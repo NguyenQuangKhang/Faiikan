@@ -1,0 +1,82 @@
+import 'package:faiikan/widgets/google_and_facebook_login.dart';
+import 'package:faiikan/widgets/intput_text_field.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class RegisterScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      padding: const EdgeInsets.all(15),
+      child: Container(
+        height: MediaQuery.of(context).size.height*0.8,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all( 15),
+              child: Column(
+                children: [
+                  InputTextField(
+                    hintText: "Tên",
+                    obscure: false,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  InputTextField(
+                    hintText: "Email",
+                    obscure: false,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  InputTextField(
+                    hintText: "Mật khẩu",
+                    obscure: true,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  InputTextField(
+                    hintText: "Nhập lại mật khẩu",
+                    obscure: true,
+                  ),
+                  SizedBox(
+                    height: 70,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          decoration: BoxDecoration(
+                              color: Color(0xffF34646),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Center(
+                            child: Text(
+                              "Đăng ký",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 19,
+                                letterSpacing: 0.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(child: SizedBox()),
+            GoogleAndFacebookLogin(),
+          ],
+        ),
+      ),
+    );
+  }
+}
