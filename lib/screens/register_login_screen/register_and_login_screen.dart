@@ -4,11 +4,14 @@ import 'package:faiikan/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 
 class RegisterAndLoginScreen extends StatelessWidget {
+  final int initialIndex;
+
+  const RegisterAndLoginScreen({ this.initialIndex=0}) ;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      initialIndex: 0,
+      initialIndex: initialIndex,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: CustomAppBar(

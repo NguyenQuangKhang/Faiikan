@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 class InputTextField extends StatefulWidget {
   final String hintText;
  bool obscure;
-   InputTextField({this.hintText,this.obscure=false});
+   InputTextField({required this.hintText,this.obscure=false});
   @override
   _InputTextFieldState createState() => _InputTextFieldState();
 }

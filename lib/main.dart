@@ -1,4 +1,5 @@
 
+import 'package:faiikan/screens/main_screen/main_screen.dart';
 import 'package:faiikan/screens/register_login_screen/register_and_login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: RegisterAndLoginScreen(),
+      home: MainScreen(),
     );
   }
 }
