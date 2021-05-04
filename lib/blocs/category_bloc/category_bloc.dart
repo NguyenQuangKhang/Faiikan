@@ -2,8 +2,9 @@
 
 
 import 'package:faiikan/models/category.dart';
+import 'package:faiikan/utils/server_name.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:http/http.dart' as http;
 import 'category_event.dart';
 import 'category_state.dart';
 
@@ -23,6 +24,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       ) async* {
     if (event is InitiateEvent) {
       yield LoadingCategory();
+//      final response = await http.get(Uri.http(server,'''/api/v1/categories/16/sub-categories'''));
+
       list_cat_1 = [new Category(id: 1, level: 1, name: "Quần áo", icon: "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg", categoryPath: "categoryPath"),new Category(id: 1, level: 1, name: "Quần áo", icon: "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg", categoryPath: "categoryPath"),new Category(id: 1, level: 1, name: "Quần áo", icon: "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg", categoryPath: "categoryPath"),new Category(id: 1, level: 1, name: "Quần áo", icon: "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg", categoryPath: "categoryPath"),
         new Category(
             id: 1,

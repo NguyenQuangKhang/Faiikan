@@ -103,7 +103,7 @@ class ProductCard extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               NumberFormat.simpleCurrency(locale: "vi")
-                                  .format(product.finalPrice)
+                                  .format(product.price.priceMin)
                                   .toString(),
                               style: TextStyle(
                                 fontSize: 18,
@@ -121,7 +121,7 @@ class ProductCard extends StatelessWidget {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   NumberFormat.simpleCurrency(locale: "vi")
-                                      .format(product.price)
+                                      .format(product.price.priceMax)
                                       .toString(),
                                   style: TextStyle(
                                       fontSize: 13,

@@ -29,4 +29,5 @@ class CustomIcon {
   static const IconData my_review = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData recently_seen = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tick = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData voucher = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

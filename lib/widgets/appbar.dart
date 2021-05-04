@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faiikan/widgets/search_field.dart';
 import 'package:flutter/material.dart';
 

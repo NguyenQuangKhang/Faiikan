@@ -1,0 +1,472 @@
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:faiikan/models/order.dart';
+import 'package:faiikan/models/order_item.dart';
+
+import 'my_order_event.dart';
+import 'my_order_state.dart';
+
+class MyOrderBloc extends Bloc<MyOrderEvent, MyOrderState> {
+  List<List<Order>> list_status_items = [
+    [
+      Order(
+        Id: "1",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "Chờ xác nhận",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color",),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+      Order(
+        Id: "2",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+    ],
+    [
+      Order(
+        Id: "1",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+      Order(
+        Id: "2",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "Đã giao",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color",),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color",IsReview: false),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color",IsReview: false),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+    ],
+    [
+      Order(
+        Id: "1",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+      Order(
+        Id: "2",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+    ],
+    [
+      Order(
+        Id: "1",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "Đã giao",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color",IsReview: false),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+      Order(
+        Id: "2",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "Đã giao",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color",IsReview: false),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color",IsReview: false),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+    ],
+    [
+      Order(
+        Id: "1",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+      Order(
+        Id: "2",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+    ],
+    [
+      Order(
+        Id: "1",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+      Order(
+        Id: "2",
+        Address: "KTX Khu B",
+        CreateDate: "2020-01-12",
+        DeliveryStatus: "",
+        list: [
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+          new OrderItem(
+              "1",
+              "Áo xyz",
+              'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
+              120000,
+              1,
+              "M",
+              "color"),
+        ],
+        MethodPayment: "Thanh toán khi nhận hàng",
+        Priceship: 15000,
+        ShippingUnit: "ExpressVN",
+        TotalPrice: 500000,
+      ),
+    ],
+  ];
+
+  MyOrderBloc(MyOrderState initialState) : super(initialState);
+
+  @override
+  MyOrderState get initialState => InitialMyOrderState();
+
+  @override
+  Stream<MyOrderState> mapEventToState(
+    MyOrderEvent event,
+  ) async* {
+    if (event is InitiateMyOrderEvent) {
+      yield LoadMyOrder();
+      yield InitialMyOrderState();
+    }
+  }
+}

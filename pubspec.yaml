@@ -32,12 +32,14 @@ dependencies:
   cached_network_image: ^3.0.0
   flutter_bloc: ^7.0.0
   equatable: ^2.0.0
+  http: ^0.13.3
   intl: ^0.17.0
   flutter_rating_bar: ^4.0.0
   carousel_slider: ^4.0.0-nullsafety.0
   flutter_countdown_timer: ^4.0.2
   percent_indicator: ^3.0.1
   flutter_html: ^2.0.0-nullsafety.0
+
 
 
 dev_dependencies:

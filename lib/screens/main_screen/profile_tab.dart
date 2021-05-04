@@ -1,8 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/models/product.dart';
 import 'package:faiikan/screens/register_login_screen/login_screen.dart';
 import 'package:faiikan/screens/register_login_screen/register_and_login_screen.dart';
-import 'package:faiikan/screens/register_login_screen/register_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:faiikan/styles/custom_icon_icons.dart';
 import 'package:faiikan/widgets/card/product_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -279,7 +280,8 @@ class ProfileScreen extends StatelessWidget {
                                 bottom: 15,
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Expanded(
                                     flex: 1,
@@ -288,12 +290,14 @@ class ProfileScreen extends StatelessWidget {
                                       children: [
                                         Image.asset(
                                           "assets/images/choxacnhan.png",
-                                          height:
-                                              MediaQuery.of(context).size.height /
-                                                  20,
-                                          width:
-                                              MediaQuery.of(context).size.height /
-                                                  20,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              20,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              20,
                                           fit: BoxFit.contain,
                                         ),
                                         SizedBox(
@@ -306,7 +310,8 @@ class ProfileScreen extends StatelessWidget {
                                           maxFontSize: 20,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.black.withOpacity(0.7),
+                                            color:
+                                                Colors.black.withOpacity(0.7),
                                             letterSpacing: 0.5,
                                           ),
                                         )
@@ -320,12 +325,14 @@ class ProfileScreen extends StatelessWidget {
                                       children: [
                                         Image.asset(
                                           "assets/images/cholayhang.png",
-                                          height:
-                                              MediaQuery.of(context).size.height /
-                                                  20,
-                                          width:
-                                              MediaQuery.of(context).size.height /
-                                                  20,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              20,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              20,
                                           fit: BoxFit.contain,
                                         ),
                                         SizedBox(
@@ -338,7 +345,8 @@ class ProfileScreen extends StatelessWidget {
                                           maxFontSize: 20,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.black.withOpacity(0.7),
+                                            color:
+                                                Colors.black.withOpacity(0.7),
                                             letterSpacing: 0.5,
                                           ),
                                         )
@@ -352,12 +360,14 @@ class ProfileScreen extends StatelessWidget {
                                       children: [
                                         Image.asset(
                                           "assets/images/danggiao.png",
-                                          height:
-                                              MediaQuery.of(context).size.height /
-                                                  20,
-                                          width:
-                                              MediaQuery.of(context).size.height /
-                                                  20,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              20,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              20,
                                           fit: BoxFit.contain,
                                         ),
                                         SizedBox(
@@ -370,7 +380,8 @@ class ProfileScreen extends StatelessWidget {
                                           maxFontSize: 20,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.black.withOpacity(0.7),
+                                            color:
+                                                Colors.black.withOpacity(0.7),
                                             letterSpacing: 0.5,
                                           ),
                                         )
@@ -384,12 +395,14 @@ class ProfileScreen extends StatelessWidget {
                                       children: [
                                         Image.asset(
                                           "assets/images/dagiao.png",
-                                          height:
-                                              MediaQuery.of(context).size.height /
-                                                  20,
-                                          width:
-                                              MediaQuery.of(context).size.height /
-                                                  20,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              20,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              20,
                                           fit: BoxFit.contain,
                                         ),
                                         SizedBox(
@@ -402,7 +415,8 @@ class ProfileScreen extends StatelessWidget {
                                           maxLines: 1,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.black.withOpacity(0.7),
+                                            color:
+                                                Colors.black.withOpacity(0.7),
                                             letterSpacing: 0.5,
                                           ),
                                         )
@@ -624,7 +638,7 @@ class ProfileScreen extends StatelessWidget {
             Row(
               children: [
                 Container(
-                    height: MediaQuery.of(context).size.height / 4 +20,
+                    height: MediaQuery.of(context).size.height / 4 + 20,
                     width: MediaQuery.of(context).size.width,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -632,9 +646,10 @@ class ProfileScreen extends StatelessWidget {
                         return Container(
                           margin: EdgeInsets.only(right: 10),
                           child: ProductCard(
-                            width: MediaQuery.of(context).size.width / 2 ,
+                            width: MediaQuery.of(context).size.width / 2,
                             height: MediaQuery.of(context).size.height / 4,
-                            product: new Product(name: "Áo abcxyz",price: 200000,adminId: 1,categoryId: "1",countRating: 4,finalPrice: 150000,freeShipping: true,imgUrl: "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg",isEvent: true,isPromotion: true,orderCount: 23,percentStar: 3.2,productId: 1,promotionPercent: 20,shopId: 1,shopName: "ádsa",shopWarehouseCity: "ádd" ),
+                            product:
+                                context.read<ProductBloc>().listdata[index],
                             index: index,
                           ),
                         );

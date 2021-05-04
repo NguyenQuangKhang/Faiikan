@@ -1,7 +1,18 @@
-
+import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
+import 'package:faiikan/blocs/CartBloc/CartState.dart';
+import 'package:faiikan/blocs/category_bloc/category_state.dart';
+import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
+import 'package:faiikan/blocs/my_order_bloc/my_order_event.dart';
+import 'package:faiikan/blocs/my_order_bloc/my_order_state.dart';
+import 'package:faiikan/screens/cart_screen/cart_screen.dart';
 import 'package:faiikan/screens/main_screen/main_screen.dart';
+import 'package:faiikan/screens/my_order_screen/my_order_screen.dart';
+import 'package:faiikan/screens/payment_screen/payment_screen.dart';
 import 'package:faiikan/screens/register_login_screen/register_and_login_screen.dart';
+import 'package:faiikan/screens/review_screen/review_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'screens/register_login_screen/register_screen.dart';
 
@@ -27,7 +38,19 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MainScreen(),
+      home: MainScreen()
+      /*BlocProvider(
+        create: (BuildContext context) => MyOrderBloc(InitialMyOrderState())..add(InitiateEvent(person_id: "person_id")),
+        child: MyOrderScreen(),
+      ),*/
+      /*BlocProvider(
+        create: (BuildContext context) =>
+            CartBloc(Initial(data: [], discount: 0, totalPrice: 0))
+              ..add(GetCartEvent(person_id: "person_id")),
+        child: CartScreen(
+          person_id: "1",
+        ),
+      ),*/
     );
   }
 }

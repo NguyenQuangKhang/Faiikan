@@ -3,8 +3,17 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
+import 'package:faiikan/blocs/product_bloc/ProductState.dart';
+import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
+import 'package:faiikan/blocs/product_detail_bloc/ProductDetailEvent.dart';
+import 'package:faiikan/blocs/product_detail_bloc/ProductDetailState.dart';
 import 'package:faiikan/models/category.dart';
+import 'package:faiikan/models/product_detail.dart';
 import 'package:faiikan/screens/product_detail_screen/product_detail_screen.dart';
+import 'package:faiikan/widgets/card/product_card.dart';
+import 'package:faiikan/models/category.dart' as Cate;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
@@ -28,16 +37,49 @@ class _ForYouScreenState extends State<ForYouScreen> {
   int time = 23 * 3600;
   late Timer _timer;
   CarouselController carouselController = CarouselController();
+  late ProductBloc productBloc;
+  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController2 = ScrollController();
+  bool flag = true;
 
   @override
   void initState() {
+
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (time > 0) time--;
       });
     });
+
     super.initState();
+    productBloc = context.read<ProductBloc>();
+//    context.bloc<RecommendProductBloc>()
+//      ..add(RecommendProductLoadEvent(
+//          userId: context.bloc<LoginBloc>().user?.id ?? 0));
+    print("Reload");
+    _scrollController2.addListener(() {
+      if (_scrollController2.position.pixels ==
+          _scrollController2.position.maxScrollExtent)
+        setState(() {
+          flag = false;
+        });
+    });
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.minScrollExtent) {
+        setState(() {
+          flag = true;
+          print(flag);
+        });
+      }
+//
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        context.read<ProductBloc>().add(ProductGetMoreDataEvent(SortBy: 0));
+      }
+    });
   }
+
   @override
   void dispose() {
     _timer.cancel();
@@ -50,6 +92,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
       height: MediaQuery.of(context).size.height,
       color: Color(0xffE7E7E7),
       child: SingleChildScrollView(
+        controller: _scrollController2,
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
@@ -238,11 +281,18 @@ class _ForYouScreenState extends State<ForYouScreen> {
                           itemCount: 5,
                           itemBuilder: (context, index) {
                             return InkWell(
-                              onTap: (){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => ProductDetail(productId: 1)),
-                                );
+                              onTap: () {
+                                Navigator.of(context).push(PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 2000),
+                                    pageBuilder: (context, animation, _) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: ProductDetail(
+                                          productId: 1,
+                                        ),
+                                      );
+                                    }));
                               },
                               child: Container(
                                 margin: EdgeInsets.only(
@@ -287,11 +337,14 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                               width: 30,
                                               decoration: BoxDecoration(
                                                   color: Color(0xffF05A5A),
-                                                  borderRadius: BorderRadius.only(
-                                                      bottomRight:
-                                                          Radius.circular(20),
-                                                      topLeft:
-                                                          Radius.circular(5))),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  20),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  5))),
                                               child: Center(
                                                 child: Text(
                                                   "50%",
@@ -334,7 +387,8 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                   vertical: 2, horizontal: 5),
                                               percent: 0.6,
                                               lineHeight: 18,
-                                              backgroundColor: Color(0xffF9AEAE),
+                                              backgroundColor:
+                                                  Color(0xffF9AEAE),
                                               progressColor: Color(0xffFF6161),
                                             )
                                           ],
@@ -420,7 +474,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                         itemCount:
                             context.read<CategoryBloc>().list_cat_1.length,
                         itemBuilder: (context, index) {
-                          Category category =
+                          Cate.Category category =
                               context.read<CategoryBloc>().list_cat_1[index];
                           return Padding(
                             padding: EdgeInsets.only(right: 0),
@@ -592,11 +646,11 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                               20) /
                                           2,
                                   child: CachedNetworkImage(
-                                    imageUrl: "https://vn-test-11.slatic.net/p/280ad8c7923b4f8630034bf2c78d08af.jpg_320x320.jpg",
+                                    imageUrl:
+                                        "https://vn-test-11.slatic.net/p/280ad8c7923b4f8630034bf2c78d08af.jpg_320x320.jpg",
                                     placeholder: (context, url) =>
                                         CircularProgressIndicator(),
-                                    errorWidget:
-                                        (context, url, error) =>
+                                    errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                     fit: BoxFit.fill,
                                   ),
@@ -607,6 +661,205 @@ class _ForYouScreenState extends State<ForYouScreen> {
                         );
                       }),
                     ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(color: Colors.white),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.filter_list,
+                            size: 30,
+                            color: Color(0xff222222),
+                          ),
+                          Text(
+                            "Lọc",
+                            style: TextStyle(
+                              color: Color(0xff222222),
+                              fontSize: 14,
+                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(
+                            Icons.refresh_rounded,
+                            color: Color(0xff222222),
+                            size: 30,
+                          ),
+                          Text(
+                            "Phổ biến",
+                            style: TextStyle(
+                              color: Color(0xff222222),
+                              fontSize: 14,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  BlocBuilder<ProductBloc, ProductsState>(
+                    builder: (context, state) {
+                      return Stack(
+                        children: <Widget>[
+                          Container(
+                            //margin: EdgeInsets.only(left: 5),
+                            color: Colors.white,
+
+                            height: MediaQuery.of(context).size.height/2,
+                            child: CustomScrollView(
+                                shrinkWrap: true,
+                                primary: false,
+                                physics: flag == true
+                                    ? NeverScrollableScrollPhysics()
+                                    : ClampingScrollPhysics(),
+                                controller: _scrollController,
+                                scrollDirection: Axis.vertical,
+                                slivers: <Widget>[
+                                  SliverGrid(
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: (MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2 -
+                                              40) /
+                                          (MediaQuery.of(context).size.height /
+                                                  3 +
+                                              15),
+                                      mainAxisSpacing: 0.0,
+                                      crossAxisSpacing: 0.0,
+                                      //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
+                                    ),
+                                    delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                        return Container(
+                                          margin: EdgeInsets.only(
+                                            top: 10,
+                                          ),
+                                          padding: EdgeInsets.only(
+                                              left: 10, bottom: 8, right: 10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+
+                                          //padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                          child: GestureDetector(
+                                              child: Container(
+                                                height: MediaQuery.of(context)
+                                                            .size
+                                                            .height /
+                                                        3 +
+                                                    20,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  backgroundBlendMode:
+                                                      BlendMode.colorBurn,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  border: Border.all(
+                                                      color: Colors.white),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 2,
+                                                      blurRadius: 4,
+                                                      offset: Offset(0,
+                                                          0), // changes position of shadow
+                                                    ),
+                                                  ],
+//                                             boxShadow: [
+//                                               BoxShadow(
+//                                                 color: Colors.black.withOpacity(0.5),
+//                                                 spreadRadius: 5,
+//                                                 blurRadius: 7,
+//                                                 offset: Offset(0, 3),
+//
+//
+//                                               ),
+//                                             ],
+                                                ),
+                                                child: ProductCard(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      2,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2,
+                                                  product: productBloc.listdata[index],
+                                                  index: index,
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            BlocProvider<
+                                                                    ProductDetailBloc>(
+                                                                create:
+                                                                    (context) {
+                                                                  return ProductDetailBloc(
+                                                                      InitialProductDetail())
+                                                                    ..add(
+                                                                        ProductDetailLoadEvent(
+                                                                      id: productBloc
+                                                                          .listdata[
+                                                                              index]
+                                                                          .id,
+                                                                      person_id:
+                                                                          '',
+                                                                    ));
+                                                                },
+                                                                child:
+                                                                    ProductDetail(
+                                                                  productId: productBloc
+                                                                      .listdata[
+                                                                          index]
+                                                                      .id,
+                                                                ))));
+                                              }),
+                                        );
+                                      },
+                                      childCount: productBloc.listdata.length,
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                          if (state is Loading)
+                            Positioned(
+                              bottom: 10,
+                              left: MediaQuery.of(context).size.width / 2 - 15,
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.red,
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

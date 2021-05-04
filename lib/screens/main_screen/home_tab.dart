@@ -1,6 +1,9 @@
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
+import 'package:faiikan/blocs/product_bloc/ProductState.dart';
 import 'package:faiikan/screens/main_screen/home_tab_tab/for_you_tab.dart';
 import 'package:faiikan/widgets/appbar.dart';
 import 'package:flutter/material.dart';
@@ -78,9 +81,12 @@ class HomeScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            BlocProvider(
+            MultiBlocProvider(
               child: ForYouScreen(),
-              create: (BuildContext context) => CategoryBloc(LoadingCategory())..add(InitiateEvent()),
+              providers: [
+                BlocProvider(create: (context) => CategoryBloc(LoadingCategory())..add(InitiateEvent()),),
+                BlocProvider(create: (context) => ProductBloc(Initial(data: [],error: "",sortBy: 0))..add(ProductLoadEvent(SortBy: 0)),),
+              ],
             ),
             Container(),
             Container(),
