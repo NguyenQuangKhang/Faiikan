@@ -1,10 +1,6 @@
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faiikan/models/category.dart';
-import 'package:faiikan/utils/server_name.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class Category2Dropdown extends StatefulWidget {
   final Category data;
@@ -19,7 +15,7 @@ class Category2Dropdown extends StatefulWidget {
 
 class _Category2DropdownState extends State<Category2Dropdown> {
   bool isExpanded = false;
-  late List<Category> subCat=[];
+  late List<Category> subCat;
   bool isLoading = false;
 
   @override
@@ -59,27 +55,57 @@ class _Category2DropdownState extends State<Category2Dropdown> {
                   onTap: () async {
                     isExpanded = !isExpanded;
 
-
-                    if (subCat.isEmpty) {
-                      setState(() {
-                        isLoading = true;
-                      });
-
-                      final response = await http.get(Uri.parse(
-                          "http://$server:8080/api/v1/categories/${widget.data
-                              .id.toString()}/sub-categories"));
-                      subCat = json
-                          .decode(response.body)
-                          .cast<Map<String, dynamic>>()
-                          .map<Category>((json) => Category.fromJson(json))
-                          .toList();
+                    subCat=[ new Category(
+                        id: 1,
+                        level: 1,
+                        name: "Áo khoác",
+                        icon:
+                        "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg",
+                        categoryPath: "categoryPath"),new Category(
+                        id: 1,
+                        level: 1,
+                        name: "Áo khoác",
+                        icon:
+                        "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg",
+                        categoryPath: "categoryPath"),new Category(
+                        id: 1,
+                        level: 1,
+                        name: "Áo khoác",
+                        icon:
+                        "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg",
+                        categoryPath: "categoryPath"),new Category(
+                        id: 1,
+                        level: 1,
+                        name: "Áo khoác",
+                        icon:
+                        "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg",
+                        categoryPath: "categoryPath"),new Category(
+                        id: 1,
+                        level: 1,
+                        name: "Áo khoác",
+                        icon:
+                        "https://media3.scdn.vn/images/ecom/category/1666_simg_3a7818_100x100_maxb.jpg",
+                        categoryPath: "categoryPath"),];
+//                    if (subCat == null) {
+//                      setState(() {
+//                        isLoading = true;
+//                      });
+//
+//                      final response = await http.get(
+//                          "http://10.0.206.16:8080/api/v1/categories/" +
+//                              widget.data.id.toString() +
+//                              "/sub-categories");
+//                      subCat = json
+//                          .decode(response.body)
+//                          .cast<Map<String, dynamic>>()
+//                          .map<Category>((json) => Category.fromJson(json))
+//                          .toList();
 
                       setState(() {
                         isLoading = false;
                       });
-                    }
-                                        setState(() {});
 
+//                    setState(() {});
                   },
                   child: Center(
                     child: Icon(

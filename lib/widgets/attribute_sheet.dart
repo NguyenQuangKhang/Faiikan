@@ -3,8 +3,6 @@ import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_event.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_state.dart';
-import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
-import 'package:faiikan/models/product_detail.dart';
 import 'package:faiikan/screens/my_order_screen/my_order_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,45 +22,12 @@ class AttributesSheet extends StatefulWidget {
 
 class _AttributesSheetState extends State<AttributesSheet> {
   int count = 1;
-  late var listIndexSelected;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    listIndexSelected = new List<int>.filled(context
-        .read<ProductDetailBloc>()
-        .productDetail
-        .attributes
-        .where((att) => att.code != "image").length, 0, growable: false);
-    super.initState();
-  }
+  int indexSelected = 0;
 
   @override
   Widget build(BuildContext context) {
-//print(context
-//    .read<ProductDetailBloc>()
-//    .productDetail
-//    .attributes
-//    .where((att) => att.code != "image").length);
-//    print(context
-//        .read<ProductDetailBloc>()
-//        .productDetail.optionProducts.firstWhere((e) {
-//         for(int i=0;i<listIndexSelected.length;i++)
-//           {
-//             if(e.option.where((a) => a.id == context
-//                 .read<ProductDetailBloc>()
-//                 .productDetail
-//                 .attributes
-//                 .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
-//               return false;
-//           }
-//          return true;
-//     }).quantity.value);
     return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * 2 / 3,
+      height: MediaQuery.of(context).size.height * 2 / 3,
       color: Colors.white,
       padding: EdgeInsets.all(10),
       child: Column(
@@ -74,20 +39,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
                 children: [
                   Text(
                     NumberFormat.simpleCurrency(locale: "vi")
-                        .format(context
-                        .read<ProductDetailBloc>()
-                        .productDetail.optionProducts.firstWhere((e) {
-                      for(int i=0;i<listIndexSelected.length;i++)
-                      {
-                        if(e.option.where((a) => a.id == context
-                            .read<ProductDetailBloc>()
-                            .productDetail
-                            .attributes
-                            .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
-                          return false;
-                      }
-                      return true;
-                    }).price.value)
+                        .format(229000)
                         .toString(),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -100,20 +52,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
                     height: 10,
                   ),
                   Text(
-                    "Kho: " + context
-                        .read<ProductDetailBloc>()
-                        .productDetail.optionProducts.firstWhere((e) {
-                      for(int i=0;i<listIndexSelected.length;i++)
-                      {
-                        if(e.option.where((a) => a.id == context
-                            .read<ProductDetailBloc>()
-                            .productDetail
-                            .attributes
-                            .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
-                          return false;
-                      }
-                      return true;
-                    }).quantity.value.toString(),
+                    "Kho: " + "50",
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.6),
                       fontSize: 17,
@@ -139,217 +78,125 @@ class _AttributesSheetState extends State<AttributesSheet> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(
-                    context
-                        .read<ProductDetailBloc>()
-                        .productDetail
-                        .attributes
-                        .where((att) => att.code != "image")
-                        .length, (index) {
-                  if (context
-                      .read<ProductDetailBloc>()
-                      .productDetail
-                      .attributes
-                      .where((att) => att.code != "image").toList()[index]
-                      .code ==
-                      "color")
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Màu:",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      letterSpacing: 0.5,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 120,
+                    child: Row(
                       children: [
-                        Text(
-                          "Màu:",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            letterSpacing: 0.5,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: 120,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: context
-                                      .read<ProductDetailBloc>()
-                                      .productDetail
-                                      .attributes
-                                      .where((att) => att.code != "image").toList()[index]
-                                  /*.firstWhere((element) => element.code == "color")*/
-                                      .options
-                                      .length,
-                                  itemBuilder: (context, i) {
-                                    return InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          listIndexSelected[index] = i;
-                                        });
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: i ==
-                                                    listIndexSelected[index]
-                                                    ? Color(0xffFA4747)
-                                                    : Colors.black
-                                                    .withOpacity(0.1),
-                                                width: 1,
-                                              ),
-                                            ),
-                                            child: CachedNetworkImage(
-                                              imageUrl: context
-                                                  .read<ProductDetailBloc>()
-                                                  .productDetail
-                                                  .optionProducts
-                                                  .firstWhere((element) {
-                                                for (var u
-                                                in element.option) {
-                                                  if (u.id ==
-                                                      context
-                                                          .read<ProductDetailBloc>()
-                                                          .productDetail
-                                                          .attributes
-                                                          .where((att) => att.code != "image").toList()[index]
-                                                      /* .firstWhere((a) => a.code == "color")*/
-                                                          .options[i]
-                                                          .id) return true;
-                                                }
-                                                return false;
-                                              })
-                                                  .option
-                                                  .firstWhere((e) =>
-                                              e.value.length > 3 &&
-                                                  e.value.substring(0, 4) ==
-                                                      "http")
-                                                  .value,
-                                              height: 100,
-                                              width: 80,
-                                              fit: BoxFit.fill,
-                                              placeholder: (context, url) =>
-                                                  Center(
-                                                      child:
-                                                      CircularProgressIndicator()),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                  Icon(Icons.error),
-                                            ),
-                                          ),
-                                          Text(
-                                            context
-                                                .read<ProductDetailBloc>()
-                                                .productDetail
-                                                .attributes
-                                                .firstWhere((element) =>
-                                            element.code == "color")
-                                                .options[i]
-                                                .value,
-                                            style: TextStyle(
-                                              color:
-                                              i == listIndexSelected[index]
-                                                  ? Color(0xffFA4747)
-                                                  : Colors.black,
-                                              fontSize: 12,
-                                              letterSpacing: 0.5,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  else
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Kích thước",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            letterSpacing: 0.5,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: 40,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: context
-                                        .read<ProductDetailBloc>()
-                                        .productDetail
-                                        .attributes
-                                        .where((att) => att.code != "image").toList()[index]
-                                        .options
-                                        .length,
-                                    itemBuilder: (context, i) {
-                                      return InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            listIndexSelected[index] = i;
-                                          });
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: i ==
-                                                      listIndexSelected[
-                                                      index]
-                                                      ? Color(0xffFA4747)
-                                                      : Color(0xffC4C4C4)
-                                                      .withOpacity(0.5)),
-                                              color:
-                                              i == listIndexSelected[index]
-                                                  ? Colors.white
-                                                  : Color(0xffC4C4C4)
-                                                  .withOpacity(0.5)),
-                                          height: 30,
-                                          width: 70,
-                                          child: Center(
-                                            child: Text(
-                                              context
-                                                  .read<ProductDetailBloc>()
-                                                  .productDetail
-                                                  .attributes
-                                                  .where((att) => att.code != "image").toList()[index]
-                                                  .options[i]
-                                                  .value,
-                                              style: TextStyle(
-                                                color: i ==
-                                                    listIndexSelected[index]
-                                                    ? Color(0xffFA4747)
-                                                    : Colors.black,
-                                              ),
-                                            ),
-                                          ),
+                        Expanded(
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    indexSelected = index;
+                                  });
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: index == indexSelected
+                                              ? Color(0xffFA4747)
+                                              : Colors.black.withOpacity(0.1),
+                                          width: 1,
                                         ),
-                                      );
-                                    }),
-                              ),
-                            ],
+                                      ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: widget.images[index],
+                                        height: 100,
+                                        width: 80,
+                                        fit: BoxFit.fill,
+                                        placeholder: (context, url) => Center(
+                                            child: CircularProgressIndicator()),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
+                                      ),
+                                    ),
+                                    Text(
+                                      "Xanh",
+                                      style: TextStyle(
+                                        color: index == 1
+                                            ? Color(0xffFA4747)
+                                            : Colors.black,
+                                        fontSize: 12,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            itemCount: 2,
                           ),
                         ),
                       ],
-                    );
-                }),
+                    ),
+                  ),
+                  Text(
+                    "Kích thước",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      letterSpacing: 0.5,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 40,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 2,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: index == 1
+                                              ? Color(0xffFA4747)
+                                              : Color(0xffC4C4C4)
+                                                  .withOpacity(0.5)),
+                                      color: index == 1
+                                          ? Colors.white
+                                          : Color(0xffC4C4C4).withOpacity(0.5)),
+                                  height: 30,
+                                  width: 70,
+                                  child: Center(
+                                    child: Text(
+                                      "M",
+                                      style: TextStyle(
+                                        color: index == 1
+                                            ? Color(0xffFA4747)
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -396,9 +243,9 @@ class _AttributesSheetState extends State<AttributesSheet> {
                             decoration: BoxDecoration(
 //                                      color: Color(0xffF34646),
                                 border: Border.all(
-                                  width: 1,
-                                  color: Color(0xffD7DEE1),
-                                )),
+                              width: 1,
+                              color: Color(0xffD7DEE1),
+                            )),
                           ),
                         ),
                         Container(
@@ -407,14 +254,14 @@ class _AttributesSheetState extends State<AttributesSheet> {
                             decoration: BoxDecoration(
 //                                      color: Color(0xffF34646),
                                 border: Border.all(
-                                  width: 1,
-                                  color: Color(0xffD7DEE1),
-                                )),
+                              width: 1,
+                              color: Color(0xffD7DEE1),
+                            )),
                             child: Center(
                                 child: Text(
-                                  count.toString(),
-                                  style: TextStyle(color: Color(0xffFA4747)),
-                                ))),
+                              count.toString(),
+                              style: TextStyle(color: Color(0xffFA4747)),
+                            ))),
                         InkWell(
                           onTap: () {
                             setState(() {
@@ -434,9 +281,9 @@ class _AttributesSheetState extends State<AttributesSheet> {
                             decoration: BoxDecoration(
 //                                      color: Color(0xffF34646),
                                 border: Border.all(
-                                  width: 1,
-                                  color: Color(0xffD7DEE1),
-                                )),
+                              width: 1,
+                              color: Color(0xffD7DEE1),
+                            )),
                           ),
                         ),
                       ],
@@ -462,9 +309,9 @@ class _AttributesSheetState extends State<AttributesSheet> {
                       ),
                       decoration: BoxDecoration(
                           border: Border.all(
-                            color: Color(0xff188A31),
-                            width: 1,
-                          )),
+                        color: Color(0xff188A31),
+                        width: 1,
+                      )),
                       child: Center(
                         child: Text(
                           "Thêm vào giỏ hàng",
@@ -490,13 +337,12 @@ class _AttributesSheetState extends State<AttributesSheet> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    BlocProvider(
-                                        create: (BuildContext context) =>
+                                builder: (context) => BlocProvider(
+                                    create: (BuildContext context) =>
                                         MyOrderBloc(InitialMyOrderState())
                                           ..add(InitiateMyOrderEvent(
                                               person_id: "person_id")),
-                                        child: MyOrderScreen())));
+                                    child: MyOrderScreen())));
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(
@@ -526,11 +372,5 @@ class _AttributesSheetState extends State<AttributesSheet> {
         ],
       ),
     );
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('listIndexSelected', listIndexSelected));
   }
 }

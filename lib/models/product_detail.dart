@@ -1,104 +1,76 @@
 class ProductDetailed {
-  late int _id;
-  late String _name;
-  late String _sku;
-  late String _description;
-  late String _shortDescription;
-  late String _highlight;
-  late String _typeId;
-  late bool _active;
-  late bool _visibility;
-  late bool _promotion;
-  late int _orderCount;
-  late bool _freeShip;
-  late Category _category;
-  late String _categories;
-  late String _brand;
-  late String _material;
-  late String _purpose;
-  late String _suitableSeason;
-  late String _madeIn;
-  late int _promotionPercent;
-  late int _totalQuantity;
-  late Ratings _ratings;
-  late RatingStar _ratingStar;
-  late List<Attributes> _attributes;
-  late List<Option_products> _optionProducts;
+ late int _id;
+ late String _name;
+ late String _sku;
+ late String _description;
+ late String _shortDescription;
+ late String _highlight;
+ late String _typeId;
+ late bool _active;
+ late bool _visibility;
+ late bool _promotion;
+ late int _orderCount;
+ late bool _freeShip;
+ late Category _category;
+ late String _categories;
+ late String _brand;
+ late String _material;
+ late  String _purpose;
+ late String _suitableSeason;
+ late String _madeIn;
+ late int _promotionPercent;
+ late int _totalQuantity;
+ late List<Attributes> _attributes;
+ late List<Option_products> _optionProducts;
 
-  Ratings get ratings =>_ratings;
-  RatingStar get ratingStar => _ratingStar;
   int get id => _id;
-
   String get name => _name;
-
   String get sku => _sku;
-
   String get description => _description;
-
   String get shortDescription => _shortDescription;
-
   String get highlight => _highlight;
-
   String get typeId => _typeId;
-
   bool get active => _active;
-
   bool get visibility => _visibility;
-
   bool get promotion => _promotion;
-
   int get orderCount => _orderCount;
-
   bool get freeShip => _freeShip;
-
   Category get category => _category;
-
   String get categories => _categories;
-
   String get brand => _brand;
-
   String get material => _material;
-
   String get purpose => _purpose;
-
   String get suitableSeason => _suitableSeason;
-
   String get madeIn => _madeIn;
-
   int get promotionPercent => _promotionPercent;
-
   int get totalQuantity => _totalQuantity;
-
   List<Attributes> get attributes => _attributes;
-
   List<Option_products> get optionProducts => _optionProducts;
 
-  ProductDetailed(
-      {required int id,
-      required String name,
-      required String sku,
-      required String description,
-      required String shortDescription,
-      required String highlight,
-      required String typeId,
-      required bool active,
-      required bool visibility,
-      required bool promotion,
-      required int orderCount,
-      required bool freeShip,
-      required Category category,
-      required String categories,
-      required String brand,
-      required String material,
-      required String purpose,
-      required String suitableSeason,
-      required String madeIn,
-        required Ratings ratings,
-        required RatingStar ratingStar,
-      required int promotionPercent,
-      required int totalQuantity,
-      required List<Attributes> attributes,
-      required List<Option_products> optionProducts}) {
+  ProductDetailed({
+    required  int id,
+   required   String name,
+   required   String sku,
+   required   String description,
+   required   String shortDescription,
+   required   String highlight,
+   required   String typeId,
+   required   bool active,
+   required   bool visibility,
+   required   bool promotion,
+   required   int orderCount,
+   required   bool freeShip,
+   required   Category category,
+   required   String categories,
+   required   String brand,
+   required   String material,
+   required   String purpose,
+   required   String suitableSeason,
+   required   String madeIn,
+   required   int promotionPercent,
+   required   int totalQuantity,
+   required   List<Attributes> attributes,
+   required   List<Option_products> optionProducts}){
     _id = id;
     _name = name;
     _sku = sku;
@@ -116,15 +88,13 @@ class ProductDetailed {
     _brand = brand;
     _material = material;
     _purpose = purpose;
-    _ratings =ratings;
-    _ratingStar=ratingStar;
     _suitableSeason = suitableSeason;
     _madeIn = madeIn;
     _promotionPercent = promotionPercent;
     _totalQuantity = totalQuantity;
     _attributes = attributes;
     _optionProducts = optionProducts;
-  }
+}
 
   ProductDetailed.fromJson(dynamic json) {
     _id = json["id"];
@@ -139,17 +109,13 @@ class ProductDetailed {
     _promotion = json["promotion"];
     _orderCount = json["orderCount"];
     _freeShip = json["freeShip"];
-    _category = (json["category"] != null
-        ? Category.fromJson(json["category"])
-        : null)!;
+    _category = (json["category"] != null ? Category.fromJson(json["category"]) : null)!;
     _categories = json["categories"];
     _brand = json["brand"];
     _material = json["material"];
-    _ratings = (json["ratings"] != null ? Ratings.fromJson(json["ratings"]) : null)!;
-    _ratingStar = (json["ratingStar"] != null ? RatingStar.fromJson(json["ratingStar"]) : null)!;
     _purpose = json["purpose"];
     _suitableSeason = json["suitable_season"];
-    _madeIn = json["madeIn"] ?? "";
+    _madeIn = json["madeIn"];
     _promotionPercent = json["promotionPercent"];
     _totalQuantity = json["total_quantity"];
     if (json["attributes"] != null) {
@@ -186,12 +152,6 @@ class ProductDetailed {
     map["categories"] = _categories;
     map["brand"] = _brand;
     map["material"] = _material;
-    if (_ratings != null) {
-      map["ratings"] = _ratings.toJson();
-    }
-    if (_ratingStar != null) {
-      map["ratingStar"] = _ratingStar.toJson();
-    }
     map["purpose"] = _purpose;
     map["suitable_season"] = _suitableSeason;
     map["madeIn"] = _madeIn;
@@ -205,33 +165,30 @@ class ProductDetailed {
     }
     return map;
   }
+
 }
 
 class Option_products {
-  late Price _price;
-  late Quantity _quantity;
-  late List<Option> _option;
+late Price _price;
+late Quantity _quantity;
+late List<Option> _option;
 
   Price get price => _price;
-
   Quantity get quantity => _quantity;
-
   List<Option> get option => _option;
 
-  Option_products(
-      {required Price price,
-      required Quantity quantity,
-      required List<Option> option}) {
+  Option_products({
+  required    Price price,
+  required    Quantity quantity,
+  required    List<Option> option}){
     _price = price;
     _quantity = quantity;
     _option = option;
-  }
+}
 
   Option_products.fromJson(dynamic json) {
     _price = (json["price"] != null ? Price.fromJson(json["price"]) : null)!;
-    _quantity = (json["quantity"] != null
-        ? Quantity.fromJson(json["quantity"])
-        : null)!;
+    _quantity = (json["quantity"] != null ? Quantity.fromJson(json["quantity"]) : null)!;
     if (json["option"] != null) {
       _option = [];
       json["option"].forEach((v) {
@@ -253,20 +210,22 @@ class Option_products {
     }
     return map;
   }
+
 }
 
 class Option {
-  late int _id;
-  late String _value;
+ late int _id;
+ late String _value;
 
   int get id => _id;
-
   String get value => _value;
 
-  Option({required int id, required String value}) {
+  Option({
+    required  int id,
+    required  String value}){
     _id = id;
     _value = value;
-  }
+}
 
   Option.fromJson(dynamic json) {
     _id = json["id"];
@@ -279,20 +238,22 @@ class Option {
     map["value"] = _value;
     return map;
   }
+
 }
 
 class Quantity {
-  late int _id;
-  late int _value;
+ late int _id;
+ late int _value;
 
   int get id => _id;
-
   int get value => _value;
 
-  Quantity({required int id, required int value}) {
+  Quantity({
+    required  int id,
+    required  int value}){
     _id = id;
     _value = value;
-  }
+}
 
   Quantity.fromJson(dynamic json) {
     _id = json["id"];
@@ -305,20 +266,22 @@ class Quantity {
     map["value"] = _value;
     return map;
   }
+
 }
 
 class Price {
-  late int _id;
-  late double _value;
+ late int _id;
+ late int _value;
 
   int get id => _id;
+  int get value => _value;
 
-  double get value => _value;
-
-  Price({required int id, required double value}) {
+  Price({
+   required   int id,
+   required   int value}){
     _id = id;
     _value = value;
-  }
+}
 
   Price.fromJson(dynamic json) {
     _id = json["id"];
@@ -331,37 +294,34 @@ class Price {
     map["value"] = _value;
     return map;
   }
+
 }
 
 class Attributes {
-  late int _id;
-  late String _type;
-  late String _label;
-  late String _code;
-  late List<Options> _options;
+late int _id;
+late  String _type;
+late  String _label;
+late  String _code;
+late  List<Options> _options;
 
   int get id => _id;
-
   String get type => _type;
-
   String get label => _label;
-
   String get code => _code;
-
   List<Options> get options => _options;
 
-  Attributes(
-      {required int id,
-      required String type,
-      required String label,
-      required String code,
-      required List<Options> options}) {
+  Attributes({
+   required   int id,
+   required   String type,
+   required   String label,
+   required   String code,
+   required   List<Options> options}){
     _id = id;
     _type = type;
     _label = label;
     _code = code;
     _options = options;
-  }
+}
 
   Attributes.fromJson(dynamic json) {
     _id = json["id"];
@@ -387,20 +347,22 @@ class Attributes {
     }
     return map;
   }
+
 }
 
 class Options {
-  late int _id;
-  late String _value;
+ late int _id;
+ late String _value;
 
   int get id => _id;
-
   String get value => _value;
 
-  Options({required int id, required String value}) {
+  Options({
+    required  int id,
+   required   String value}){
     _id = id;
     _value = value;
-  }
+}
 
   Options.fromJson(dynamic json) {
     _id = json["id"];
@@ -413,37 +375,34 @@ class Options {
     map["value"] = _value;
     return map;
   }
+
 }
 
 class Category {
-  late int _id;
-  late String _name;
-  late dynamic _icon;
-  late int _level;
-  late List<dynamic> _categories;
+late  int _id;
+late  String _name;
+late  dynamic _icon;
+late  int _level;
+late  List<dynamic> _categories;
 
   int get id => _id;
-
   String get name => _name;
-
   dynamic get icon => _icon;
-
   int get level => _level;
-
   List<dynamic> get categories => _categories;
 
-  Category(
-      {required int id,
-      required String name,
-      required dynamic icon,
-      required int level,
-      required List<dynamic> categories}) {
+  Category({
+  required   int id,
+  required   String name,
+  required   dynamic icon,
+  required   int level,
+  required   List<dynamic> categories}){
     _id = id;
     _name = name;
     _icon = icon;
     _level = level;
     _categories = categories;
-  }
+}
 
   Category.fromJson(dynamic json) {
     _id = json["id"];
@@ -453,7 +412,7 @@ class Category {
     if (json["categories"] != null) {
       _categories = [];
       json["categories"].forEach((v) {
-        _categories = [];
+        _categories=[];
       });
     }
   }
@@ -467,243 +426,6 @@ class Category {
     if (_categories != null) {
       map["categories"] = _categories.map((v) => v.toJson()).toList();
     }
-    return map;
-  }
-}
-
-class RatingStar {
-  late int _id;
-  late int _star1;
-  late int _star2;
-  late int _star3;
-  late int _star4;
-  late int _star5;
-
-  int get id => _id;
-
-  int get star1 => _star1;
-
-  int get star2 => _star2;
-
-  int get star3 => _star3;
-
-  int get star4 => _star4;
-
-  int get star5 => _star5;
-
-  RatingStar(
-      {required int id,
-      required int star1,
-      required int star2,
-      required int star3,
-      required int star4,
-      required int star5}) {
-    _id = id;
-    _star1 = star1;
-    _star2 = star2;
-    _star3 = star3;
-    _star4 = star4;
-    _star5 = star5;
-  }
-
-  RatingStar.fromJson(dynamic json) {
-    _id = json["id"];
-    _star1 = json["star1"];
-    _star2 = json["star2"];
-    _star3 = json["star3"];
-    _star4 = json["star4"];
-    _star5 = json["star5"];
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map["id"] = _id;
-    map["star1"] = _star1;
-    map["star2"] = _star2;
-    map["star3"] = _star3;
-    map["star4"] = _star4;
-    map["star5"] = _star5;
-    return map;
-  }
-}
-
-class Ratings {
-  late List<Listrating> _listrating;
-  late TotalCount _totalCount;
-
-  List<Listrating> get listrating => _listrating;
-  TotalCount get totalCount => _totalCount;
-  Ratings({required List<Listrating> listrating,required TotalCount totalCount}) {
-    _listrating = listrating;
-    _totalCount =totalCount;
-  }
-
-  Ratings.fromJson(dynamic json) {
-    if (json["list-rating"] != null) {
-      _listrating = [];
-      json["list-rating"].forEach((v) {
-        _listrating.add(Listrating.fromJson(v));
-      });
-    }
-    if(json["total_count"]!=null)
-      {
-          _totalCount=TotalCount.fromJson(json["total_count"]);
-      }
-
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    if (_listrating != null) {
-      map["list-rating"] = _listrating.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
-}
-
-class Listrating {
-  late String _imageAvatar;
-  late String _comment;
-  late int _star;
-  late String _timeUpdated;
-  late List<String> _imageRating;
-  late String _size;
-  late String _color;
-  late int _ratingId;
-  late String _userName;
-  late int _customerId;
-
-  String get imageAvatar => _imageAvatar;
-
-  String get comment => _comment;
-
-  int get star => _star;
-
-  String get timeUpdated => _timeUpdated;
-
-  List<String> get imageRating => _imageRating;
-
-  String get size => _size;
-
-  String get color => _color;
-
-  int get ratingId => _ratingId;
-
-  String get userName => _userName;
-
-  int get customerId => _customerId;
-
-  Listrating(
-      {required String imageAvatar,
-      required String comment,
-      required int star,
-      required String timeUpdated,
-      required List<String> imageRating,
-      required String size,
-      required String color,
-      required int ratingId,
-      required String userName,
-      required int customerId}) {
-    _imageAvatar = imageAvatar;
-    _comment = comment;
-    _star = star;
-    _timeUpdated = timeUpdated;
-    _imageRating = imageRating;
-    _size = size;
-    _color = color;
-    _ratingId = ratingId;
-    _userName = userName;
-    _customerId = customerId;
-  }
-
-  Listrating.fromJson(dynamic json) {
-    _imageAvatar = json["imageAvatar"];
-    if(json["comment"]==null)
-      _comment="";
-   else _comment = json["comment"];
-    _star = json["star"];
-    _timeUpdated = json["timeUpdated"];
-    if (json["imageRating"] != null) {
-      _imageRating = json["imageRating"].cast<String>();
-    }
-    _size = json["size"];
-    _color = json["color"];
-    _ratingId = json["rating_id"];
-    _userName = json["user_name"];
-    _customerId = json["customer_id"];
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map["imageAvatar"] = _imageAvatar;
-    map["comment"] = _comment;
-    map["star"] = _star;
-    map["timeUpdated"] = _timeUpdated;
-    map["imageRating"] = _imageRating;
-
-    map["size"] = _size;
-    map["color"] = _color;
-    map["rating_id"] = _ratingId;
-    map["user_name"] = _userName;
-    map["customer_id"] = _customerId;
-    return map;
-  }
-}
-
-
-class TotalCount {
-  late int _totalAll;
-  late int _totalImage;
-  late int _totalStar1;
-  late int _totalStar2;
-  late int _totalStar3;
-  late int _totalStar4;
-  late int _totalStar5;
-
-  int get totalAll => _totalAll;
-  int get totalImage => _totalImage;
-  int get totalStar1 => _totalStar1;
-  int get totalStar2 => _totalStar2;
-  int get totalStar3 => _totalStar3;
-  int get totalStar4 => _totalStar4;
-  int get totalStar5 => _totalStar5;
-
-  TotalCount({
-    required   int totalAll,
-    required   int totalImage,
-    required   int totalStar1,
-    required   int totalStar2,
-    required   int totalStar3,
-    required   int totalStar4,
-    required   int totalStar5}){
-    _totalAll = totalAll;
-    _totalImage = totalImage;
-    _totalStar1 = totalStar1;
-    _totalStar2 = totalStar2;
-    _totalStar3 = totalStar3;
-    _totalStar4 = totalStar4;
-    _totalStar5 = totalStar5;
-  }
-
-  TotalCount.fromJson(dynamic json) {
-    _totalAll = json["total_all"];
-    _totalImage = json["total_image"];
-    _totalStar1 = json["total_star1"];
-    _totalStar2 = json["total_star2"];
-    _totalStar3 = json["total_star3"];
-    _totalStar4 = json["total_star4"];
-    _totalStar5 = json["total_star5"];
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map["total_all"] = _totalAll;
-    map["total_image"] = _totalImage;
-    map["total_star1"] = _totalStar1;
-    map["total_star2"] = _totalStar2;
-    map["total_star3"] = _totalStar3;
-    map["total_star4"] = _totalStar4;
-    map["total_star5"] = _totalStar5;
     return map;
   }
 
