@@ -71,14 +71,14 @@ late int _countRating;
 }
 
 class Price {
- late int _priceMax;
- late int _priceMin;
-  int get priceMax => _priceMax;
-  int get priceMin => _priceMin;
+ late double _priceMax;
+ late double _priceMin;
+ double get priceMax => _priceMax;
+ double get priceMin => _priceMin;
 
   Price({
-   required  int priceMax,
-   required  int priceMin}){
+   required  double priceMax,
+   required  double priceMin}){
     _priceMax = priceMax;
     _priceMin = priceMin;
 }
