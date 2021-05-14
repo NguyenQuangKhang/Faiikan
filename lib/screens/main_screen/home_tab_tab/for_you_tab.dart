@@ -20,6 +20,8 @@ import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../category_tab.dart';
+
 final items = [
   "https://www.designbold.com/academy/wp-content/uploads/2018/08/Tutorial_40.jpg",
   "https://i.ytimg.com/vi/U8HU_IuoGJ0/maxresdefault.jpg",
@@ -44,7 +46,6 @@ class _ForYouScreenState extends State<ForYouScreen> {
 
   @override
   void initState() {
-
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (time > 0) time--;
@@ -289,6 +290,12 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                       return FadeTransition(
                                         opacity: animation,
                                         child: ProductDetail(
+                                          percentStar: productBloc
+                                              .listdata[index].percentStar,
+                                          countRating: productBloc
+                                              .listdata[index].countRating,
+                                          price:
+                                              productBloc.listdata[index].price,
                                           productId: 1,
                                         ),
                                       );
@@ -448,12 +455,12 @@ class _ForYouScreenState extends State<ForYouScreen> {
                       ),
                     ),
                     onTap: () {
-//                      Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                              builder: (_) => BlocProvider.value(
-//                                  value: context.bloc<CategoryBloc>(),
-//                                  child: ExploreScreenNew())));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                  value: context.read<CategoryBloc>(),
+                                  child: CategoryScreen())));
                     },
                   )
                 ],
@@ -514,7 +521,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                           borderRadius:
                                               BorderRadius.circular(25),
                                           child: CachedNetworkImage(
-                                            imageUrl: category.icon != null
+                                            imageUrl: category.icon != ""
                                                 ? category.icon
                                                 : "https://i.pinimg.com/236x/30/87/8d/30878dc76c22265aa23b6c0328886113.jpg",
                                             placeholder: (context, url) =>
@@ -666,60 +673,75 @@ class _ForYouScreenState extends State<ForYouScreen> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(color: Colors.white),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.filter_list,
-                            size: 30,
-                            color: Color(0xff222222),
-                          ),
-                          Text(
-                            "Lọc",
-                            style: TextStyle(
-                              color: Color(0xff222222),
-                              fontSize: 14,
-                              letterSpacing: 0.5,
-                              fontWeight: FontWeight.w500,
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                        border: Border(
+                            top: BorderSide(
+                              color: Color(0xffE7E7E7),
+                              width: 5,
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            Icons.refresh_rounded,
-                            color: Color(0xff222222),
-                            size: 30,
-                          ),
-                          Text(
-                            "Phổ biến",
-                            style: TextStyle(
+                            bottom: BorderSide(
+                              color: Color(0xffE7E7E7),
+                              width: 5,
+                            ))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.filter_list,
+                              size: 30,
                               color: Color(0xff222222),
-                              fontSize: 14,
-                              letterSpacing: 0.5,
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            Text(
+                              "Lọc",
+                              style: TextStyle(
+                                color: Color(0xff222222),
+                                fontSize: 14,
+                                letterSpacing: 0.5,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              Icons.refresh_rounded,
+                              color: Color(0xff222222),
+                              size: 30,
+                            ),
+                            Text(
+                              "Phổ biến",
+                              style: TextStyle(
+                                color: Color(0xff222222),
+                                fontSize: 14,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   BlocBuilder<ProductBloc, ProductsState>(
                     builder: (context, state) {
                       return Stack(
                         children: <Widget>[
                           Container(
-                            //margin: EdgeInsets.only(left: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
                             color: Colors.white,
-
-                            height: MediaQuery.of(context).size.height/2,
+                            height: MediaQuery.of(context).size.height / 2,
                             child: CustomScrollView(
                                 shrinkWrap: true,
                                 primary: false,
@@ -737,108 +759,72 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                       .size
                                                       .width /
                                                   2 -
-                                              40) /
+                                              37) /
                                           (MediaQuery.of(context).size.height /
-                                                  3 +
-                                              15),
-                                      mainAxisSpacing: 0.0,
-                                      crossAxisSpacing: 0.0,
+                                                  3 -
+                                              7),
+                                      mainAxisSpacing: 10.0,
+                                      crossAxisSpacing: 10.0,
                                       //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
                                     ),
                                     delegate: SliverChildBuilderDelegate(
                                       (BuildContext context, int index) {
-                                        return Container(
-                                          margin: EdgeInsets.only(
-                                            top: 10,
-                                          ),
-                                          padding: EdgeInsets.only(
-                                              left: 10, bottom: 8, right: 10),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white.withOpacity(0),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-
-                                          //padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                                          child: GestureDetector(
-                                              child: Container(
-                                                height: MediaQuery.of(context)
-                                                            .size
-                                                            .height /
-                                                        3 +
-                                                    20,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  backgroundBlendMode:
-                                                      BlendMode.colorBurn,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  border: Border.all(
-                                                      color: Colors.white),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 2,
-                                                      blurRadius: 4,
-                                                      offset: Offset(0,
-                                                          0), // changes position of shadow
-                                                    ),
-                                                  ],
-//                                             boxShadow: [
-//                                               BoxShadow(
-//                                                 color: Colors.black.withOpacity(0.5),
-//                                                 spreadRadius: 5,
-//                                                 blurRadius: 7,
-//                                                 offset: Offset(0, 3),
-//
-//
-//                                               ),
-//                                             ],
-                                                ),
-                                                child: ProductCard(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height /
-                                                      2,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      2,
-                                                  product: productBloc.listdata[index],
-                                                  index: index,
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            BlocProvider<
-                                                                    ProductDetailBloc>(
-                                                                create:
-                                                                    (context) {
-                                                                  return ProductDetailBloc(
-                                                                      InitialProductDetail())
-                                                                    ..add(
-                                                                        ProductDetailLoadEvent(
-                                                                      id: productBloc
-                                                                          .listdata[
-                                                                              index]
-                                                                          .id,
-                                                                      person_id:
-                                                                          '',
-                                                                    ));
-                                                                },
-                                                                child:
-                                                                    ProductDetail(
-                                                                  productId: productBloc
-                                                                      .listdata[
-                                                                          index]
-                                                                      .id,
-                                                                ))));
-                                              }),
-                                        );
+                                        return GestureDetector(
+                                            child: ProductCard(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  3,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2,
+                                              product:
+                                                  productBloc.listdata[index],
+                                              index: index,
+                                            ),
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          BlocProvider<
+                                                                  ProductDetailBloc>(
+                                                              create:
+                                                                  (context) {
+                                                                return ProductDetailBloc(
+                                                                    InitialProductDetail())
+                                                                  ..add(
+                                                                      ProductDetailLoadEvent(
+                                                                    id: productBloc
+                                                                        .listdata[
+                                                                            index]
+                                                                        .id,
+                                                                    person_id:
+                                                                        '',
+                                                                  ));
+                                                              },
+                                                              child:
+                                                                  ProductDetail(
+                                                                percentStar: productBloc
+                                                                    .listdata[
+                                                                        index]
+                                                                    .percentStar,
+                                                                countRating: productBloc
+                                                                    .listdata[
+                                                                        index]
+                                                                    .countRating,
+                                                                price: productBloc
+                                                                    .listdata[
+                                                                        index]
+                                                                    .price,
+                                                                productId:
+                                                                    productBloc
+                                                                        .listdata[
+                                                                            index]
+                                                                        .id,
+                                                              ))));
+                                            });
                                       },
                                       childCount: productBloc.listdata.length,
                                     ),

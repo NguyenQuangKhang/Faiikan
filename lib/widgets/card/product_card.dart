@@ -21,18 +21,20 @@ class ProductCard extends StatelessWidget {
     return Container(
       width: width,
       height: height,
+      margin: EdgeInsets.only(
+          left: 3, bottom: 3, right: 3,top: 3),
       decoration: BoxDecoration(
         backgroundBlendMode: BlendMode.colorBurn,
-        color: Colors.white,
+        color: Colors.white.withOpacity(0),
         borderRadius: BorderRadius.circular(8),
-//        boxShadow: [
-//          BoxShadow(
-//            color: Colors.black.withOpacity(0.5),
-//            spreadRadius: 5,
-//            blurRadius: 7,
-//            offset: Offset(0, 3),
-//          ),
-//        ],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: Offset(0, 0),
+          ),
+        ],
       ),
       child: Column(
         children: <Widget>[
@@ -79,6 +81,7 @@ class ProductCard extends StatelessWidget {
                                 color: Colors.red,
                                 fontWeight: FontWeight.w500),
                             textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),

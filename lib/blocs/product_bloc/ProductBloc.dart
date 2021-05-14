@@ -25,23 +25,24 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
     if (event is ProductLoadEvent) {
       currentPage = 1;
       listdata = [];
-      var param = {'p': 1, 'filter': "popular",};
+//      var param = {'p': 1, 'filter': "popular",};
       yield Loading(
           sortBy: state.sortBy,
           error: "null",
           /* filterRules: null,*/
           data: listdata);
-      print("123");
+
       final response = await http.get(
-          Uri.http(
-            server,
-            '''/api/v1/cat/20/products''', param
+          Uri.parse(
+            "http://$server:8080/api/v1/cat/20/products?p=${currentPage.toString()}&filter=popular",
           ),
           headers: {
             HttpHeaders.contentTypeHeader: 'application/json',
           });
       print(response.body);
-       listdata=  json.decode(response.body).cast<Map<String,dynamic>>().map<Product>((json) => Product.fromJson(json)).toList();
+      listdata =
+          json.decode(response.body).cast<Map<String, dynamic>>().map<Product>((
+              json) => Product.fromJson(json)).toList();
       print(listdata);
       currentPage++;
 
@@ -89,12 +90,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
           error: state.error,
 //          filterRules: state.filterRules,
           data: state.data);
-      final response = await http.get(Uri.http(
-          server,
-          "api/v1/cat/" +
-              event.categoryPath +
-              "/products?p=" +
-              currentPageByCateGory.toString()));
+      final response = await http.get(Uri.parse(
+          "http://${server}:8080api/v1/cat/${event.categoryPath}/products?p=${currentPageByCateGory.toString()}"));
       listdataByCategory = json
           .decode(response.body)
           .cast<Map<String, dynamic>>()
@@ -131,13 +128,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
 //        currentPageByCateGory++;
 //      }
 
-      if (state is ProductsGridViewState)
-        yield ProductsAddmoreState(
-            data: listdataByCategory, sortBy: state.sortBy, error: '');
-      else
-        yield ProductsGridViewState(
-            data: listdataByCategory, sortBy: state.sortBy, error: '');
-    }
+          if (state is ProductsGridViewState)
+      yield
+      ProductsAddmoreState(
+          data: listdataByCategory, sortBy: state.sortBy, error: '');
+    else
+      yield ProductsGridViewState(
+          data: listdataByCategory, sortBy: state.sortBy, error: '');
+  }
 
 //    if (event is FilterandSortByEvent) {
 //      print(event.SortBy);
@@ -280,5 +278,5 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
 //            data: listdataFilter,
 //            sortBy: event.SortBy == null ? state.sortBy : event.SortBy);
 //    }
-  }
+    }
 }

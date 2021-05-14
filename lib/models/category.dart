@@ -1,44 +1,40 @@
 class Category {
- late int _id;
- late int _level;
- late String _name;
- late String _icon;
- late String _categoryPath;
+late int _id;
+late String _name;
+late String _icon;
+late int _level;
 
   int get id => _id;
-  int get level => _level;
   String get name => _name;
   String get icon => _icon;
-  String get categoryPath => _categoryPath;
+  int get level => _level;
 
   Category({
-    required int id,
-    required int level,
-    required String name,
-    required String icon,
-    required String categoryPath}){
+      required int id,
+      required String name,
+      required String icon,
+      required int level}){
     _id = id;
-    _level = level;
     _name = name;
     _icon = icon;
-    _categoryPath = categoryPath;
-  }
+    _level = level;
+}
 
   Category.fromJson(dynamic json) {
     _id = json["id"];
-    _level = json["level"];
     _name = json["name"];
-    _icon = json["icon"];
-    _categoryPath = json["category-path"];
+    if(json["icon"]==null)
+      _icon ="";
+    else _icon = json["icon"];
+    _level = json["level"];
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     map["id"] = _id;
-    map["level"] = _level;
     map["name"] = _name;
     map["icon"] = _icon;
-    map["category-path"] = _categoryPath;
+    map["level"] = _level;
     return map;
   }
 
