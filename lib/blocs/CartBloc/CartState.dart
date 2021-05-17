@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:faiikan/models/cart_item.dart';
 import 'package:faiikan/models/order_item.dart';
 
 
 abstract class CartState extends Equatable {
-  final List<OrderItem> data;
+  final List<CartItem> data;
   final int totalPrice;
   final double discount;
 
@@ -19,7 +20,7 @@ abstract class CartState extends Equatable {
 
 class CartLoadedState extends CartState {
   CartLoadedState({
-    required List<OrderItem> data,
+    required List<CartItem> data,
     required int totalPrice,
     required double discount,
   }) : super(data: data, totalPrice: totalPrice, discount: discount);
@@ -27,7 +28,7 @@ class CartLoadedState extends CartState {
 
 class CartLoaded2State extends CartState {
   CartLoaded2State({
-    required List<OrderItem> data,
+    required List<CartItem> data,
     required int totalPrice,
     required double discount,
   }) : super(data: data, totalPrice: totalPrice, discount: discount);
@@ -35,16 +36,21 @@ class CartLoaded2State extends CartState {
 
 class CartLoadingState extends CartState {
   CartLoadingState({
-    required List<OrderItem> data,
+    required List<CartItem> data,
     required int totalPrice,
     required double discount,
   }) : super(data: data, totalPrice: totalPrice, discount: discount);
 }
 
-class Initial extends CartState {
-  Initial({
-    required List<OrderItem> data,
+class InitialCart extends CartState {
+  InitialCart({
+    required List<CartItem> data,
     required int totalPrice,
     required double discount,
   }) : super(data: data, totalPrice: totalPrice, discount: discount);
+}
+
+class ErrorCart extends CartState {
+  final String error;
+  ErrorCart({required this.error}) : super(data:[], totalPrice: 0,discount: 0.0);
 }

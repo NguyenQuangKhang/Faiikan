@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
@@ -283,23 +284,23 @@ class _ForYouScreenState extends State<ForYouScreen> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                Navigator.of(context).push(PageRouteBuilder(
-                                    transitionDuration:
-                                        Duration(milliseconds: 2000),
-                                    pageBuilder: (context, animation, _) {
-                                      return FadeTransition(
-                                        opacity: animation,
-                                        child: ProductDetail(
-                                          percentStar: productBloc
-                                              .listdata[index].percentStar,
-                                          countRating: productBloc
-                                              .listdata[index].countRating,
-                                          price:
-                                              productBloc.listdata[index].price,
-                                          productId: 1,
-                                        ),
-                                      );
-                                    }));
+//                                Navigator.of(context).push(PageRouteBuilder(
+//                                    transitionDuration:
+//                                        Duration(milliseconds: 2000),
+//                                    pageBuilder: (context, animation, _) {
+//                                      return FadeTransition(
+//                                        opacity: animation,
+//                                        child: ProductDetail(
+//                                          percentStar: productBloc
+//                                              .listdata[index].percentStar,
+//                                          countRating: productBloc
+//                                              .listdata[index].countRating,
+//                                          price:
+//                                              productBloc.listdata[index].price,
+//                                          productId: 1,
+//                                        ),
+//                                      );
+//    }));
                               },
                               child: Container(
                                 margin: EdgeInsets.only(
@@ -601,6 +602,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                     child: GridView.count(
                       scrollDirection: Axis.vertical,
                       mainAxisSpacing: 10,
+                      physics: NeverScrollableScrollPhysics(),
                       crossAxisSpacing: 10,
                       childAspectRatio: 2,
                       crossAxisCount: 2,
@@ -671,6 +673,76 @@ class _ForYouScreenState extends State<ForYouScreen> {
                   ),
                 ],
               ),
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                  child: Text(
+                    "Có thể bạn cũng thích",
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18,
+                      letterSpacing: 0.5,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height / 4 <200? 200 +26: MediaQuery.of(context).size.height / 4+26,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: productBloc.listRecommendTopRating.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        child: ProductCard(
+                          height: MediaQuery.of(context).size.height / 4 <200? 200: MediaQuery.of(context).size.height / 4,
+                          width: MediaQuery.of(context).size.width / 3,
+                          product: productBloc.listRecommendTopRating[index],
+                          index: index,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => MultiBlocProvider(
+                                          providers: [
+                                            BlocProvider<ProductDetailBloc>(
+                                              create: (context) {
+                                                return ProductDetailBloc(
+                                                    InitialProductDetail())
+                                                  ..add(ProductDetailLoadEvent(
+                                                    id: productBloc
+                                                        .listRecommendTopRating[
+                                                            index]
+                                                        .id,
+                                                    person_id: '',
+                                                  ));
+                                              },
+                                            ),
+                                            BlocProvider.value(
+                                              value: context.read<CartBloc>(),
+                                            ),
+                                          ],
+                                          child: ProductDetail(
+                                            percentStar: productBloc
+                                                .listRecommendTopRating[index]
+                                                .percentStar,
+                                            countRating: productBloc
+                                                .listRecommendTopRating[index]
+                                                .countRating,
+                                            price: productBloc
+                                                .listRecommendTopRating[index]
+                                                .price,
+                                            productId: productBloc
+                                                .listRecommendTopRating[index]
+                                                .id,
+                                          ))));
+                        });
+                  }),
             ),
             Container(
               decoration: BoxDecoration(color: Colors.white),
@@ -787,23 +859,32 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          BlocProvider<
-                                                                  ProductDetailBloc>(
-                                                              create:
-                                                                  (context) {
-                                                                return ProductDetailBloc(
-                                                                    InitialProductDetail())
-                                                                  ..add(
-                                                                      ProductDetailLoadEvent(
-                                                                    id: productBloc
-                                                                        .listdata[
-                                                                            index]
-                                                                        .id,
-                                                                    person_id:
-                                                                        '',
-                                                                  ));
-                                                              },
+                                                      builder: (_) =>
+                                                          MultiBlocProvider(
+                                                              providers: [
+                                                                BlocProvider<
+                                                                    ProductDetailBloc>(
+                                                                  create:
+                                                                      (context) {
+                                                                    return ProductDetailBloc(
+                                                                        InitialProductDetail())
+                                                                      ..add(
+                                                                          ProductDetailLoadEvent(
+                                                                        id: productBloc
+                                                                            .listdata[index]
+                                                                            .id,
+                                                                        person_id:
+                                                                            '',
+                                                                      ));
+                                                                  },
+                                                                ),
+                                                                BlocProvider
+                                                                    .value(
+                                                                  value: context
+                                                                      .read<
+                                                                          CartBloc>(),
+                                                                ),
+                                                              ],
                                                               child:
                                                                   ProductDetail(
                                                                 percentStar: productBloc

@@ -80,3 +80,17 @@ const ProductByCategoryCodeEvent({required this.categoryPath});
 //String toString() =>
 //    'ProductButtonPressed { ... }';
 //}
+
+class RecommendTopRatingEvent extends ProductEvent {
+
+  final String userId;
+  const RecommendTopRatingEvent({required this.userId});
+
+
+  @override
+  List<Object> get props => [userId];
+
+  @override
+  String toString() =>
+      'ProductButtonPressed { ... }';
+}

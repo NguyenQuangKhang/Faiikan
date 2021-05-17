@@ -1,6 +1,12 @@
+import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
+import 'package:faiikan/blocs/CartBloc/CartState.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
+import 'package:faiikan/blocs/product_bloc/ProductState.dart';
 import 'package:faiikan/screens/main_screen/category_tab.dart';
 import 'package:faiikan/screens/main_screen/favorite_tab.dart';
 import 'package:faiikan/screens/main_screen/home_tab.dart';
@@ -19,7 +25,25 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int currentIndex = 0;
   final tab = [
-    HomeScreen(),
+  MultiBlocProvider(
+  providers: [
+  BlocProvider(
+  create: (BuildContext context) =>
+  CategoryBloc(LoadingCategory())..add(InitiateEvent()),
+  ),
+  BlocProvider(
+  create: (BuildContext context) =>
+  CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
+  ..add(GetCartEvent(person_id: "142519")),
+  ),
+  BlocProvider(
+  create: (BuildContext context) =>
+  ProductBloc(Initial(data: [], error: "", sortBy: 0))
+  ..add(ProductLoadEvent(SortBy: 0)),
+  ),
+
+  ],
+  child:  HomeScreen(),),
     BlocProvider(
       child: CategoryScreen(),
       create: (BuildContext context) => CategoryBloc(LoadingCategory())..add(InitiateEvent()),

@@ -43,7 +43,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<RatingBloc, RatingState>(builder: (context, state) {
       if(state is InitialRatingState)
-        return Center(child: CircularProgressIndicator(),);
+        return Container(color: Colors.white,child: Center(child: CircularProgressIndicator(backgroundColor: Colors.redAccent,),));
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -234,9 +234,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
                             if (index == 2)
                               return InkWell(
                                 onTap: () {
-                                  setState(() {
+                                  if (selected != index) {
                                     selected = index;
-                                  });
+                                    context.read<RatingBloc>().add(
+                                        UpdateRatingEvent(
+                                            product_id: context
+                                                .read<ProductDetailBloc>()
+                                                .productDetail
+                                                .id
+                                                .toString(),
+                                            select: selectedOtion[selected]));
+                                  }
                                 },
                                 child: Container(
                                   width:
@@ -288,9 +296,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
                             if (index == 3)
                               return InkWell(
                                 onTap: () {
-                                  setState(() {
+                                  if (selected != index) {
                                     selected = index;
-                                  });
+                                    context.read<RatingBloc>().add(
+                                        UpdateRatingEvent(
+                                            product_id: context
+                                                .read<ProductDetailBloc>()
+                                                .productDetail
+                                                .id
+                                                .toString(),
+                                            select: selectedOtion[selected]));
+                                  };
                                 },
                                 child: Container(
                                   width:
@@ -341,9 +357,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
                             if (index == 4)
                               return InkWell(
                                 onTap: () {
-                                  setState(() {
+                                  if (selected != index) {
                                     selected = index;
-                                  });
+                                    context.read<RatingBloc>().add(
+                                        UpdateRatingEvent(
+                                            product_id: context
+                                                .read<ProductDetailBloc>()
+                                                .productDetail
+                                                .id
+                                                .toString(),
+                                            select: selectedOtion[selected]));
+                                  }
                                 },
                                 child: Container(
                                   width:
@@ -394,9 +418,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
                             if (index == 5)
                               return InkWell(
                                 onTap: () {
-                                  setState(() {
+                                  if (selected != index) {
                                     selected = index;
-                                  });
+                                    context.read<RatingBloc>().add(
+                                        UpdateRatingEvent(
+                                            product_id: context
+                                                .read<ProductDetailBloc>()
+                                                .productDetail
+                                                .id
+                                                .toString(),
+                                            select: selectedOtion[selected]));
+                                  }
                                 },
                                 child: Container(
                                   width:
@@ -447,9 +479,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
                             if (index == 6)
                               return InkWell(
                                 onTap: () {
-                                  setState(() {
+                                  if (selected != index) {
                                     selected = index;
-                                  });
+                                    context.read<RatingBloc>().add(
+                                        UpdateRatingEvent(
+                                            product_id: context
+                                                .read<ProductDetailBloc>()
+                                                .productDetail
+                                                .id
+                                                .toString(),
+                                            select: selectedOtion[selected]));
+                                  }
                                 },
                                 child: Container(
                                   width:
@@ -686,6 +726,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
 }
 
 double calAverageStarRating(RatingStar s) {
+  if(s.star1 + s.star2 + s.star3 + s.star4 + s.star5==0)
+    return 0;
   return (s.star1 + s.star2 * 2 + s.star3 * 3 + s.star4 * 4 + s.star5 * 5) /
       (s.star1 + s.star2 + s.star3 + s.star4 + s.star5);
 }

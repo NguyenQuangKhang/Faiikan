@@ -8,13 +8,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isBack;
   final Color backgroundColor;
   final isRedTitle;
+  final VoidCallback onTapCart;
+  final VoidCallback onTapNotification;
 
   const CustomAppBar(
       {required this.bottom,
       this.title = "FaiiKan",
       this.isRedTitle = false,
       this.isBack = false,
-      this.backgroundColor = Colors.white});
+      this.backgroundColor = Colors.white,required this.onTapCart,required this.onTapNotification});
 
   @override
   Widget build(BuildContext context) {
@@ -65,16 +67,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         bottom: bottom,
         actions: isRedTitle
             ? [
-                Icon(
-                  Icons.notifications_none,
-                  color: Colors.black,
-                  size: 30,
+                InkWell(
+                  onTap: onTapNotification,
+                  child: Icon(
+                    Icons.notifications_none,
+                    color: Colors.black,
+                    size: 30,
+                  ),
                 ),
                 SizedBox(width: 10),
-                Icon(
-                  Icons.shopping_cart_outlined,
-                  color: Colors.black,
-                  size: 30,
+                InkWell(
+                  onTap: onTapCart,
+                  child: Icon(
+                    Icons.shopping_cart_outlined,
+                    color: Colors.black,
+                    size: 30,
+                  ),
                 ),
                 SizedBox(width: 10),
               ]

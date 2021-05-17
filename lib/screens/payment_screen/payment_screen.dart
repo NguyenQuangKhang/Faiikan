@@ -1,4 +1,5 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/models/cart_item.dart' as cart;
 import 'package:faiikan/models/order_item.dart';
 import 'package:faiikan/screens/address_screen/select_address.dart';
 import 'package:faiikan/styles/custom_icon_icons.dart';
@@ -17,16 +18,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
   bool haveAddress = false;
 
   String Voucher = "Chọn hoặc nhập voucher";
-  late List<OrderItem> listItems;
+  late List<cart.CartItem> listItems;
 
   @override
   void initState() {
     // TODO: implement initState
-    listItems = context
-        .read<CartBloc>()
-        .list_data
-        .where((element) => element.isChosen)
-        .toList();
+//    listItems = context
+//        .read<CartBloc>()
+//        .list_data
+//        .where((element) => element.isChosen)
+//        .toList();
     super.initState();
   }
 

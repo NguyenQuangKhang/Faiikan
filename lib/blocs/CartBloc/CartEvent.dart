@@ -18,14 +18,15 @@ class GetCartEvent extends CartEvent {
 }
 
 class UpdateCartEvent extends CartEvent {
-  final String id;
+  final int id;
   final int amount;
 
   final int index;
+  final int optionId;
 
-  UpdateCartEvent({ required this.id,required this.amount,required this.index});
+  UpdateCartEvent({ required this.id,required this.amount,required this.index,required this.optionId});
   @override
-  List<Object> get props => [id,amount,index];
+  List<Object> get props => [id,amount,index,optionId];
 
   @override
   String toString() =>
@@ -33,7 +34,7 @@ class UpdateCartEvent extends CartEvent {
 }
 
 class DeleteCartEvent extends CartEvent {
-  final List<String> id;
+  final String id;
   final int index;
   DeleteCartEvent({ required this.id,required this.index});
   @override

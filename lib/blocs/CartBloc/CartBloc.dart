@@ -1,78 +1,15 @@
+import 'dart:convert';
+
+import 'package:faiikan/models/cart_item.dart';
 import 'package:faiikan/models/order_item.dart';
+import 'package:faiikan/utils/server_name.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'CartEvent.dart';
 import 'CartState.dart';
-
-List<OrderItem> list = [
-  new OrderItem(
-      "1",
-      "Áo xyz",
-      'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
-      120000,
-      1,
-      "M",
-      "color"),
-  new OrderItem(
-      "1",
-      "Áo xyz",
-      'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
-      120000,
-      1,
-      "M",
-      "color"),
-  new OrderItem(
-      "1",
-      "Áo xyz",
-      'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
-      120000,
-      1,
-      "M",
-      "color"),
-  new OrderItem(
-      "1",
-      "Áo xyz",
-      'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
-      120000,
-      1,
-      "M",
-      "color"),
-  new OrderItem(
-      "1",
-      "Áo xyz",
-      'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
-      120000,
-      1,
-      "M",
-      "color"),
-  new OrderItem(
-      "1",
-      "Áo xyz",
-      'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
-      120000,
-      1,
-      "M",
-      "color"),
-  new OrderItem(
-      "1",
-      "Áo xyz",
-      'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
-      120000,
-      1,
-      "M",
-      "color"),
-  new OrderItem(
-    "1",
-    "Áo xyz",
-    'https://img.zanado.com/media/cache_img/wysiwyg/2015/themhinh2015/thang-10/156513/ao_khoac_nam_xo_ngon_pa_fashion_a76a.jpg',
-    120000,
-    1,
-    "M",
-    "color",
-  ),
-];
+import 'package:http/http.dart' as http;
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  List<OrderItem> list_data = [];
+  List<CartItem> list_data = [];
   late double totalPrice = 0;
   late double discount;
 
@@ -80,48 +17,81 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   @override
   // TODO: implement initialState
-  CartState get initialState => Initial(data: [], discount: 0, totalPrice: 0);
+  CartState get initialState =>
+      InitialCart(data: [], discount: 0, totalPrice: 0);
 
   @override
   Stream<CartState> mapEventToState(event) async* {
     if (event is GetCartEvent) {
-      list_data = list;
-
+      yield InitialCart(data: [], discount: 0, totalPrice: 0);
+      final response = await http.get(Uri.parse(
+          "http://$server:8080/api/v1/cart/${event.person_id}/get-list"));
+      list_data = json
+          .decode(response.body)
+          .cast<Map<String, dynamic>>()
+          .map<CartItem>((json) => CartItem.fromJson(json))
+          .toList();
       yield CartLoadedState(
           data: list_data,
           discount: state.discount,
           totalPrice: (totalPrice - totalPrice * state.discount).toInt());
     }
     if (event is UpdateCartEvent) {
-      yield CartLoadingState(data: list_data,
-          discount: state.discount,
-          totalPrice: (totalPrice - totalPrice * state.discount).toInt());
-      totalPrice += (event.amount - list_data[event.index].count) *
-          list_data[event.index].productPrice;
-      list_data[event.index].count = event.amount;
-      if (state is CartLoadedState)
-        yield CartLoaded2State(
-            data: list_data,
-            discount: state.discount,
-            totalPrice: (totalPrice - totalPrice * state.discount).toInt());
-      else
-        yield CartLoadedState(
-            data: list_data,
-            discount: state.discount,
-            totalPrice: (totalPrice - totalPrice * state.discount).toInt());
+      try {
+        http.put(
+          Uri.parse("http://$server:8080/api/v1/cart/${event.id}/update"),
+          headers: <String, String>{
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          },
+          body: <String, String>{
+            'p_option': event.optionId.toString(),
+            'amount': event.amount.toString(),
+          },
+        );
+        if(list_data[event.index].isChosen==true)totalPrice += (event.amount - list_data[event.index].amount) *
+            list_data[event.index].optionProduct.price.value;
+      list_data[event.index].amount = event.amount;
+        if (state is CartLoadedState)
+          yield CartLoaded2State(
+              data: list_data,
+              discount: state.discount,
+              totalPrice: (totalPrice - totalPrice * state.discount).toInt());
+        else
+          yield CartLoadedState(
+              data: list_data,
+              discount: state.discount,
+              totalPrice: (totalPrice - totalPrice * state.discount).toInt());
+      } catch (e) {
+        print(e.toString());
+        yield ErrorCart(error: e.toString());
+        this.add(GetCartEvent(person_id: "142519"));
+      }
     }
 
     if (event is DeleteCartEvent) {
-      if (state is CartLoadedState)
-        yield CartLoaded2State(
-            data: list_data,
-            discount: state.discount,
-            totalPrice: (totalPrice - totalPrice * state.discount).toInt());
-      else
-        yield CartLoadedState(
-            data: list_data,
-            discount: state.discount,
-            totalPrice: (totalPrice - totalPrice * state.discount).toInt());
+      try {
+        http.delete(
+          Uri.parse("http://$server:8080/api/v1/cart/${event.id}/remove"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+        list_data.removeAt(event.index);
+        if (state is CartLoadedState)
+          yield CartLoaded2State(
+              data: list_data,
+              discount: state.discount,
+              totalPrice: (totalPrice - totalPrice * state.discount).toInt());
+        else
+          yield CartLoadedState(
+              data: list_data,
+              discount: state.discount,
+              totalPrice: (totalPrice - totalPrice * state.discount).toInt());
+      } catch (e) {
+        print(e.toString());
+        yield ErrorCart(error: e.toString());
+        this.add(GetCartEvent(person_id: "142519"));
+      }
     }
     if (event is CheckItemCartEvent) {
       list_data[event.index].isChosen = event.value;
@@ -129,7 +99,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       totalPrice = 0;
       for (int i = 0; i < list_data.length; i++) {
         if (list_data[i].isChosen == true) {
-          totalPrice += list_data[i].count * list_data[i].productPrice;
+          totalPrice +=
+              list_data[i].amount * list_data[i].optionProduct.price.value;
         }
       }
       if (state is CartLoadedState)
@@ -151,7 +122,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       totalPrice = 0;
       for (int i = 0; i < list_data.length; i++) {
         if (list_data[i].isChosen == true) {
-          totalPrice += list_data[i].count * list_data[i].productPrice;
+          totalPrice +=
+              list_data[i].amount * list_data[i].optionProduct.price.value;
         }
       }
       if (state is CartLoadedState)

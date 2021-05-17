@@ -10,7 +10,8 @@ import 'ProductDetailState.dart';
 
 class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   late ProductDetailed productDetail;
-
+  late String optionProductId;
+  late int amount;
   ProductDetailBloc(ProductDetailState initialState) : super(initialState);
 
   @override
@@ -22,7 +23,23 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
       yield ProductDetailShowState(data: productDetail);
     }
     if (event is AddtocartEvent) {
-      yield ProductDetailShowState(data: productDetail);
+      yield LoadingProductDetail();
+//      try {
+
+        await http.post(
+          Uri.parse(
+              "http://$server:8080/api/v1/cart/142519/${event.product_id}/add"),
+          headers: <String, String>{
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          },
+          body: <String, String>{
+            'p_option': event.option_amount_id,
+            'amount': event.amount.toString(),
+          },
+        );
+
+        yield ProductDetailShowState(data: productDetail);
+//      } catch (e) {}
     }
 
     if (event is FavoriteTapEvent) {}

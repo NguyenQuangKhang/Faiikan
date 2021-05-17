@@ -20,3 +20,10 @@ class InitialProductDetail extends ProductDetailState {
   // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
+class LoadingProductDetail extends ProductDetailState {
+  LoadingProductDetail();
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}

@@ -15,6 +15,8 @@ class RegisterAndLoginScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: CustomAppBar(
+          onTapCart: (){},
+          onTapNotification: (){},
           isBack: true,
           bottom: TabBar(
             indicatorColor: Colors.black,

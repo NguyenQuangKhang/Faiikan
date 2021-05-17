@@ -453,6 +453,21 @@ class _AttributesSheetState extends State<AttributesSheet> {
                 Expanded(
                   child: InkWell(
                     onTap: () {
+                      context.read<ProductDetailBloc>().optionProductId=context
+                          .read<ProductDetailBloc>()
+                          .productDetail.optionProducts.firstWhere((e) {
+                        for(int i=0;i<listIndexSelected.length;i++)
+                        {
+                          if(e.option.where((a) => a.id == context
+                              .read<ProductDetailBloc>()
+                              .productDetail
+                              .attributes
+                              .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
+                            return false;
+                        }
+                        return true;
+                      }).productOptionId.toString();
+                      context.read<ProductDetailBloc>().amount=count;
                       Navigator.of(context).pop("Thêm vào giỏ hàng");
                     },
                     child: Container(
@@ -487,16 +502,16 @@ class _AttributesSheetState extends State<AttributesSheet> {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    BlocProvider(
-                                        create: (BuildContext context) =>
-                                        MyOrderBloc(InitialMyOrderState())
-                                          ..add(InitiateMyOrderEvent(
-                                              person_id: "person_id")),
-                                        child: MyOrderScreen())));
+//                        Navigator.push(
+//                            context,
+//                            MaterialPageRoute(
+//                                builder: (context) =>
+//                                    BlocProvider(
+//                                        create: (BuildContext context) =>
+//                                        MyOrderBloc(InitialMyOrderState())
+//                                          ..add(InitiateMyOrderEvent(
+//                                              person_id: "person_id")),
+//                                        child: MyOrderScreen())));
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(

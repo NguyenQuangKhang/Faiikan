@@ -208,6 +208,7 @@ class ProductDetailed {
 }
 
 class Option_products {
+  late int _productOptionId;
   late Price _price;
   late Quantity _quantity;
   late List<Option> _option;
@@ -217,17 +218,21 @@ class Option_products {
   Quantity get quantity => _quantity;
 
   List<Option> get option => _option;
+  int get productOptionId => _productOptionId;
 
   Option_products(
-      {required Price price,
+      {required int productOptionId,
+        required Price price,
       required Quantity quantity,
       required List<Option> option}) {
+    _productOptionId=productOptionId;
     _price = price;
     _quantity = quantity;
     _option = option;
   }
 
   Option_products.fromJson(dynamic json) {
+    _productOptionId= json["product_option_id"];
     _price = (json["price"] != null ? Price.fromJson(json["price"]) : null)!;
     _quantity = (json["quantity"] != null
         ? Quantity.fromJson(json["quantity"])
@@ -539,12 +544,13 @@ class Ratings {
   }
 
   Ratings.fromJson(dynamic json) {
-    if (json["list-rating"] != null) {
+    if (json["list-rating"] != []) {
       _listrating = [];
       json["list-rating"].forEach((v) {
         _listrating.add(Listrating.fromJson(v));
       });
     }
+    else _listrating=[];
     if(json["total_count"]!=null)
       {
           _totalCount=TotalCount.fromJson(json["total_count"]);
@@ -571,7 +577,6 @@ class Listrating {
   late String _color;
   late int _ratingId;
   late String _userName;
-  late int _customerId;
 
   String get imageAvatar => _imageAvatar;
 
@@ -591,7 +596,6 @@ class Listrating {
 
   String get userName => _userName;
 
-  int get customerId => _customerId;
 
   Listrating(
       {required String imageAvatar,
@@ -613,39 +617,40 @@ class Listrating {
     _color = color;
     _ratingId = ratingId;
     _userName = userName;
-    _customerId = customerId;
   }
 
   Listrating.fromJson(dynamic json) {
-    _imageAvatar = json["imageAvatar"];
+    _imageAvatar = json["image-avatar"];
     if(json["comment"]==null)
       _comment="";
    else _comment = json["comment"];
     _star = json["star"];
-    _timeUpdated = json["timeUpdated"];
-    if (json["imageRating"] != null) {
-      _imageRating = json["imageRating"].cast<String>();
+    _timeUpdated = json["time-updated"];
+    if (json["images-rating"] != []) {
+      _imageRating=[];
+      json["images-rating"].forEach((v) {
+        _imageRating.add(v);
+      });
     }
+    else _imageRating=[];
     _size = json["size"];
     _color = json["color"];
     _ratingId = json["rating_id"];
     _userName = json["user_name"];
-    _customerId = json["customer_id"];
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
-    map["imageAvatar"] = _imageAvatar;
+    map["image-avatar"] = _imageAvatar;
     map["comment"] = _comment;
     map["star"] = _star;
-    map["timeUpdated"] = _timeUpdated;
-    map["imageRating"] = _imageRating;
+    map["time-updated"] = _timeUpdated;
+    map["images-rating"] = _imageRating;
 
     map["size"] = _size;
     map["color"] = _color;
     map["rating_id"] = _ratingId;
     map["user_name"] = _userName;
-    map["customer_id"] = _customerId;
     return map;
   }
 }

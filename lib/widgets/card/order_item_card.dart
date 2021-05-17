@@ -1,6 +1,6 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
-import 'package:faiikan/models/order_item.dart';
+import 'package:faiikan/models/cart_item.dart' as cart_item;
 import 'package:faiikan/widgets/attribute_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,7 +12,7 @@ final images = [
 ];
 
 class OrderItemCard extends StatelessWidget {
-  final OrderItem orderItem;
+  final cart_item.CartItem orderItem;
   final int index;
 
   const OrderItemCard(
@@ -41,7 +41,7 @@ class OrderItemCard extends StatelessWidget {
           Container(
             padding: isOrderDetail?EdgeInsets.all(15):EdgeInsets.zero,
             child: Image.network(
-              orderItem.productImgURL,
+              orderItem.optionProduct.image.value,
               fit: BoxFit.fill,
             ),
             width: MediaQuery.of(context).size.width / 3 - 25,
@@ -63,7 +63,7 @@ class OrderItemCard extends StatelessWidget {
                             width:
                                 MediaQuery.of(context).size.width * 2 / 3 - 60,
                             child: Text(
-                              orderItem.productName,
+                              orderItem.nameProduct,
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -99,9 +99,9 @@ class OrderItemCard extends StatelessWidget {
                             Text(
                               "Phân loại: " +
                                   orderItem
-                                      .Color +
+                                      .optionProduct.color.value +
                                   ", " +
-                                  orderItem.Size,
+                                  orderItem.optionProduct.size.value,
                               style: TextStyle(
                                 color: Colors.black.withOpacity(0.7),
                                 fontSize: 12,
@@ -121,24 +121,24 @@ class OrderItemCard extends StatelessWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+//                        Text(
+//                          NumberFormat.simpleCurrency(locale: "vi")
+//                              .format(orderItem.optionProduct.price.value)
+//                              .toString(),
+//                          style: TextStyle(
+//                              fontSize: 12,
+//                              color: Colors.black54,
+//                              decoration: TextDecoration.lineThrough,
+//                              decorationThickness: 2,
+//                              decorationColor: Colors.black54,
+//                              decorationStyle: TextDecorationStyle.solid),
+//                        ),
+//                        SizedBox(
+//                          width: 5,
+//                        ),
                         Text(
                           NumberFormat.simpleCurrency(locale: "vi")
-                              .format(orderItem.productPrice)
-                              .toString(),
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                              decoration: TextDecoration.lineThrough,
-                              decorationThickness: 2,
-                              decorationColor: Colors.black54,
-                              decorationStyle: TextDecorationStyle.solid),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          NumberFormat.simpleCurrency(locale: "vi")
-                              .format(orderItem.productPrice)
+                              .format(orderItem.optionProduct.price.value)
                               .toString(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class OrderItemCard extends StatelessWidget {
                                     TextStyle(color: Colors.grey, fontSize: 12),
                               ),
                               Text(
-                                orderItem.count.toString(),
+                                orderItem.amount.toString(),
                                 style: TextStyle(
                                     fontSize: 13,
                                     color: Colors.black,
@@ -180,12 +180,13 @@ class OrderItemCard extends StatelessWidget {
                             children: <Widget>[
                               InkWell(
                                 onTap: () {
-                                  if (orderItem.count > 0)
+                                  if (orderItem.amount > 0)
+
                                     context.read<CartBloc>().add(
                                         UpdateCartEvent(
-                                            id: orderItem.id,
-                                            amount: orderItem.count - 1,
-                                            index: index));
+                                            id: orderItem.cartId,
+                                            amount: orderItem.amount - 1,
+                                            index: index,optionId: orderItem.optionProduct.productOptionId));
                                 },
                                 child: Container(
                                   width: 30,
@@ -215,13 +216,13 @@ class OrderItemCard extends StatelessWidget {
                                     color: Color(0xffD7DEE1),
                                   )),
                                   child: Center(
-                                      child: Text(orderItem.count.toString(),style: TextStyle(color: Color(0xffFA4747)),))),
+                                      child: Text(orderItem.amount.toString(),style: TextStyle(color: Color(0xffFA4747)),))),
                               InkWell(
                                 onTap: () {
                                   context.read<CartBloc>().add(UpdateCartEvent(
-                                      id: orderItem.id,
-                                      amount: orderItem.count + 1,
-                                      index: index));
+                                      id: orderItem.cartId,
+                                      amount: orderItem.amount + 1,
+                                      index: index,optionId: orderItem.optionProduct.productOptionId ));
                                 },
                                 child: Container(
                                   width: 30,

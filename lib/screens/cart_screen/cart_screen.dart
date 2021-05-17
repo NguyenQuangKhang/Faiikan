@@ -1,6 +1,7 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
 import 'package:faiikan/blocs/CartBloc/CartState.dart';
+import 'package:faiikan/models/cart_item.dart' as cart;
 import 'package:faiikan/models/order_item.dart';
 import 'package:faiikan/screens/main_screen/home_tab_tab/for_you_tab.dart';
 import 'package:faiikan/screens/payment_screen/payment_screen.dart';
@@ -22,7 +23,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   String Voucher = "Nhấn để chọn voucher";
   bool chooseAll = true;
-  List<OrderItem> list_chosen = [];
+  List<cart.CartItem> list_chosen = [];
   bool isRemoving = false;
 
   @override
@@ -41,7 +42,7 @@ class _CartScreenState extends State<CartScreen> {
         }
       }
 
-      if (state is Initial) return Container();
+      if (state is InitialCart) return Container(color: Colors.white,child: Center(child: CircularProgressIndicator(backgroundColor: Colors.redAccent,),));
       return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -64,29 +65,15 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
           actions: <Widget>[
-            GestureDetector(
-              onTap: () {
-//                Navigator.push(
-//                    context,
-//                    MaterialPageRoute(
-//                      builder: (context) => BlocProvider<SearchBloc>(
-//                          create: (context) {
-//                            return SearchBloc();
-//                          },
-//                          child: SearchScreen()),
-//                    ));
-              },
-              child: Icon(Icons.search, color: Colors.white, size: 40),
-            ),
           ],
-          backgroundColor: Color(0xFF4ab3b5),
+          backgroundColor: Colors.white,
         ),
         backgroundColor: Colors.white,
         body: Column(
           children: <Widget>[
             Expanded(
               child: Container(
-                padding: EdgeInsets.only(top: 8, left: 8, right: 8),
+
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
@@ -116,7 +103,7 @@ class _CartScreenState extends State<CartScreen> {
                       confirmDismiss: (direction) async {
                         return await showDialog(
                           context: context,
-                          builder: (BuildContext context) {
+                          builder: (_) {
                             return Dialog(
                               child: Container(
                                 child: Column(
@@ -164,11 +151,19 @@ class _CartScreenState extends State<CartScreen> {
                                         ),
                                         Expanded(
                                           child: InkWell(
-                                            onTap: () =>
-                                                Navigator.of(context).pop(true),
+                                            onTap: () {
+                                              context
+                                                  .read<CartBloc>()
+                                                  .add(DeleteCartEvent(
+                                                  index: index,
+                                                  id:
+                                                  context.read<CartBloc>().list_data[index].cartId.toString()
+                                              ));
+                                             Navigator.of(context).pop();
+                            },
                                             child: Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 10),
+//                                              padding: EdgeInsets.symmetric(
+//                                                  vertical: 10),
                                               decoration: BoxDecoration(
                                                   border: Border.all(
                                                       color: Color(0xffC4C4C4)
@@ -196,86 +191,94 @@ class _CartScreenState extends State<CartScreen> {
                         );
                       },
                       key: Key(index.toString()),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              height: 40,
-                              width: 40,
-                              alignment: Alignment.topCenter,
-                              child: Checkbox(
-                                value: context
-                                    .read<CartBloc>()
-                                    .list_data[index]
-                                    .isChosen,
-                                activeColor: Color(0xffED2626),
-                                onChanged: (value) {
-                                  chooseAll = false;
-                                  context.read<CartBloc>().add(
-                                      CheckItemCartEvent(
-                                          index: index, value: value!));
-                                },
-                              )),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                            ),
-                            margin: EdgeInsets.only(bottom: 15),
-                            child: Stack(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 8, left: 8, right: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                OrderItemCard(
-                                  orderItem:
-                                      context.read<CartBloc>().list_data[index],
-                                  index: index,
-                                ),
-                                Positioned(
-                                    top: 5,
-                                    right: 5,
-                                    child: GestureDetector(
-                                      child: Icon(
-                                        Icons.cancel,
-                                        size: 20,
-                                        color: Colors.black45,
-                                      ),
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (_) {
-                                            // return object of type Dialog
-                                            return AlertDialog(
-                                              title: new Text("Lưu ý!"),
-                                              content: new Text(
-                                                  "Bạn có chắc muốn xóa sản phẩm này không?"),
-                                              actions: <Widget>[
-                                                // usually buttons at the bottom of the dialog
-                                                new FlatButton(
-                                                  child: new Text("Có"),
-                                                  onPressed: () {
-                                                    context
-                                                        .read<CartBloc>()
-                                                        .add(DeleteCartEvent(
-                                                            index: index,
-                                                            id: [
-                                                              "${context.read<CartBloc>().list_data[index].id}"
-                                                            ]));
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                                new FlatButton(
-                                                  child: new Text("Hủy"),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
+                                Container(
+                                    height: 40,
+                                    width: 40,
+                                    alignment: Alignment.topCenter,
+                                    child: Checkbox(
+                                      value: context
+                                          .read<CartBloc>()
+                                          .list_data[index]
+                                          .isChosen,
+                                      activeColor: Color(0xffED2626),
+                                      onChanged: (value) {
+                                        chooseAll = false;
+                                        context.read<CartBloc>().add(
+                                            CheckItemCartEvent(
+                                                index: index, value: value!));
                                       },
-                                    ))
+                                    )),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  margin: EdgeInsets.only(bottom: 15),
+                                  child: Stack(
+                                    children: <Widget>[
+                                      OrderItemCard(
+                                        orderItem:
+                                            context.read<CartBloc>().list_data[index],
+                                        index: index,
+                                      ),
+//                                      Positioned(
+//                                          top: 5,
+//                                          right: 5,
+//                                          child: GestureDetector(
+//                                            child: Icon(
+//                                              Icons.cancel,
+//                                              size: 20,
+//                                              color: Colors.black45,
+//                                            ),
+//                                            onTap: () {
+//                                              showDialog(
+//                                                context: context,
+//                                                builder: (_) {
+//                                                  // return object of type Dialog
+//                                                  return AlertDialog(
+//                                                    title: new Text("Lưu ý!"),
+//                                                    content: new Text(
+//                                                        "Bạn có chắc muốn xóa sản phẩm này không?"),
+//                                                    actions: <Widget>[
+//                                                      // usually buttons at the bottom of the dialog
+//                                                      new TextButton(
+//                                                        child: new Text("Có"),
+//                                                        onPressed: () {
+//                                                          context
+//                                                              .read<CartBloc>()
+//                                                              .add(DeleteCartEvent(
+//                                                                  index: index,
+//                                                                  id:
+//                                                                    context.read<CartBloc>().list_data[index].cartId.toString()
+//                                                                  ));
+//                                                          Navigator.of(context).pop();
+//                                                        },
+//                                                      ),
+//                                                      new TextButton(
+//                                                        child: new Text("Hủy"),
+//                                                        onPressed: () {
+//                                                          Navigator.of(context).pop();
+//                                                        },
+//                                                      ),
+//                                                    ],
+//                                                  );
+//                                                },
+//                                              );
+//                                            },
+//                                          ))
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
+                          Container(height: 1,color: Color(0xffE7E7E7),),
                         ],
                       ),
                     );

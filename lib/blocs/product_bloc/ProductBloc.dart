@@ -12,7 +12,7 @@ import 'ProductState.dart';
 class ProductBloc extends Bloc<ProductEvent, ProductsState> {
   List<Product> listdata = [];
   int currentPage = 1;
-
+  List<Product> listRecommendTopRating=[];
   List<Product> listdataFilter = [];
   int currentPageFilter = 1;
   List<Product> listdataByCategory = [];
@@ -31,7 +31,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
           error: "null",
           /* filterRules: null,*/
           data: listdata);
-
+      final response1 = await http.get(Uri.parse(
+          "http://$server:8080/api/v1/recommend/top-rating/67493"));
+      listRecommendTopRating = json
+          .decode(response1.body)
+          .cast<Map<String, dynamic>>()
+          .map<Product>((json) => Product.fromJson(json))
+          .toList();
       final response = await http.get(
           Uri.parse(
             "http://$server:8080/api/v1/cat/20/products?p=${currentPage.toString()}&filter=popular",
@@ -278,5 +284,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
 //            data: listdataFilter,
 //            sortBy: event.SortBy == null ? state.sortBy : event.SortBy);
 //    }
+  if(event is RecommendTopRatingEvent)
+    {
+
+    }
     }
 }
