@@ -10,7 +10,7 @@ class ProductDetailShowState extends ProductDetailState {
 
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 class InitialProductDetail extends ProductDetailState {
@@ -18,12 +18,27 @@ class InitialProductDetail extends ProductDetailState {
 
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 class LoadingProductDetail extends ProductDetailState {
   LoadingProductDetail();
 
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
+}
+class LoadingProductDetailReset extends ProductDetailState {
+  LoadingProductDetailReset();
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+class ErrorProductDetail extends ProductDetailState {
+  final String error;
+  ErrorProductDetail({required this.error});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
 }

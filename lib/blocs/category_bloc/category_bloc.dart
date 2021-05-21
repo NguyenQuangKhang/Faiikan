@@ -12,7 +12,7 @@ import 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   List<Category> list_cat_1 = [];
-  List<Category> sub_cat = [];
+
 
   int indexSelected=0;
 
@@ -28,19 +28,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       yield LoadingCategory();
       final response = await http.get(Uri.parse("http://$server:8080/api/v1/categories/16/sub-categories"));
       list_cat_1 = json.decode(response.body).cast<Map<String,dynamic>>().map<Category>((json) => Category.fromJson(json)).toList();
-      final response2= await http.get(Uri.parse("http://$server:8080/api/v1/categories/${list_cat_1[0].id.toString()}/sub-categories"));
-      sub_cat = json.decode(response2.body).cast<Map<String,dynamic>>().map<Category>((json) => Category.fromJson(json)).toList();
       yield LoadCategories();
 
     }
 
 
-    if(event is CategoryButtonPressed)
-    {
-      yield LoadingCategory();
-      final response = await http.get(Uri.parse("http://$server:8080/api/v1/categories/${event.parentId.toString()}/sub-categories"));
-      sub_cat = json.decode(response.body).cast<Map<String,dynamic>>().map<Category>((json) => Category.fromJson(json)).toList();
-      yield LoadCategories();
-    }
+
   }
 }

@@ -12,39 +12,25 @@ class Category1Button extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: isSelected?bgColor:Colors.white,
-        height: MediaQuery.of(context).size.height / 6,
+
+      decoration: BoxDecoration( color: isSelected?bgColor:Colors.white,border: Border(bottom: BorderSide(color: Color(0xffE7E7E7),width: 1))),
         padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Image.network(
-                data.icon,
-                fit: BoxFit.fill,
-//                color: isSelected?Colors.red: null,
-              ),
-            ),
 
             SizedBox(
               height: 10,
             ),
-            Expanded(
-              flex: 1,
-              child: Text(
-                data.name,
-                style: TextStyle(
-                  color: isSelected?Colors.black:Colors.black54,
-                  fontSize: 10,
-                ),
-                textAlign: TextAlign.center,
+            Text(
+              data.name,
+              style: TextStyle(
+                color: isSelected?Colors.black:Colors.black54,
+                fontSize: 10,
               ),
+              textAlign: TextAlign.center,
             ),
-            if(!isSelected) Container(
-              height: 1,
-              color: Colors.black45,
-            )
+
           ],
         ),
       ),

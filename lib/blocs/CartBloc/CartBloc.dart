@@ -12,6 +12,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   List<CartItem> list_data = [];
   late double totalPrice = 0;
   late double discount;
+  late String userId;
 
   CartBloc(CartState initialState) : super(initialState);
 
@@ -24,6 +25,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   Stream<CartState> mapEventToState(event) async* {
     if (event is GetCartEvent) {
       yield InitialCart(data: [], discount: 0, totalPrice: 0);
+      userId=event.person_id;
       final response = await http.get(Uri.parse(
           "http://$server:8080/api/v1/cart/${event.person_id}/get-list"));
       list_data = json
@@ -64,7 +66,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       } catch (e) {
         print(e.toString());
         yield ErrorCart(error: e.toString());
-        this.add(GetCartEvent(person_id: "142519"));
+        this.add(GetCartEvent(person_id: userId));
       }
     }
 
@@ -90,7 +92,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       } catch (e) {
         print(e.toString());
         yield ErrorCart(error: e.toString());
-        this.add(GetCartEvent(person_id: "142519"));
+        this.add(GetCartEvent(person_id: userId));
       }
     }
     if (event is CheckItemCartEvent) {

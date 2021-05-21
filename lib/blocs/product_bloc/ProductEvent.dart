@@ -9,10 +9,10 @@ abstract class ProductEvent extends Equatable {
 
 class ProductLoadEvent extends ProductEvent {
 
-
+final int userId;
 final int SortBy;
 
-  ProductLoadEvent({required this.SortBy});
+  ProductLoadEvent({required this.SortBy,required this.userId});
 
   @override
   List<Object> get props => [];
@@ -39,30 +39,30 @@ class ProductGetMoreDataEvent extends ProductEvent {
 
 class ProductByCategoryCodeEvent extends ProductEvent {
 
-final String categoryPath;
-const ProductByCategoryCodeEvent({required this.categoryPath});
+final String categoryId;
+final String filter;
+const ProductByCategoryCodeEvent({required this.categoryId,required this.filter});
 
 
   @override
-  List<Object> get props => [categoryPath];
+  List<Object> get props => [];
 
   @override
   String toString() =>
       'ProductButtonPressed { ... }';
 }
-//class ProductGetMoreDataByCategoryCodeEvent extends ProductEvent {
-//
-//  final int SortBy;
-//  final Filter filter;
-//  final int level_code;
-//  const ProductGetMoreDataByCategoryCodeEvent({this.SortBy,this.filter,this.level_code});
-//  @override
-//  List<Object> get props => [SortBy,Filter];
-//
-//  @override
-//  String toString() =>
-//      'ProductButtonPressed { ... }';
-//}
+class ProductGetMoreDataByCategoryCodeEvent extends ProductEvent {
+
+  final String filter;
+  final int catId;
+  const ProductGetMoreDataByCategoryCodeEvent({required this.filter,required this.catId});
+  @override
+  List<Object> get props => [catId,filter];
+
+  @override
+  String toString() =>
+      'ProductButtonPressed { ... }';
+}
 //
 //
 //class FilterandSortByEvent extends ProductEvent {

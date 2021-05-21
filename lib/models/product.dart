@@ -8,6 +8,7 @@ late int _orderCount;
 late String _imgUrl;
 late double _percentStar;
 late int _countRating;
+bool isLiked=true;
 
  String get name => _name;
  Price get price => _price;

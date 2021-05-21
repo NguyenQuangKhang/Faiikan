@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
@@ -22,6 +24,35 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../category_tab.dart';
+
+List<String> imagesFlashSale = [
+  "https://assets.adidas.com/images/w_600,f_auto,q_auto/e714edee57fa45a2b102acaf010e276d_9366/Stan_Smith_Shoes_White_GZ3098_01_standard.jpg",
+  "https://media3.scdn.vn/img3/2019/4_11/RNYPwV_simg_de2fe0_500x500_maxb.jpg",
+  "https://media3.scdn.vn/img4/2021/04_27/BBxkmtiq7Qj4jlR9BT4n_simg_de2fe0_500x500_maxb.jpg",
+  "https://media3.scdn.vn/img3/2019/11_22/EeqVb7_simg_de2fe0_500x500_maxb.jpg",
+  "https://media3.scdn.vn/img4/2020/08_28/0Flhy94WecKP5ULHzB9G_simg_de2fe0_500x500_maxb.png",
+];
+List<int> priceFlashSale =[
+  (200+Random().nextInt(100)),
+  (200+Random().nextInt(100)),
+  (200+Random().nextInt(100)),
+  (200+Random().nextInt(100)),
+  (200+Random().nextInt(100)),
+];
+List<int> soldAmountFlashSale=[
+  (200+Random().nextInt(1000)),
+  (200+Random().nextInt(1000)),
+  (200+Random().nextInt(1000)),
+  (200+Random().nextInt(1000)),
+  (200+Random().nextInt(1000))
+];
+List<int> promotionFlashSale=[
+  (30+Random().nextInt(3)*10),
+  (30+Random().nextInt(3)*10),
+  (30+Random().nextInt(3)*10),
+  (30+Random().nextInt(3)*10),
+  (30+Random().nextInt(3)*10),
+];
 
 final items = [
   "https://www.designbold.com/academy/wp-content/uploads/2018/08/Tutorial_40.jpg",
@@ -316,8 +347,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                           Container(
                                             margin: EdgeInsets.only(top: 2),
                                             child: CachedNetworkImage(
-                                              imageUrl:
-                                                  "https://assets.adidas.com/images/w_600,f_auto,q_auto/e714edee57fa45a2b102acaf010e276d_9366/Stan_Smith_Shoes_White_GZ3098_01_standard.jpg",
+                                              imageUrl: imagesFlashSale[index],
                                               fit: BoxFit.fill,
                                               placeholder: (context, url) => Center(
                                                   child:
@@ -355,7 +385,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                                   5))),
                                               child: Center(
                                                 child: Text(
-                                                  "50%",
+                                                  promotionFlashSale[index].toString() +"%",
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 8),
@@ -376,7 +406,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(
-                                              "162.000đ",
+                                             priceFlashSale[index].toString() +".000đ",
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
@@ -386,7 +416,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                             ),
                                             LinearPercentIndicator(
                                               center: Text(
-                                                "10 đã bán",
+                                                soldAmountFlashSale[index].toString() + " đã bán",
                                                 style: TextStyle(
                                                     fontSize: 10,
                                                     color: Colors.white),
@@ -677,7 +707,9 @@ class _ForYouScreenState extends State<ForYouScreen> {
             Row(
               children: [
                 Container(
+                  width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                  color: Colors.white,
                   child: Text(
                     "Có thể bạn cũng thích",
                     style: TextStyle(
@@ -690,19 +722,30 @@ class _ForYouScreenState extends State<ForYouScreen> {
                 ),
               ],
             ),
+            SizedBox(
+              height: 5,
+            ),
             Container(
-              height: MediaQuery.of(context).size.height / 4 <200? 200 +26: MediaQuery.of(context).size.height / 4+26,
+              height: MediaQuery.of(context).size.height / 4 < 200
+                  ? 200
+                  : MediaQuery.of(context).size.height / 4,
               width: MediaQuery.of(context).size.width,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: productBloc.listRecommendTopRating.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                        child: ProductCard(
-                          height: MediaQuery.of(context).size.height / 4 <200? 200: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 3,
-                          product: productBloc.listRecommendTopRating[index],
-                          index: index,
+                        child: Container(
+                          margin: EdgeInsets.only(right: 5),
+                          child: ProductCard(
+                            onTapFavorite: () {},
+                            height: MediaQuery.of(context).size.height / 4 < 200
+                                ? 200
+                                : MediaQuery.of(context).size.height / 4,
+                            width: MediaQuery.of(context).size.width / 3,
+                            product: productBloc.listRecommendTopRating[index],
+                            index: index,
+                          ),
                         ),
                         onTap: () {
                           Navigator.push(
@@ -710,24 +753,26 @@ class _ForYouScreenState extends State<ForYouScreen> {
                               MaterialPageRoute(
                                   builder: (_) => MultiBlocProvider(
                                           providers: [
-                                            BlocProvider<ProductDetailBloc>(
-                                              create: (context) {
-                                                return ProductDetailBloc(
-                                                    InitialProductDetail())
+                                            BlocProvider(
+                                                create: (_) =>
+                                                    ProductDetailBloc(InitialProductDetail())
                                                   ..add(ProductDetailLoadEvent(
-                                                    id: productBloc
-                                                        .listRecommendTopRating[
-                                                            index]
-                                                        .id,
-                                                    person_id: '',
-                                                  ));
-                                              },
-                                            ),
+                                                    id: productBloc.listRecommendTopRating[index].id,
+                                                    person_id: context
+                                                        .read<AccountBloc>()
+                                                        .user
+                                                        .id
+                                                        .toString(),
+                                                  ))),
                                             BlocProvider.value(
                                               value: context.read<CartBloc>(),
                                             ),
                                           ],
                                           child: ProductDetail(
+                                            userId: context
+                                                .read<AccountBloc>()
+                                                .user
+                                                .id!,
                                             percentStar: productBloc
                                                 .listRecommendTopRating[index]
                                                 .percentStar,
@@ -802,17 +847,17 @@ class _ForYouScreenState extends State<ForYouScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+//                  SizedBox(
+//                    height: 10,
+//                  ),
                   BlocBuilder<ProductBloc, ProductsState>(
                     builder: (context, state) {
                       return Stack(
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            color: Colors.white,
+//                            padding: EdgeInsets.symmetric(
+//                                horizontal: 5, vertical: 5),
+                            color: Color(0xffE7E7E7),
                             height: MediaQuery.of(context).size.height / 2,
                             child: CustomScrollView(
                                 shrinkWrap: true,
@@ -831,18 +876,19 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                       .size
                                                       .width /
                                                   2 -
-                                              37) /
+                                              22 / 5) /
                                           (MediaQuery.of(context).size.height /
                                                   3 -
-                                              7),
-                                      mainAxisSpacing: 10.0,
-                                      crossAxisSpacing: 10.0,
+                                              2.5),
+                                      mainAxisSpacing: 5,
+                                      crossAxisSpacing: 5,
                                       //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
                                     ),
                                     delegate: SliverChildBuilderDelegate(
                                       (BuildContext context, int index) {
                                         return GestureDetector(
                                             child: ProductCard(
+                                              onTapFavorite: () {},
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .height /
@@ -862,22 +908,18 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                       builder: (_) =>
                                                           MultiBlocProvider(
                                                               providers: [
-                                                                BlocProvider<
-                                                                    ProductDetailBloc>(
-                                                                  create:
-                                                                      (context) {
-                                                                    return ProductDetailBloc(
-                                                                        InitialProductDetail())
-                                                                      ..add(
-                                                                          ProductDetailLoadEvent(
+                                                                BlocProvider(
+                                                                    create: (_) =>
+                                                                    ProductDetailBloc(InitialProductDetail())
+                                                                      ..add(ProductDetailLoadEvent(
                                                                         id: productBloc
-                                                                            .listdata[index]
-                                                                            .id,
-                                                                        person_id:
-                                                                            '',
-                                                                      ));
-                                                                  },
-                                                                ),
+                                                                            .listdata[index].id,
+                                                                        person_id: context
+                                                                            .read<AccountBloc>()
+                                                                            .user
+                                                                            .id
+                                                                            .toString(),
+                                                                      ))),
                                                                 BlocProvider
                                                                     .value(
                                                                   value: context
@@ -887,6 +929,11 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                               ],
                                                               child:
                                                                   ProductDetail(
+                                                                userId: context
+                                                                    .read<
+                                                                        AccountBloc>()
+                                                                    .user
+                                                                    .id!,
                                                                 percentStar: productBloc
                                                                     .listdata[
                                                                         index]

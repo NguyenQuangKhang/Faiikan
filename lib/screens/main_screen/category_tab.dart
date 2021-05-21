@@ -6,12 +6,7 @@ import 'package:faiikan/widgets/category2_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-List<Color> listBgColors = [
-  Color(0xffADDBDE),
-  Color(0xffF6A1B5),
-  Color(0xffE1B857),
-  Color(0xff94C163),
-];
+Color listBgColors = Color(0xffE7E7E7);
 
 class CategoryScreen extends StatefulWidget {
   @override
@@ -38,18 +33,20 @@ class _CategoryScreenState extends State<CategoryScreen> {
           },
           child: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Colors.black,
             size: 30,
           ),
         ),
         textTheme: TextTheme(),
+        backgroundColor: Colors.white,
         title: Center(
           child: Text(
             "Danh mục",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           ),
         ),
       ),
+      backgroundColor: Color(0xffE7E7E7),
       body: BlocBuilder(
           bloc: _categoryBloc,
           builder: (context, state) {
@@ -64,28 +61,37 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 children: <Widget>[
                   Expanded(
                     flex: 3,
-                    child: ListView.builder(
-                      itemCount: _categoryBloc.list_cat_1.length,
-                      itemBuilder: (context, index) {
-                        return Category1Button(
-                          onTap: () {
-                            _categoryBloc.indexSelected = index;
-                            _categoryBloc.add(CategoryButtonPressed(
-                                parentId: _categoryBloc.list_cat_1[index].id));
-                          },
-                          data: _categoryBloc.list_cat_1[index],
-                          isSelected: index == _categoryBloc.indexSelected
-                              ? true
-                              : false,
-                          bgColor: listBgColors[index % 3].withOpacity(0.7),
-                        );
-                      },
+                    child: Container(
+                      color: Colors.white,
+                      child: ListView.builder(
+                        itemCount: _categoryBloc.list_cat_1.length,
+                        itemBuilder: (context, index) {
+                          return Category1Button(
+                            onTap: () {
+                              setState(() {
+                                _categoryBloc.indexSelected = index;
+                              });
+
+
+                            },
+                            data: _categoryBloc.list_cat_1[index],
+                            isSelected: index == _categoryBloc.indexSelected
+                                ? true
+                                : false,
+                            bgColor: listBgColors,
+                          );
+                        },
+                      ),
                     ),
                   ),
                   Expanded(
                     flex: 7,
                     child: Column(
                       children: <Widget>[
+                        Container(
+                          height: 5,
+                          color: listBgColors,
+                        ),
                         InkWell(
                           onTap: () {
 //                            Navigator.push(context,MaterialPageRoute(
@@ -102,10 +108,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                              vertical: 5,
-                              horizontal: 10,
+                              vertical: 10,
+                              horizontal: 15,
                             ),
-                            color: Color(0xffEBECE9),
+//                            margin: EdgeInsets.only(left: 5),
+                            color: Colors.white,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -113,15 +120,26 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   _categoryBloc
                                       .list_cat_1[_categoryBloc.indexSelected]
                                       .name,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                  style: TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.w600,letterSpacing: 0.5),
                                 ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 20,
-                                  color: Colors.black54,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Xem tất cả",
+                                      style: TextStyle(
+                                        color: Color(0xff0C73D2),
+                                        fontSize: 10,
+                                        letterSpacing: 0.5,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 10,
+                                      color: Color(0xff0C73D2),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -129,13 +147,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         ),
                         Expanded(
                           child: Container(
-                            color: listBgColors[_categoryBloc.indexSelected % 3]
-                                .withOpacity(0.7),
+                            color: listBgColors,
                             padding: EdgeInsets.all(5),
                             child: ListView.builder(
                               itemBuilder: (context, index) {
                                 return Category2Dropdown(
-                                  data: _categoryBloc.sub_cat[index],
+                                  data: _categoryBloc.list_cat_1[_categoryBloc.indexSelected].subCategory[index],
                                   onTap: () {
 //                                  Navigator.push(context,MaterialPageRoute(
 //                                      builder: (context)=> BlocProvider<ProductBloc>(
@@ -152,7 +169,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   onTapDropdownItem: () {},
                                 );
                               },
-                              itemCount: _categoryBloc.sub_cat.length,
+                              itemCount: _categoryBloc.list_cat_1[_categoryBloc.indexSelected].subCategory.length,
                             ),
                           ),
                         ),
@@ -161,7 +178,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   )
                 ],
               ),
-
             ]);
           }),
     );

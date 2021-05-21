@@ -1,12 +1,18 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
 import 'package:faiikan/blocs/CartBloc/CartState.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
+import 'package:faiikan/blocs/favorite_bloc/FavoriteBloc.dart';
+import 'package:faiikan/blocs/favorite_bloc/FavoriteEvent.dart';
+import 'package:faiikan/blocs/favorite_bloc/FavortieState.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
 import 'package:faiikan/blocs/product_bloc/ProductState.dart';
+import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
+import 'package:faiikan/blocs/product_detail_bloc/ProductDetailState.dart';
 import 'package:faiikan/screens/main_screen/category_tab.dart';
 import 'package:faiikan/screens/main_screen/favorite_tab.dart';
 import 'package:faiikan/screens/main_screen/home_tab.dart';
@@ -24,34 +30,62 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int currentIndex = 0;
-  final tab = [
-  MultiBlocProvider(
-  providers: [
-  BlocProvider(
-  create: (BuildContext context) =>
-  CategoryBloc(LoadingCategory())..add(InitiateEvent()),
-  ),
-  BlocProvider(
-  create: (BuildContext context) =>
-  CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
-  ..add(GetCartEvent(person_id: "142519")),
-  ),
-  BlocProvider(
-  create: (BuildContext context) =>
-  ProductBloc(Initial(data: [], error: "", sortBy: 0))
-  ..add(ProductLoadEvent(SortBy: 0)),
-  ),
+  var tab;
 
-  ],
-  child:  HomeScreen(),),
-    BlocProvider(
-      child: CategoryScreen(),
-      create: (BuildContext context) => CategoryBloc(LoadingCategory())..add(InitiateEvent()),
-    ),
-    MessageScreen(),
-    FavoriteScreen(),
-    ProfileScreen(),
-  ];
+  @override
+  void initState() {
+    tab = [
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (BuildContext context) =>
+                CategoryBloc(LoadingCategory())..add(InitiateEvent()),
+          ),
+          BlocProvider(
+            create: (BuildContext context) =>
+                CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
+                  ..add(GetCartEvent(
+                      person_id:
+                          context.read<AccountBloc>().user.id!.toString())),
+          ),
+          BlocProvider(
+            create: (BuildContext context) =>
+                ProductBloc(Initial(data: [], error: "", sortBy: 0))
+                  ..add(ProductLoadEvent(
+                      SortBy: 0, userId: context.read<AccountBloc>().user.id!)),
+          ),
+//          BlocProvider<ProductDetailBloc>(
+//            create: (BuildContext context) {
+//              return ProductDetailBloc(InitialProductDetail());
+//            },
+//          ),
+        ],
+        child: HomeScreen(),
+      ),
+      BlocProvider(
+        child: CategoryScreen(),
+        create: (BuildContext context) =>
+            CategoryBloc(LoadingCategory())..add(InitiateEvent()),
+      ),
+      MessageScreen(),
+      MultiBlocProvider(
+        providers: [
+
+          BlocProvider(
+            create: (BuildContext context) =>
+                FavoriteBloc(InitialFavorite(data: []))
+                  ..add(FavoriteLoadEvent(
+                      person_id:
+                          context.read<AccountBloc>().user.id!.toString())),
+          )
+        ],
+        child: FavoriteScreen(),
+      ),
+      ProfileScreen(),
+    ];
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

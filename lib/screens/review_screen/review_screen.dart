@@ -24,7 +24,7 @@ class ReviewScreen extends StatefulWidget {
 class _ReviewScreenState extends State<ReviewScreen> {
   ScrollController scrollController = ScrollController();
   int selected = 0;
-  List<String> selectedOtion = ["all", "image", "1", "2", "3", "4", "5"];
+  List<String> selectedOtion = ["all", "image", "5", "4", "3", "2", "1"];
 
   @override
   void initState() {
@@ -112,7 +112,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                           .read<ProductDetailBloc>()
                                           .productDetail
                                           .ratingStar)
-                                      .toString() +
+                                      .toStringAsFixed(2) +
                                   "/5.0",
                               style: TextStyle(
                                   fontSize: 12,

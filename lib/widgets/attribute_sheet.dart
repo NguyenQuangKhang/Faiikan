@@ -133,7 +133,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
             height: 1,
             color: Colors.black26,
           ),
-          Flexible(
+          Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               padding: EdgeInsets.symmetric(vertical: 10),
@@ -193,6 +193,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
                                       child: Column(
                                         children: [
                                           Container(
+                                            margin: EdgeInsets.only(right: 5),
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: i ==
@@ -259,6 +260,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
                                               letterSpacing: 0.5,
                                             ),
                                           ),
+
                                         ],
                                       ),
                                     );
@@ -268,6 +270,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
                             ],
                           ),
                         ),
+                        SizedBox(height: 10,),
                       ],
                     );
                   else
@@ -275,7 +278,11 @@ class _AttributesSheetState extends State<AttributesSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Kích thước",
+                          context
+                              .read<ProductDetailBloc>()
+                              .productDetail
+                              .attributes
+                              .where((att) => att.code != "image").toList()[index].code,
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.black,
@@ -308,6 +315,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
                                           });
                                         },
                                         child: Container(
+                                          margin: EdgeInsets.only(right: 5),
                                           decoration: BoxDecoration(
                                               border: Border.all(
                                                   color: i ==
@@ -347,6 +355,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
                             ],
                           ),
                         ),
+                        SizedBox(height: 10,),
                       ],
                     );
                 }),

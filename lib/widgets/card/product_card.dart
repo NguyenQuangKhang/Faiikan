@@ -9,39 +9,47 @@ class ProductCard extends StatelessWidget {
   final int index;
   final double height;
   final double width;
-
-  ProductCard(
-      {required this.product,
-      required this.index,
-      required this.height,
-      required this.width});
+  bool hasLike;
+  final VoidCallback onTapFavorite;
+  bool liked;
+  ProductCard({
+    required this.product,
+    required this.index,
+    required this.height,
+    required this.width,
+    this.hasLike = false,
+    this.liked=false,
+    required this.onTapFavorite,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       height: height,
-      margin: EdgeInsets.only(
-          left: 3, bottom: 3, right: 3,top: 3),
+//      margin: EdgeInsets.only(
+//          left: 3, bottom: 3, right: 3,top: 3),
       decoration: BoxDecoration(
         backgroundBlendMode: BlendMode.colorBurn,
         color: Colors.white.withOpacity(0),
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: Offset(0, 0),
-          ),
-        ],
+//        borderRadius: BorderRadius.circular(8),
+//        boxShadow: [
+//          BoxShadow(
+//            color: Colors.black.withOpacity(0.3),
+//            spreadRadius: 1,
+//            blurRadius: 2,
+//            offset: Offset(0, 0),
+//          ),
+//        ],
       ),
-      child: Column(
-        children: <Widget>[
-          ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(8), topLeft: Radius.circular(8)),
-              child: Image.network(
+      child: Stack(
+        children: [
+          Column(
+            children: <Widget>[
+              ClipRRect(
+//                  borderRadius: BorderRadius.only(
+//                      topRight: Radius.circular(8), topLeft: Radius.circular(8)),
+                  child: Image.network(
                 product.imgUrl != null
                     ? product.imgUrl
                     : "https://cdn.tgdd.vn/comment/34134321/58595582_1405843519557852_4325264661025914880_n-20190424085228.jpg",
@@ -51,24 +59,22 @@ class ProductCard extends StatelessWidget {
                     : width,
                 height: height == null
                     ? MediaQuery.of(context).size.height / 3 - 80
-                    : height - 120,
+                    : height - 140,
                 colorBlendMode: BlendMode.darken,
               )),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8)),
-              color: Colors.white,
-            ),
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: Padding(
-                padding: EdgeInsets.all(10),
+              Container(
+                decoration: BoxDecoration(
+//                  borderRadius: BorderRadius.only(
+//                      bottomLeft: Radius.circular(8),
+//                      bottomRight: Radius.circular(8)),
+                  color: Colors.white,
+                ),
                 child: Container(
-                  width: 170,
-                  height: 120,
+//                    width: 170,
+                  height: 140,
+                  padding: EdgeInsets.all(10),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
                         height: 30,
@@ -78,9 +84,9 @@ class ProductCard extends StatelessWidget {
                             maxLines: 1,
                             style: TextStyle(
                                 fontSize: 15,
-                                color: Colors.red,
+                                color: Color(0xff4B4A5A),
                                 fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.center,
+//                            textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -106,11 +112,12 @@ class ProductCard extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               NumberFormat.simpleCurrency(locale: "vi")
-                                  .format(product.price.priceMin)
+                                  .format(product.price.priceMax *
+                                      (1 - product.promotionPercent / 100))
                                   .toString(),
                               style: TextStyle(
                                 fontSize: 18,
-                                color: Colors.blue,
+                                color: Color(0xffE92E22),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -120,46 +127,63 @@ class ProductCard extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  NumberFormat.simpleCurrency(locale: "vi")
-                                      .format(product.price.priceMax)
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey,
-                                      decoration: TextDecoration.lineThrough),
-                                ),
-                              ),
                               product.promotionPercent != 0
-                                  ? Container(
-                                      height: 20,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: Color(0xffdb3022)),
-                                      child: Center(
-                                        child: Text(
-                                          product.promotionPercent.toString() +
-                                              "%",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white),
-                                        ),
+                                  ? Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        NumberFormat.simpleCurrency(
+                                                locale: "vi")
+                                            .format(product.price.priceMax)
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.grey,
+                                            decoration:
+                                                TextDecoration.lineThrough),
                                       ),
                                     )
                                   : Container(),
-                              //SizedBox(width: 5,),
+                              if (hasLike)
+                                InkWell(
+                                  onTap: onTapFavorite,
+                                  child: Icon(
+                                    liked? Icons.favorite: Icons.favorite_outline_sharp,
+                                    color: liked?Colors.redAccent:Color(0xff4B4A5A).withOpacity(0.5),
+                                    size: 30,
+                                  ),
+                                )
                             ],
                           ))
                     ],
                   ),
                 ),
               ),
-            ),
+            ],
           ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: product.promotionPercent != 0
+                ? Container(
+//            padding: EdgeInsets.symmetric(horizontal: 5,vertical: 3),
+                    height: 20,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.only(bottomLeft: Radius.circular(10)),
+                        color: Color(0xffF6E11E)),
+                    child: Center(
+                      child: Text(
+                        "-" + product.promotionPercent.toString() + "%",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xffF34343)),
+                      ),
+                    ),
+                  )
+                : Container(),
+          )
         ],
       ),
     );

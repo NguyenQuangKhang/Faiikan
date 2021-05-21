@@ -24,6 +24,7 @@ class ProductDetailed {
   late RatingStar _ratingStar;
   late List<Attributes> _attributes;
   late List<Option_products> _optionProducts;
+  late bool _isLiked;
 
   Ratings get ratings =>_ratings;
   RatingStar get ratingStar => _ratingStar;
@@ -72,6 +73,8 @@ class ProductDetailed {
   List<Attributes> get attributes => _attributes;
 
   List<Option_products> get optionProducts => _optionProducts;
+  bool get isLiked => _isLiked;
+  set isLiked(bool a) {_isLiked =a;}
 
   ProductDetailed(
       {required int id,
@@ -98,7 +101,8 @@ class ProductDetailed {
       required int promotionPercent,
       required int totalQuantity,
       required List<Attributes> attributes,
-      required List<Option_products> optionProducts}) {
+      required List<Option_products> optionProducts,
+      required bool isLiked,}) {
     _id = id;
     _name = name;
     _sku = sku;
@@ -124,6 +128,7 @@ class ProductDetailed {
     _totalQuantity = totalQuantity;
     _attributes = attributes;
     _optionProducts = optionProducts;
+    _isLiked=isLiked;
   }
 
   ProductDetailed.fromJson(dynamic json) {
@@ -164,6 +169,7 @@ class ProductDetailed {
         _optionProducts.add(Option_products.fromJson(v));
       });
     }
+    _isLiked=json["liked"];
   }
 
   Map<String, dynamic> toJson() {
@@ -620,7 +626,9 @@ class Listrating {
   }
 
   Listrating.fromJson(dynamic json) {
-    _imageAvatar = json["image-avatar"];
+    if(json["image-avatar"]==null)
+      _imageAvatar="";
+   else _imageAvatar = json["image-avatar"];
     if(json["comment"]==null)
       _comment="";
    else _comment = json["comment"];
@@ -633,7 +641,10 @@ class Listrating {
       });
     }
     else _imageRating=[];
-    _size = json["size"];
+    if(json["size"] ==null)
+      _size="";
+  else  _size = json["size"];
+
     _color = json["color"];
     _ratingId = json["rating_id"];
     _userName = json["user_name"];

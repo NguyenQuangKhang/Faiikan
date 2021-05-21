@@ -1,6 +1,8 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
 import 'package:faiikan/blocs/CartBloc/CartState.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountState.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_event.dart';
@@ -38,7 +40,11 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MainScreen()
+      home: BlocProvider(
+        create: (BuildContext context) => AccountBloc(AccountInitial()),
+        child: RegisterAndLoginScreen(),
+      ),
+      /*MainScreen()*/
       /*BlocProvider(
         create: (BuildContext context) => MyOrderBloc(InitialMyOrderState())..add(InitiateEvent(person_id: "person_id")),
         child: MyOrderScreen(),

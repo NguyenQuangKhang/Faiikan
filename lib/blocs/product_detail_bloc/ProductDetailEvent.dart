@@ -24,6 +24,18 @@ class ProductDetailLoadEvent extends ProductDetailEvent {
   String toString() =>
       'ProductButtonPressed { ... }';
 }
+class ProductDetailResetEvent extends ProductDetailEvent {
+ final int id;
+  final String person_id;
+
+  ProductDetailResetEvent({required this.id, required this.person_id});
+  @override
+  List<Object> get props => [id,person_id];
+
+  @override
+  String toString() =>
+      'ProductButtonPressed { ... }';
+}
 class AddtocartEvent extends ProductDetailEvent {
 
  final String person_id;

@@ -5,7 +5,8 @@ import 'package:flutter/widgets.dart';
 class InputTextField extends StatefulWidget {
   final String hintText;
  bool obscure;
-   InputTextField({required this.hintText,this.obscure=false});
+  TextEditingController controller;
+   InputTextField({required this.hintText,this.obscure=false,required this.controller});
   @override
   _InputTextFieldState createState() => _InputTextFieldState();
 }
@@ -16,7 +17,8 @@ class _InputTextFieldState extends State<InputTextField> {
   Widget build(BuildContext context) {
     return TextField(
       maxLines: 1,
-      obscureText: isHidePassword,
+      controller: widget.controller,
+      obscureText: widget.obscure?isHidePassword:widget.obscure,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
         border: UnderlineInputBorder(),

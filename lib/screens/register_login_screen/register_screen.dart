@@ -4,6 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatelessWidget {
+  TextEditingController txtName=TextEditingController();
+  TextEditingController txtEmail=TextEditingController();
+  TextEditingController txtPassword=TextEditingController();
+  TextEditingController txtPasswordConfirm=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -20,6 +24,7 @@ class RegisterScreen extends StatelessWidget {
                   InputTextField(
                     hintText: "Tên",
                     obscure: false,
+                    controller: txtName,
                   ),
                   SizedBox(
                     height: 20,
@@ -27,6 +32,7 @@ class RegisterScreen extends StatelessWidget {
                   InputTextField(
                     hintText: "Email",
                     obscure: false,
+                    controller: txtEmail,
                   ),
                   SizedBox(
                     height: 20,
@@ -34,6 +40,7 @@ class RegisterScreen extends StatelessWidget {
                   InputTextField(
                     hintText: "Mật khẩu",
                     obscure: true,
+                    controller: txtPassword,
                   ),
                   SizedBox(
                     height: 20,
@@ -41,6 +48,7 @@ class RegisterScreen extends StatelessWidget {
                   InputTextField(
                     hintText: "Nhập lại mật khẩu",
                     obscure: true,
+                    controller: txtPasswordConfirm,
                   ),
                   SizedBox(
                     height: 70,

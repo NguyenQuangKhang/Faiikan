@@ -646,6 +646,7 @@ class ProfileScreen extends StatelessWidget {
                         return Container(
                           margin: EdgeInsets.only(right: 10),
                           child: ProductCard(
+                            onTapFavorite: (){},
                             width: MediaQuery.of(context).size.width / 2,
                             height: MediaQuery.of(context).size.height / 4,
                             product:
