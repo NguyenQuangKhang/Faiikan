@@ -42,3 +42,28 @@ class ErrorProductDetail extends ProductDetailState {
   // TODO: implement props
   List<Object?> get props => [];
 }
+class LoadingProductAlsoLikeState extends ProductDetailState {
+
+  LoadingProductAlsoLikeState();
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+class LoadingRecommendAndAlsoLikeProduct extends ProductDetailState {
+
+  LoadingRecommendAndAlsoLikeProduct();
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class LoadingAddtoCart extends ProductDetailState {
+
+  LoadingAddtoCart();
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}

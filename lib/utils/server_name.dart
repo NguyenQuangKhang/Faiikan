@@ -1,1 +1,1 @@
-String server ="192.168.1.4";
+String server ="192.168.1.11";

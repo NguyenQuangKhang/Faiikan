@@ -4,13 +4,18 @@ import 'package:flutter/material.dart';
 import 'my_address.dart';
 
 class SelectAddressScreen extends StatefulWidget {
+  final String userId;
+
+  const SelectAddressScreen({required this.userId});
+
   @override
   _SelectAddressState createState() => _SelectAddressState();
 }
 
 class _SelectAddressState extends State<SelectAddressScreen> {
-  int selected=0;
-  int defaultIndex=0;
+  int selected = 0;
+  int defaultIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +42,13 @@ class _SelectAddressState extends State<SelectAddressScreen> {
         ),
         actions: [
           InkWell(
-            onTap: (){
+            onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MyAddressScreen()
-                  ));
+                      builder: (context) => MyAddressScreen(
+                            userId: widget.userId,
+                          )));
             },
             child: Center(
               child: Text(
@@ -60,90 +66,101 @@ class _SelectAddressState extends State<SelectAddressScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(scrollDirection: Axis.vertical,itemCount: 2,itemBuilder: (context, index) {
-              return InkWell(
-                onTap: (){
-                  setState(() {
-                    selected=index;
-                  });
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            spacing: 10,
-                            direction: Axis.vertical,
+            child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: 2,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        selected = index;
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(15),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                spacing: 10,
+                                direction: Axis.vertical,
                                 children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Địa chỉ nhận hàng",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      if (index == defaultIndex)
+                                        Text(
+                                          "[Mặc định]",
+                                          style: TextStyle(
+                                            color: Color(0xffF83434),
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        )
+                                    ],
+                                  ),
                                   Text(
-                                    "Địa chỉ nhận hàng",
+                                    "Nguyễn Quang Khang" +
+                                        " | " +
+                                        "0967524699",
                                     style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  if(index==defaultIndex) Text(
-                                    "[Mặc định]",
-                                    style: TextStyle(
-                                      color: Color(0xffF83434),
+                                      color: Colors.black.withOpacity(0.8),
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                     ),
-                                  )
+                                  ),
+                                  Text(
+                                    "Kí túc xá khu B - Đhqg tp.HCM",
+                                    style: TextStyle(
+                                      color: Colors.black.withOpacity(0.8),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Dĩ An - Đông Hòa - Bình Dương",
+                                    style: TextStyle(
+                                      color: Colors.black.withOpacity(0.8),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
                                 ],
                               ),
-                              Text(
-                                "Nguyễn Quang Khang" + " | " + "0967524699",
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.8),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                              if (index == selected)
+                                Icon(
+                                  Icons.done_sharp,
+                                  size: 25,
+                                  color: Color(0xffF62D2D),
                                 ),
-                              ),
-                              Text(
-                                "Kí túc xá khu B - Đhqg tp.HCM",
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.8),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              Text(
-                                "Dĩ An - Đông Hòa - Bình Dương",
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.8),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
                             ],
                           ),
-                         if(index==selected) Icon(
-                            Icons.done_sharp,
-                            size: 25,
-                            color: Color(0xffF62D2D),
-                          ),
-
-                        ],
-                      ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 5,
+                          color: Colors.black.withOpacity(0.2),
+                        )
+                      ],
                     ),
-                    SizedBox(height: 5,),
-                    Container(height: 5,color: Colors.black.withOpacity(0.2),)
-                  ],
-                ),
-              );
-            }),
+                  );
+                }),
           ),
         ],
       ),

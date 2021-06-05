@@ -1,6 +1,7 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
 import 'package:faiikan/blocs/CartBloc/CartState.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
@@ -29,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                       return BlocProvider.value(
                         value: context.read<CartBloc>(),
                         child: CartScreen(
-                          person_id: "1",
+                          person_id: context.read<AccountBloc>().user.id!,
                         ),
                       );
                     }));

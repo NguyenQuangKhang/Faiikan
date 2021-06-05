@@ -31,20 +31,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
           error: "null",
           /* filterRules: null,*/
           data: listdata);
-      final response1 = await http.get(
-          Uri.parse("http://$server:8080/api/v1/recommend/top-rating/67493"));
-      listRecommendTopRating = json
-          .decode(response1.body)
-          .cast<Map<String, dynamic>>()
-          .map<Product>((json) => Product.fromJson(json))
-          .toList();
       final response = await http.get(
-          Uri.parse(
-            "http://$server:8080/api/v1/cat/20/products?p=${currentPage.toString()}&filter=popular",
-          ),
-          headers: {
-            HttpHeaders.contentTypeHeader: 'application/json',
-          });
+          Uri.parse("http://$server:8080/api/v1/recommend/top-rating/${event.userId}?p=${currentPage.toString()}"));
+
+
       listdata = json
           .decode(response.body)
           .cast<Map<String, dynamic>>()

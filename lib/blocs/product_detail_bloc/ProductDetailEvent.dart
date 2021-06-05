@@ -71,3 +71,34 @@ class FavoriteTapEvent extends ProductDetailEvent {
  String toString() =>
      'ProductButtonPressed { ... }';
 }
+class LoadMoreProductAlsoLikeEvent extends ProductDetailEvent {
+
+ final String person_id;
+
+
+
+
+ LoadMoreProductAlsoLikeEvent({ required this.person_id});
+ @override
+ List<Object> get props => [person_id];
+
+ @override
+ String toString() =>
+     'ProductButtonPressed { ... }';
+}
+class LoadRecommendAndAlsoLikeProductEvent extends ProductDetailEvent {
+
+ final String person_id;
+ final String productId;
+
+
+
+
+ LoadRecommendAndAlsoLikeProductEvent({ required this.person_id,required this.productId});
+ @override
+ List<Object> get props => [person_id];
+
+ @override
+ String toString() =>
+     'ProductButtonPressed { ... }';
+}

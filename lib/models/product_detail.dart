@@ -155,7 +155,7 @@ class ProductDetailed {
     _purpose = json["purpose"];
     _suitableSeason = json["suitable_season"];
     _madeIn = json["madeIn"] ?? "";
-    _promotionPercent = json["promotionPercent"];
+    _promotionPercent = (json["promotionPercent"] as double).toInt();
     _totalQuantity = json["total_quantity"];
     if (json["attributes"] != null) {
       _attributes = [];
@@ -579,8 +579,8 @@ class Listrating {
   late int _star;
   late String _timeUpdated;
   late List<String> _imageRating;
-  late String _size;
-  late String _color;
+  late String? _size;
+  late String? _color;
   late int _ratingId;
   late String _userName;
 
@@ -594,9 +594,9 @@ class Listrating {
 
   List<String> get imageRating => _imageRating;
 
-  String get size => _size;
+  String? get size => _size;
 
-  String get color => _color;
+  String? get color => _color;
 
   int get ratingId => _ratingId;
 

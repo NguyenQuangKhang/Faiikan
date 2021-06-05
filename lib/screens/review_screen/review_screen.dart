@@ -639,7 +639,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                           width: 35,
                                         ),
                                         Text(
-                                          context.read<RatingBloc>().data.listrating[index].timeUpdated +" | Phân loại: " + context.read<RatingBloc>().data.listrating[index].size+", "+ context.read<RatingBloc>().data.listrating[index].color,
+                                          context.read<RatingBloc>().data.listrating[index].timeUpdated +" | Phân loại: " + (context.read<RatingBloc>().data.listrating[index].size==null? "" : context.read<RatingBloc>().data.listrating[index].size!) +", "+ (context.read<RatingBloc>().data.listrating[index].color==null? "" : context.read<RatingBloc>().data.listrating[index].color!),
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 12,

@@ -26,8 +26,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     if (event is GetCartEvent) {
       yield InitialCart(data: [], discount: 0, totalPrice: 0);
       userId=event.person_id;
+      print(Uri.parse(
+          "http://$server:8080/api/v1/cart/${event.person_id}/get-list-item"));
       final response = await http.get(Uri.parse(
-          "http://$server:8080/api/v1/cart/${event.person_id}/get-list"));
+          "http://$server:8080/api/v1/cart/${event.person_id}/get-list-item"));
       list_data = json
           .decode(response.body)
           .cast<Map<String, dynamic>>()
@@ -41,13 +43,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     if (event is UpdateCartEvent) {
       try {
         http.put(
-          Uri.parse("http://$server:8080/api/v1/cart/${event.id}/update"),
+          Uri.http("$server:8080","/api/v1/cart/${event.userId}/${event.id}/update",{
+            'p_option': event.optionId.toString(),
+            'qty': event.amount.toString(),
+          }),
           headers: <String, String>{
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          },
-          body: <String, String>{
-            'p_option': event.optionId.toString(),
-            'amount': event.amount.toString(),
           },
         );
         if(list_data[event.index].isChosen==true)totalPrice += (event.amount - list_data[event.index].amount) *

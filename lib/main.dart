@@ -7,6 +7,7 @@ import 'package:faiikan/blocs/category_bloc/category_state.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_event.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_state.dart';
+import 'package:faiikan/screens/address_screen/my_address.dart';
 import 'package:faiikan/screens/cart_screen/cart_screen.dart';
 import 'package:faiikan/screens/main_screen/main_screen.dart';
 import 'package:faiikan/screens/my_order_screen/my_order_screen.dart';
@@ -16,6 +17,9 @@ import 'package:faiikan/screens/review_screen/review_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'blocs/address_bloc/address_bloc.dart';
+import 'blocs/address_bloc/address_event.dart';
+import 'blocs/address_bloc/address_state.dart';
 import 'screens/register_login_screen/register_screen.dart';
 
 void main() {
@@ -40,7 +44,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider(
+      home:
+          /*BlocProvider(
+        create: (_) => AddressBloc(InitialAddressState())
+          ..add(GetProvinceEvent()),
+        child: MyAddressScreen(),
+      ),*/
+          BlocProvider(
         create: (BuildContext context) => AccountBloc(AccountInitial()),
         child: RegisterAndLoginScreen(),
       ),

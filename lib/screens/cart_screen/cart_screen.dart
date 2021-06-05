@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class CartScreen extends StatefulWidget {
-  final String person_id;
+  final int person_id;
 
   const CartScreen({required this.person_id});
 
@@ -223,6 +223,7 @@ class _CartScreenState extends State<CartScreen> {
                                   child: Stack(
                                     children: <Widget>[
                                       OrderItemCard(
+                                        userId: widget.person_id,
                                         orderItem:
                                             context.read<CartBloc>().list_data[index],
                                         index: index,
@@ -582,7 +583,7 @@ class _CartScreenState extends State<CartScreen> {
                             MaterialPageRoute(
                               builder: (_) => BlocProvider.value(
                                   value: context.read<CartBloc>(),
-                                  child: PaymentScreen()),
+                                  child: PaymentScreen(userId: widget.person_id.toString(),)),
                             ));
                       },
                     ),

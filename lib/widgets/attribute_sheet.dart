@@ -25,9 +25,27 @@ class AttributesSheet extends StatefulWidget {
 class _AttributesSheetState extends State<AttributesSheet> {
   int count = 1;
   late var listIndexSelected;
-
+ late double height;
   @override
   void initState() {
+    height=220;
+   if( context
+        .read<ProductDetailBloc>()
+        .productDetail
+        .attributes
+        .where((att) => att.code == "color").isNotEmpty)
+     height+= 150;
+   if( context
+        .read<ProductDetailBloc>()
+        .productDetail
+        .attributes
+        .where((att) => att.code != "image" && att.code !="color").isNotEmpty)
+     height+= 80*context
+         .read<ProductDetailBloc>()
+         .productDetail
+         .attributes
+         .where((att) => att.code != "image" && att.code !="color").length;
+
     // TODO: implement initState
     listIndexSelected = new List<int>.filled(context
         .read<ProductDetailBloc>()
@@ -59,10 +77,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
 //          return true;
 //     }).quantity.value);
     return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * 2 / 3,
+      height: height,
       color: Colors.white,
       padding: EdgeInsets.all(10),
       child: Column(
@@ -72,29 +87,37 @@ class _AttributesSheetState extends State<AttributesSheet> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    NumberFormat.simpleCurrency(locale: "vi")
-                        .format(context
-                        .read<ProductDetailBloc>()
-                        .productDetail.optionProducts.firstWhere((e) {
-                      for(int i=0;i<listIndexSelected.length;i++)
-                      {
-                        if(e.option.where((a) => a.id == context
-                            .read<ProductDetailBloc>()
-                            .productDetail
-                            .attributes
-                            .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
-                          return false;
-                      }
-                      return true;
-                    }).price.value)
-                        .toString(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Color(0xffF65151),
+                  Container( width: MediaQuery.of(context).size.width-20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          NumberFormat.simpleCurrency(locale: "vi")
+                              .format(context
+                              .read<ProductDetailBloc>()
+                              .productDetail.optionProducts.firstWhere((e) {
+                            for(int i=0;i<listIndexSelected.length;i++)
+                            {
+                              if(e.option.where((a) => a.id == context
+                                  .read<ProductDetailBloc>()
+                                  .productDetail
+                                  .attributes
+                                  .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
+                                return false;
+                            }
+                            return true;
+                          }).price.value)
+                              .toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Color(0xffF65151),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        InkWell(onTap: (){Navigator.of(context).pop();},child: Icon(Icons.cancel_outlined,color: Colors.grey,))
+                      ],
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   SizedBox(
                     height: 10,
@@ -134,8 +157,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
             color: Colors.black26,
           ),
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+            child: Container(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

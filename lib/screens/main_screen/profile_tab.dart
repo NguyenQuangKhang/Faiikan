@@ -1,6 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:faiikan/blocs/address_bloc/address_bloc.dart';
+import 'package:faiikan/blocs/address_bloc/address_event.dart';
+import 'package:faiikan/blocs/address_bloc/address_state.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductState.dart';
 import 'package:faiikan/models/product.dart';
+import 'package:faiikan/screens/address_screen/my_address.dart';
 import 'package:faiikan/screens/register_login_screen/login_screen.dart';
 import 'package:faiikan/screens/register_login_screen/register_and_login_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +15,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
+  final int userId;
+
+  const ProfileScreen({required this.userId});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -137,7 +146,9 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              Expanded(child: SizedBox()),
+                              SizedBox(
+                                height: 20,
+                              ),
                               Container(
                                 width:
                                     MediaQuery.of(context).size.width / 2 + 200,
@@ -197,18 +208,20 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
                         SizedBox(
-                          height: 70,
+                          height: MediaQuery.of(context).size.height / 12,
                         ),
                       ],
                     ),
                   ),
                   Positioned(
-                    top: MediaQuery.of(context).size.height / 3 - 70,
+                    top: MediaQuery.of(context).size.height / 2 -
+                        60 -
+                        (MediaQuery.of(context).size.height / 2 - 300),
                     child: Container(
                       margin: EdgeInsets.only(
                         right: 10,
@@ -573,6 +586,65 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => BlocProvider(
+                              create: (_) => AddressBloc(InitialAddressState())
+                                ..add(InitialAddressEvent(
+                                    userId: userId.toString())),
+                              child: MyAddressScreen(userId: userId.toString()),
+                            )));
+              },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black.withOpacity(0.2),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_sharp,
+                          color: Color(0xffDF8365),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Địa chỉ giao hàng",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            letterSpacing: 0.5,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.arrow_forward_ios_sharp,
+                          color: Color(0xff666666),
+                          size: 20,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -635,30 +707,43 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
-              children: [
-                Container(
-                    height: MediaQuery.of(context).size.height / 4 + 20,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.only(right: 10),
-                          child: ProductCard(
-                            onTapFavorite: (){},
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: MediaQuery.of(context).size.height / 4,
-                            product:
-                                context.read<ProductBloc>().listdata[index],
-                            index: index,
-                          ),
-                        );
-                      },
-                      itemCount: 5,
-                    )),
-              ],
-            )
+            BlocBuilder<ProductBloc, ProductsState>(builder: (context, state) {
+              if(state is Initial || state is Loading)
+                return Center(child: CircularProgressIndicator(backgroundColor: Colors.redAccent,),);
+              return Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                          height: MediaQuery.of(context).size.height / 4 + 20,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.only(right: 10),
+                                child: ProductCard(
+                                  onTapFavorite: () {},
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  height:
+                                      MediaQuery.of(context).size.height / 4,
+                                  product: context
+                                      .read<ProductBloc>()
+                                      .listRecommendTopRating[index],
+                                  index: index,
+                                ),
+                              );
+                            },
+                            itemCount:context
+                                .read<ProductBloc>()
+                                .listRecommendTopRating.length ,
+                          )),
+                    ],
+                  ),
+                ],
+              );
+            }),
           ],
         ),
       ),

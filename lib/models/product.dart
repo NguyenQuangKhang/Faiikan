@@ -46,7 +46,7 @@ bool isLiked=true;
     _price = (json["price"] != null ? Price.fromJson(json["price"]) : null)!;
     _id = json["id"];
     _freeShipping = json["free_shipping"];
-    _promotionPercent = json["promotion_percent"];
+    _promotionPercent = (json["promotion_percent"] as double).toInt();
     _orderCount = json["order_count"];
     _imgUrl = json["img_url"];
     _percentStar = json["percent_star"];

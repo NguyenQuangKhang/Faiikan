@@ -13,10 +13,12 @@ final images = [
 
 class OrderItemCard extends StatelessWidget {
   final cart_item.CartItem orderItem;
+  final int userId;
   final int index;
 
   const OrderItemCard(
-      {required this.orderItem,
+      {required this.userId,
+      required this.orderItem,
       required this.index,
       this.isOrderDetail = false});
 
@@ -24,22 +26,22 @@ class OrderItemCard extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(3),
+//      margin: EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: isOrderDetail?Color(0xffEFEBEB):Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 3,
-            offset: Offset(0, 0), // changes position of shadow
-          ),
-        ],
+        color: isOrderDetail ? Color(0xffEFEBEB) : Colors.white,
+//        boxShadow: [
+//          BoxShadow(
+//            color: Colors.black.withOpacity(0.5),
+//            spreadRadius: 2,
+//            blurRadius: 3,
+//            offset: Offset(0, 0), // changes position of shadow
+//          ),
+//        ],
       ),
       child: Row(
         children: <Widget>[
           Container(
-            padding: isOrderDetail?EdgeInsets.all(15):EdgeInsets.zero,
+            padding: isOrderDetail ? EdgeInsets.all(15) : EdgeInsets.zero,
             child: Image.network(
               orderItem.optionProduct.image.value,
               fit: BoxFit.fill,
@@ -78,14 +80,15 @@ class OrderItemCard extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                       if(!isOrderDetail) showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AttributesSheet(
-                                images: images,
-                                isSheet: true,
-                              );
-                            });
+                        if (!isOrderDetail)
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AttributesSheet(
+                                  images: images,
+                                  isSheet: true,
+                                );
+                              });
                       },
                       child: Container(
                         color: Color(0xffEEEEEE),
@@ -96,12 +99,11 @@ class OrderItemCard extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Text(
+                          Text(
                               "Phân loại: " +
-                                  orderItem
-                                      .optionProduct.color.value +
+                                 checkNullColor(orderItem.optionProduct.color )   +
                                   ", " +
-                                  orderItem.optionProduct.size.value,
+                                 checkNullSize(orderItem.optionProduct.size),
                               style: TextStyle(
                                 color: Colors.black.withOpacity(0.7),
                                 fontSize: 12,
@@ -181,12 +183,14 @@ class OrderItemCard extends StatelessWidget {
                               InkWell(
                                 onTap: () {
                                   if (orderItem.amount > 0)
-
                                     context.read<CartBloc>().add(
                                         UpdateCartEvent(
                                             id: orderItem.cartId,
+                                            userId: userId,
                                             amount: orderItem.amount - 1,
-                                            index: index,optionId: orderItem.optionProduct.productOptionId));
+                                            index: index,
+                                            optionId: orderItem.optionProduct
+                                                .productOptionId));
                                 },
                                 child: Container(
                                   width: 30,
@@ -207,7 +211,7 @@ class OrderItemCard extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                height: 30,
+                                  height: 30,
                                   width: 40,
                                   decoration: BoxDecoration(
 //                                      color: Color(0xffF34646),
@@ -216,13 +220,19 @@ class OrderItemCard extends StatelessWidget {
                                     color: Color(0xffD7DEE1),
                                   )),
                                   child: Center(
-                                      child: Text(orderItem.amount.toString(),style: TextStyle(color: Color(0xffFA4747)),))),
+                                      child: Text(
+                                    orderItem.amount.toString(),
+                                    style: TextStyle(color: Color(0xffFA4747)),
+                                  ))),
                               InkWell(
                                 onTap: () {
                                   context.read<CartBloc>().add(UpdateCartEvent(
+                                    userId: userId,
                                       id: orderItem.cartId,
                                       amount: orderItem.amount + 1,
-                                      index: index,optionId: orderItem.optionProduct.productOptionId ));
+                                      index: index,
+                                      optionId: orderItem
+                                          .optionProduct.productOptionId));
                                 },
                                 child: Container(
                                   width: 30,
@@ -253,4 +263,17 @@ class OrderItemCard extends StatelessWidget {
       ),
     );
   }
+}
+
+String checkNullColor(cart_item.Color? str)
+{
+  if(str ==null)
+  return "";
+  else return str.value.toString();
+}
+String checkNullSize(cart_item.Size? str)
+{
+  if(str ==null)
+    return "";
+  else return str.value.toString();
 }

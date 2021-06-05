@@ -26,19 +26,19 @@ bool isChosen=false;
 }
 
   CartItem.fromJson(dynamic json) {
-    _cartId = json["cart-id"];
+    _cartId = json["cart-item-id"];
     _productId = json["product-id"];
     _nameProduct = json["name-product"];
-    _amount = json["amount"];
+    _amount = json["quantity"];
     _optionProduct = (json["option-product"] != null ? OptionProduct.fromJson(json["option-product"]) : null)!;
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
-    map["cart-id"] = _cartId;
+    map["cart-item-id"] = _cartId;
     map["product-id"] = _productId;
     map["name-product"] = _nameProduct;
-    map["amount"] = _amount;
+    map["quantity"] = _amount;
     if (_optionProduct != null) {
       map["option-product"] = _optionProduct.toJson();
     }
@@ -51,15 +51,15 @@ class OptionProduct {
 late  int _productOptionId;
 late  Price _price;
 late  Quantity _quantity;
-late  Color _color;
-late  Size _size;
+  Color? _color;
+  Size? _size;
 late  Image _image;
 
   int get productOptionId => _productOptionId;
   Price get price => _price;
   Quantity get quantity => _quantity;
-  Color get color => _color;
-  Size get size => _size;
+  Color? get color => _color;
+  Size? get size => _size;
   Image get image => _image;
 
   OptionProduct({
@@ -81,8 +81,8 @@ late  Image _image;
     _productOptionId = json["product-option-id"];
     _price = (json["price"] != null ? Price.fromJson(json["price"]) : null)!;
     _quantity = (json["quantity"] != null ? Quantity.fromJson(json["quantity"]) : null)!;
-    _color = (json["color"] != null ? Color.fromJson(json["color"]) : null)!;
-    _size = (json["size"] != null ? Size.fromJson(json["size"]) : null)!;
+    _color = (json["color"] != null ? Color.fromJson(json["color"]) : null);
+    _size = (json["size"] != null ? Size.fromJson(json["size"]) : null);
     _image = (json["image"] != null ? Image.fromJson(json["image"]) : null)!;
   }
 
@@ -96,10 +96,10 @@ late  Image _image;
       map["quantity"] = _quantity.toJson();
     }
     if (_color != null) {
-      map["color"] = _color.toJson();
+      map["color"] = _color!.toJson();
     }
     if (_size != null) {
-      map["size"] = _size.toJson();
+      map["size"] = _size!.toJson();
     }
     if (_image != null) {
       map["image"] = _image.toJson();

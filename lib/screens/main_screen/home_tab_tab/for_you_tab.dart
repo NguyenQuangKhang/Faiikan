@@ -711,7 +711,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                   color: Colors.white,
                   child: Text(
-                    "Có thể bạn cũng thích",
+                    "Gợi ý cho bạn",
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 18,
@@ -725,70 +725,70 @@ class _ForYouScreenState extends State<ForYouScreen> {
             SizedBox(
               height: 5,
             ),
-            Container(
-              height: MediaQuery.of(context).size.height / 4 < 200
-                  ? 200
-                  : MediaQuery.of(context).size.height / 4,
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: productBloc.listRecommendTopRating.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                        child: Container(
-                          margin: EdgeInsets.only(right: 5),
-                          child: ProductCard(
-                            onTapFavorite: () {},
-                            height: MediaQuery.of(context).size.height / 4 < 200
-                                ? 200
-                                : MediaQuery.of(context).size.height / 4,
-                            width: MediaQuery.of(context).size.width / 3,
-                            product: productBloc.listRecommendTopRating[index],
-                            index: index,
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MultiBlocProvider(
-                                          providers: [
-                                            BlocProvider(
-                                                create: (_) =>
-                                                    ProductDetailBloc(InitialProductDetail())
-                                                  ..add(ProductDetailLoadEvent(
-                                                    id: productBloc.listRecommendTopRating[index].id,
-                                                    person_id: context
-                                                        .read<AccountBloc>()
-                                                        .user
-                                                        .id
-                                                        .toString(),
-                                                  ))),
-                                            BlocProvider.value(
-                                              value: context.read<CartBloc>(),
-                                            ),
-                                          ],
-                                          child: ProductDetail(
-                                            userId: context
-                                                .read<AccountBloc>()
-                                                .user
-                                                .id!,
-                                            percentStar: productBloc
-                                                .listRecommendTopRating[index]
-                                                .percentStar,
-                                            countRating: productBloc
-                                                .listRecommendTopRating[index]
-                                                .countRating,
-                                            price: productBloc
-                                                .listRecommendTopRating[index]
-                                                .price,
-                                            productId: productBloc
-                                                .listRecommendTopRating[index]
-                                                .id,
-                                          ))));
-                        });
-                  }),
-            ),
+//            Container(
+//              height: MediaQuery.of(context).size.height / 4 < 200
+//                  ? 200
+//                  : MediaQuery.of(context).size.height / 4,
+//              width: MediaQuery.of(context).size.width,
+//              child: ListView.builder(
+//                  scrollDirection: Axis.horizontal,
+//                  itemCount: productBloc.listRecommendTopRating.length,
+//                  itemBuilder: (context, index) {
+//                    return GestureDetector(
+//                        child: Container(
+//                          margin: EdgeInsets.only(right: 5),
+//                          child: ProductCard(
+//                            onTapFavorite: () {},
+//                            height: MediaQuery.of(context).size.height / 4 < 200
+//                                ? 200
+//                                : MediaQuery.of(context).size.height / 4,
+//                            width: MediaQuery.of(context).size.width / 3,
+//                            product: productBloc.listRecommendTopRating[index],
+//                            index: index,
+//                          ),
+//                        ),
+//                        onTap: () {
+//                          Navigator.push(
+//                              context,
+//                              MaterialPageRoute(
+//                                  builder: (_) => MultiBlocProvider(
+//                                          providers: [
+//                                            BlocProvider(
+//                                                create: (_) =>
+//                                                    ProductDetailBloc(LoadingProductDetail())
+//                                                  ..add(ProductDetailLoadEvent(
+//                                                    id: productBloc.listRecommendTopRating[index].id,
+//                                                    person_id: context
+//                                                        .read<AccountBloc>()
+//                                                        .user
+//                                                        .id
+//                                                        .toString(),
+//                                                  ))),
+//                                            BlocProvider.value(
+//                                              value: context.read<CartBloc>(),
+//                                            ),
+//                                          ],
+//                                          child: ProductDetail(
+//                                            userId: context
+//                                                .read<AccountBloc>()
+//                                                .user
+//                                                .id!,
+//                                            percentStar: productBloc
+//                                                .listRecommendTopRating[index]
+//                                                .percentStar,
+//                                            countRating: productBloc
+//                                                .listRecommendTopRating[index]
+//                                                .countRating,
+//                                            price: productBloc
+//                                                .listRecommendTopRating[index]
+//                                                .price,
+//                                            productId: productBloc
+//                                                .listRecommendTopRating[index]
+//                                                .id,
+//                                          ))));
+//                        });
+//                  }),
+//            ),
             Container(
               decoration: BoxDecoration(color: Colors.white),
               child: Column(
@@ -858,7 +858,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
 //                            padding: EdgeInsets.symmetric(
 //                                horizontal: 5, vertical: 5),
                             color: Color(0xffE7E7E7),
-                            height: MediaQuery.of(context).size.height / 2,
+                            height: MediaQuery.of(context).size.height-300,
                             child: CustomScrollView(
                                 shrinkWrap: true,
                                 primary: false,

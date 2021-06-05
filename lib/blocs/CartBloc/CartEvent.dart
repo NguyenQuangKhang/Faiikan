@@ -19,12 +19,13 @@ class GetCartEvent extends CartEvent {
 
 class UpdateCartEvent extends CartEvent {
   final int id;
+  final int userId;
   final int amount;
 
   final int index;
   final int optionId;
 
-  UpdateCartEvent({ required this.id,required this.amount,required this.index,required this.optionId});
+  UpdateCartEvent({ required this.userId,required this.id,required this.amount,required this.index,required this.optionId});
   @override
   List<Object> get props => [id,amount,index,optionId];
 

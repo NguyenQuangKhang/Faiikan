@@ -70,7 +70,6 @@ class _MainScreenState extends State<MainScreen> {
       MessageScreen(),
       MultiBlocProvider(
         providers: [
-
           BlocProvider(
             create: (BuildContext context) =>
                 FavoriteBloc(InitialFavorite(data: []))
@@ -81,7 +80,14 @@ class _MainScreenState extends State<MainScreen> {
         ],
         child: FavoriteScreen(),
       ),
-      ProfileScreen(),
+      BlocProvider(
+        create: (BuildContext context) =>
+        ProductBloc(Initial(data: [], error: "", sortBy: 0))
+          ..add(ProductLoadEvent(
+              SortBy: 0, userId: context.read<AccountBloc>().user.id!)),
+        child:   ProfileScreen(userId: context.read<AccountBloc>().user.id!,),
+      ),
+
     ];
     // TODO: implement initState
     super.initState();

@@ -10,6 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class PaymentScreen extends StatefulWidget {
+  final String userId;
+
+  const PaymentScreen({Key? key, required this.userId}) : super(key: key);
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
@@ -124,7 +127,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             )
                           : InkWell(
                         onTap: () async {
-                          await Navigator.push(context, MaterialPageRoute(builder: (context)=> SelectAddressScreen())).then((value) {
+                          await Navigator.push(context, MaterialPageRoute(builder: (context)=> SelectAddressScreen(userId: widget.userId,))).then((value) {
                             setState(() {
                               haveAddress=true;
                             });
@@ -190,6 +193,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             vertical: 10,
                           ),
                           child: OrderItemCard(
+                            userId: 0,
                             orderItem: listItems[index],
                             index: index,
                             isOrderDetail: true,

@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/CartBloc/CartState.dart';
 import 'package:faiikan/widgets/search_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget bottom;
@@ -16,7 +19,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.title = "FaiiKan",
       this.isRedTitle = false,
       this.isBack = false,
-      this.backgroundColor = Colors.white,required this.onTapCart,required this.onTapNotification});
+      this.backgroundColor = Colors.white,
+      required this.onTapCart,
+      required this.onTapNotification});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +50,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         ]),
                   ),
                   Expanded(
-                      flex: 2,
                       child: Container(
                           margin: EdgeInsets.only(left: 10),
                           padding:
@@ -78,15 +82,61 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 SizedBox(width: 10),
                 InkWell(
                   onTap: onTapCart,
-                  child: Icon(
-                    Icons.shopping_cart_outlined,
-                    color: Colors.black,
-                    size: 30,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: Icon(
+                          Icons.shopping_cart_outlined,
+                          color: Colors.black,
+                          size: 30,
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 5,
+                        child: Container(
+                            height: 17,
+                            width: 17,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 1,
+                                )),
+                            child: Center(
+                              child: BlocBuilder<CartBloc, CartState>(
+                                builder: (context, state) {
+                                  if (state is InitialCart )
+                                    return Text(
+                                      "",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 10),
+                                    );
+                                  return Text(
+                                    context
+                                        .read<CartBloc>()
+                                        .list_data
+                                        .length
+                                        .toString(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 10),
+                                  );
+                                },
+                              ),
+                            )),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(width: 10),
               ]
             : null,
+        leadingWidth: isRedTitle ? 0 : 100,
         leading: isBack
             ? IconButton(
                 icon: Icon(
