@@ -1,6 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartState.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
+import 'package:faiikan/blocs/search_bloc/search_bloc.dart';
+import 'package:faiikan/blocs/search_bloc/search_event.dart';
+import 'package:faiikan/blocs/search_bloc/search_state.dart';
+import 'package:faiikan/screens/search_screen/search_screen.dart';
 import 'package:faiikan/widgets/search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,8 +63,33 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             color: Colors.black.withOpacity(0.05),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: SearchField(
-                            text: "Bạn tìm gì hôm nay?",
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => BlocProvider(
+                                            create: (_) =>
+                                                SearchBloc(InitialSearchState())
+                                                  ..add(InitiateSearchEvent(
+                                                      userId: context
+                                                          .read<AccountBloc>()
+                                                          .user
+                                                          .id!
+                                                          .toString())),
+                                            child: BlocProvider.value(
+                                              value: context.read<CartBloc>(),
+                                              child: SearchScreen(userId:context
+                                                  .read<AccountBloc>()
+                                                  .user
+                                                  .id!
+                                                   ,),
+                                            ),
+                                          )));
+                            },
+                            child: SearchField(
+                              text: "Bạn tìm gì hôm nay?",
+                            ),
                           )))
                 ],
               )
@@ -107,7 +137,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             child: Center(
                               child: BlocBuilder<CartBloc, CartState>(
                                 builder: (context, state) {
-                                  if (state is InitialCart )
+                                  if (state is InitialCart)
                                     return Text(
                                       "",
                                       style: TextStyle(
