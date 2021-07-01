@@ -20,7 +20,7 @@ class SearchField extends StatelessWidget {
           text,
           style: TextStyle(
             color: Color(0xff030303).withOpacity(0.5),
-            fontSize: 14,
+            fontSize: 10,
             letterSpacing: 0.5,
           ),
         ),

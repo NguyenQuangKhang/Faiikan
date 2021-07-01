@@ -15,13 +15,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isBack;
   final Color backgroundColor;
-  final isRedTitle;
+  final bool isRedTitle;
+  final bool isCenterRedTitle;
   final VoidCallback onTapCart;
   final VoidCallback onTapNotification;
 
   const CustomAppBar(
       {required this.bottom,
       this.title = "FaiiKan",
+        this.isCenterRedTitle=false,
       this.isRedTitle = false,
       this.isBack = false,
       this.backgroundColor = Colors.white,
@@ -51,6 +53,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               letterSpacing: 0.5,
                               color: Color(0xffEF5454),
                             ),
+
                           ),
                         ]),
                   ),
@@ -93,7 +96,29 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           )))
                 ],
               )
-            : Text(
+            : isCenterRedTitle? Center(
+              child: RichText(
+          text: TextSpan(
+                text: "FAII",
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.5,
+                    color: Colors.black),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "KAN",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.5,
+                      color: Color(0xffEF5454),
+                    ),
+
+                  ),
+                ]),
+        ),
+            ) :Text(
                 title,
                 style: TextStyle(color: Colors.black),
               ),

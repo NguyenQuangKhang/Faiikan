@@ -26,7 +26,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       ) async* {
     if (event is InitiateEvent) {
       yield LoadingCategory();
-      final response = await http.get(Uri.parse("http://$server:8080/api/v1/categories/16/sub-categories"));
+      final response = await http.get(Uri.parse("http://$server:8080/api/v1/categories/${event.catId}/sub-categories"));
       list_cat_1 = json.decode(response.body).cast<Map<String,dynamic>>().map<Category>((json) => Category.fromJson(json)).toList();
       yield LoadCategories();
 

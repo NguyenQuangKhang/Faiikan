@@ -16,6 +16,9 @@ class CategoryButtonPressed extends CategoryEvent {
 }
 
 class InitiateEvent extends CategoryEvent {
+  final int catId;
+
+  InitiateEvent({required this.catId});
   @override
   List<Object> get props => [];
 

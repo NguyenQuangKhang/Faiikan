@@ -94,3 +94,17 @@ class RecommendTopRatingEvent extends ProductEvent {
   String toString() =>
       'ProductButtonPressed { ... }';
 }
+
+class SeenProductEvent extends ProductEvent {
+
+  final String userId;
+  const SeenProductEvent({required this.userId});
+
+
+  @override
+  List<Object> get props => [userId];
+
+  @override
+  String toString() =>
+      'ProductButtonPressed { ... }';
+}

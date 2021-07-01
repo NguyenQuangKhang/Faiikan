@@ -102,3 +102,17 @@ class LoadRecommendAndAlsoLikeProductEvent extends ProductDetailEvent {
  String toString() =>
      'ProductButtonPressed { ... }';
 }
+class ChangeToFavoriteTapSuccessEvent extends ProductDetailEvent {
+
+
+
+
+
+ ChangeToFavoriteTapSuccessEvent();
+ @override
+ List<Object> get props => [];
+
+ @override
+ String toString() =>
+     'ProductButtonPressed { ... }';
+}

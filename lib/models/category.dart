@@ -1,39 +1,44 @@
 class Category {
-late int _id;
-late String _name;
-late String _icon;
-late int _level;
-late List<SubCategory> subCategory;
+  late int _id;
+  late String _name;
+  late String _icon;
+  late int _level;
+  late List<SubCategory> subCategory;
 
   int get id => _id;
+
   String get name => _name;
+
   String get icon => _icon;
+
   int get level => _level;
 
   Category({
-      required int id,
-      required String name,
-      required String icon,
-      required int level}){
+    required int id,
+    required String name,
+    required String icon,
+    required int level,
+    required List<SubCategory> subCat,
+  }) {
     _id = id;
     _name = name;
     _icon = icon;
     _level = level;
-}
+    subCategory = subCat;
+  }
 
   Category.fromJson(dynamic json) {
     _id = json["id"];
     _name = json["name"];
-    if(json["icon"]==null)
-      _icon ="";
-    else _icon = json["icon"];
+    if (json["icon"] == null)
+      _icon = "";
+    else
+      _icon = json["icon"];
     _level = json["level"];
-    if(json["categories"] ==[])
-    {
-      subCategory=[];
-    }
-    else {
-      subCategory=[];
+    if (json["categories"] == []) {
+      subCategory = [];
+    } else {
+      subCategory = [];
       json["categories"].forEach((v) {
         subCategory.add(SubCategory.fromJson(v));
       });
@@ -48,7 +53,6 @@ late List<SubCategory> subCategory;
     map["level"] = _level;
     return map;
   }
-
 }
 
 class SubCategory {
@@ -56,42 +60,45 @@ class SubCategory {
   late String _name;
   late String _icon;
   late int _level;
-  late List<Category> subCategory;
+  late List<SubCategory> subCategory;
+
   int get id => _id;
+
   String get name => _name;
+
   String get icon => _icon;
+
   int get level => _level;
 
-
-  SubCategory({
-    required int id,
-    required String name,
-    required String icon,
-    required int level}){
+  SubCategory(
+      {required int id,
+      required String name,
+      required String icon,
+      required int level,
+      required List<SubCategory> subCat}) {
     _id = id;
     _name = name;
     _icon = icon;
     _level = level;
+    subCategory = subCat;
   }
 
   SubCategory.fromJson(dynamic json) {
     _id = json["id"];
     _name = json["name"];
-    if(json["icon"]==null)
-      _icon ="";
-    else _icon = json["icon"];
+    if (json["icon"] == null)
+      _icon = "";
+    else
+      _icon = json["icon"];
     _level = json["level"];
-    if(json["categories"] ==[])
-      {
-        subCategory=[];
-      }
-    else {
-      subCategory=[];
+    if (json["categories"] == []) {
+      subCategory = [];
+    } else {
+      subCategory = [];
       json["categories"].forEach((v) {
-        subCategory.add(Category.fromJson(v));
+        subCategory.add(SubCategory.fromJson(v));
       });
     }
-    
   }
 
   Map<String, dynamic> toJson() {
@@ -102,5 +109,4 @@ class SubCategory {
     map["level"] = _level;
     return map;
   }
-
 }

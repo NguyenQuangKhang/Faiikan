@@ -6,15 +6,27 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
+import 'package:faiikan/blocs/hot_search_bloc/hot_search_bloc.dart';
+import 'package:faiikan/blocs/hot_search_bloc/hot_search_event.dart';
+import 'package:faiikan/blocs/hot_search_bloc/hot_search_state.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
 import 'package:faiikan/blocs/product_bloc/ProductState.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailEvent.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailState.dart';
+import 'package:faiikan/blocs/search_bloc/search_bloc.dart';
+import 'package:faiikan/blocs/search_bloc/search_event.dart';
+import 'package:faiikan/blocs/search_bloc/search_state.dart';
+import 'package:faiikan/blocs/similar_product_bloc/similar_product_bloc.dart';
+import 'package:faiikan/blocs/similar_product_bloc/similar_product_event.dart';
+import 'package:faiikan/blocs/similar_product_bloc/similar_product_state.dart';
 import 'package:faiikan/models/category.dart';
 import 'package:faiikan/models/product_detail.dart';
 import 'package:faiikan/screens/product_detail_screen/product_detail_screen.dart';
+import 'package:faiikan/screens/product_screen/ProductWithCatLv3_Screen.dart';
+import 'package:faiikan/screens/search_screen/search_screen.dart';
+import 'package:faiikan/screens/similar_product_screen/similar_product_screen.dart';
 import 'package:faiikan/widgets/card/product_card.dart';
 import 'package:faiikan/models/category.dart' as Cate;
 import 'package:flutter/cupertino.dart';
@@ -22,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../category_tab.dart';
 
@@ -32,26 +45,26 @@ List<String> imagesFlashSale = [
   "https://media3.scdn.vn/img3/2019/11_22/EeqVb7_simg_de2fe0_500x500_maxb.jpg",
   "https://media3.scdn.vn/img4/2020/08_28/0Flhy94WecKP5ULHzB9G_simg_de2fe0_500x500_maxb.png",
 ];
-List<int> priceFlashSale =[
-  (200+Random().nextInt(100)),
-  (200+Random().nextInt(100)),
-  (200+Random().nextInt(100)),
-  (200+Random().nextInt(100)),
-  (200+Random().nextInt(100)),
+List<int> priceFlashSale = [
+  (200 + Random().nextInt(100)),
+  (200 + Random().nextInt(100)),
+  (200 + Random().nextInt(100)),
+  (200 + Random().nextInt(100)),
+  (200 + Random().nextInt(100)),
 ];
-List<int> soldAmountFlashSale=[
-  (200+Random().nextInt(1000)),
-  (200+Random().nextInt(1000)),
-  (200+Random().nextInt(1000)),
-  (200+Random().nextInt(1000)),
-  (200+Random().nextInt(1000))
+List<int> soldAmountFlashSale = [
+  (200 + Random().nextInt(1000)),
+  (200 + Random().nextInt(1000)),
+  (200 + Random().nextInt(1000)),
+  (200 + Random().nextInt(1000)),
+  (200 + Random().nextInt(1000))
 ];
-List<int> promotionFlashSale=[
-  (30+Random().nextInt(3)*10),
-  (30+Random().nextInt(3)*10),
-  (30+Random().nextInt(3)*10),
-  (30+Random().nextInt(3)*10),
-  (30+Random().nextInt(3)*10),
+List<int> promotionFlashSale = [
+  (30 + Random().nextInt(3) * 10),
+  (30 + Random().nextInt(3) * 10),
+  (30 + Random().nextInt(3) * 10),
+  (30 + Random().nextInt(3) * 10),
+  (30 + Random().nextInt(3) * 10),
 ];
 
 final items = [
@@ -107,7 +120,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
       }
 //
       if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+          _scrollController.position.maxScrollExtent - 10) {
         context.read<ProductBloc>().add(ProductGetMoreDataEvent(SortBy: 0));
       }
     });
@@ -350,8 +363,9 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                               imageUrl: imagesFlashSale[index],
                                               fit: BoxFit.fill,
                                               placeholder: (context, url) => Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
+                                                  child: Center(
+                                                      child:
+                                                          CircularProgressIndicator())),
                                               errorWidget:
                                                   (context, url, error) =>
                                                       Icon(Icons.error),
@@ -385,7 +399,9 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                                   5))),
                                               child: Center(
                                                 child: Text(
-                                                  promotionFlashSale[index].toString() +"%",
+                                                  promotionFlashSale[index]
+                                                          .toString() +
+                                                      "%",
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 8),
@@ -406,7 +422,8 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(
-                                             priceFlashSale[index].toString() +".000đ",
+                                              priceFlashSale[index].toString() +
+                                                  ".000đ",
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
@@ -416,7 +433,9 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                             ),
                                             LinearPercentIndicator(
                                               center: Text(
-                                                soldAmountFlashSale[index].toString() + " đã bán",
+                                                soldAmountFlashSale[index]
+                                                        .toString() +
+                                                    " đã bán",
                                                 style: TextStyle(
                                                     fontSize: 10,
                                                     color: Colors.white),
@@ -491,7 +510,13 @@ class _ForYouScreenState extends State<ForYouScreen> {
                           MaterialPageRoute(
                               builder: (_) => BlocProvider.value(
                                   value: context.read<CategoryBloc>(),
-                                  child: CategoryScreen())));
+                                  child: BlocProvider.value(
+                                    value: context.read<CartBloc>(),
+                                    child: CategoryScreen(userId: context
+                                        .read<AccountBloc>()
+                                        .user
+                                        .id!,),
+                                  ))));
                     },
                   )
                 ],
@@ -583,7 +608,38 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                     ],
                                   ),
                                 ),
-                                onTap: () {}),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              BlocProvider<ProductBloc>(
+                                                create: (_) {
+                                                  return ProductBloc(
+                                                    InitialProductState(
+                                                      data: [],
+                                                      error: "",
+                                                      sortBy: 0,
+                                                    ),
+                                                  )..add(
+                                                      ProductByCategoryCodeEvent(
+                                                          categoryId: category.id.toString(),
+                                                          filter:
+                                                          "popular"));
+                                                },
+                                                child: BlocProvider.value(
+                                                  value: context.read<CartBloc>(),
+                                                  child: ProductWithSubCat_Screen(
+                                                      userId: context
+                                                          .read<AccountBloc>()
+                                                          .user
+                                                          .id!,
+                                                      title: category
+                                                          .name,
+                                                      category: category)),
+                                                ),
+                                              ));
+                                }),
                           );
                         })),
               ],
@@ -608,98 +664,226 @@ class _ForYouScreenState extends State<ForYouScreen> {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.refresh_rounded,
-                            color: Color(0xff0C73D2),
-                            size: 25,
-                          ),
-                          Text(
-                            "Đổi",
-                            style: TextStyle(
+                      InkWell(
+                        onTap: () {
+                          context
+                              .read<HotSearchBloc>()
+                              .add(LoadMoreHotSearchEvent());
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.refresh_rounded,
                               color: Color(0xff0C73D2),
-                              fontSize: 16,
-                              letterSpacing: 0.5,
+                              size: 25,
                             ),
-                          ),
-                        ],
+                            Text(
+                              "Đổi",
+                              style: TextStyle(
+                                color: Color(0xff0C73D2),
+                                fontSize: 16,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  Container(
-                    height: MediaQuery.of(context).size.height / 4,
-                    child: GridView.count(
-                      scrollDirection: Axis.vertical,
-                      mainAxisSpacing: 10,
-                      physics: NeverScrollableScrollPhysics(),
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 2,
-                      crossAxisCount: 2,
-                      children: List.generate(4, (index) {
+                  BlocBuilder<HotSearchBloc, HotSearchState>(
+                    builder: (context, state) {
+                      if (state is LoadHotSearch)
                         return Container(
-                          margin: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.black12,
-                              width: 1,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 2,
-                                offset:
-                                    Offset(0, 0), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                flex: 1,
+                          height: MediaQuery.of(context).size.height / 4,
+                          child: GridView.count(
+                            scrollDirection: Axis.vertical,
+                            mainAxisSpacing: 10,
+                            physics: NeverScrollableScrollPhysics(),
+                            crossAxisSpacing: 10,
+                            childAspectRatio: 2,
+                            crossAxisCount: 2,
+                            children: List.generate(4, (index) {
+                              return InkWell(
+                                onTap: (){
+
+                                },
                                 child: Container(
-                                    height:
-                                        (MediaQuery.of(context).size.height /
-                                                    4 -
-                                                20) /
-                                            2,
-                                    child: Center(
-                                      child: Text(
-                                        "Giày nữ",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                          letterSpacing: 0.5,
+                                  margin: EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.black12,
+                                      width: 1,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: Offset(
+                                            0, 0), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                            height: (MediaQuery.of(context)
+                                                            .size
+                                                            .height /
+                                                        4 -
+                                                    20) /
+                                                2,
+                                            child: Center(
+                                              child: Shimmer.fromColors(
+                                                baseColor: Colors.grey,
+                                                highlightColor:
+                                                    Colors.grey.withOpacity(0.5),
+                                                child: Text(
+                                                  "Loading...",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    letterSpacing: 0.5,
+                                                  ),
+                                                ),
+                                              ),
+                                            )),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Shimmer.fromColors(
+                                          baseColor: Colors.grey,
+                                          highlightColor:
+                                              Colors.grey.withOpacity(0.5),
+                                          child: Container(
+                                            height: (MediaQuery.of(context)
+                                                            .size
+                                                            .height /
+                                                        4 -
+                                                    20) /
+                                                2,
+                                          ),
                                         ),
                                       ),
-                                    )),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  height:
-                                      (MediaQuery.of(context).size.height / 4 -
-                                              20) /
-                                          2,
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        "https://vn-test-11.slatic.net/p/280ad8c7923b4f8630034bf2c78d08af.jpg_320x320.jpg",
-                                    placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                    fit: BoxFit.fill,
+                                    ],
                                   ),
                                 ),
-                              ),
-                            ],
+                              );
+                            }),
                           ),
                         );
-                      }),
-                    ),
+                      return Container(
+                        height: MediaQuery.of(context).size.height / 4,
+                        child: GridView.count(
+                          scrollDirection: Axis.vertical,
+                          mainAxisSpacing: 10,
+                          physics: NeverScrollableScrollPhysics(),
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 2,
+                          crossAxisCount: 2,
+                          children: List.generate(4, (index) {
+                            return InkWell(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => BlocProvider(
+                                          create: (_) =>
+                                          SearchBloc(InitialSearchState())
+                                            ..add(SearchTextEvent(text: context
+                                                .read<HotSearchBloc>()
+                                                .listHotSearch[index]
+                                                .keyword, userId: context
+                                                .read<AccountBloc>()
+                                                .user
+                                                .id!.toString())),
+                                          child: BlocProvider.value(
+                                            value: context.read<CartBloc>(),
+                                            child: SearchScreen(userId:context
+                                                .read<AccountBloc>()
+                                                .user
+                                                .id!
+                                              ,),
+                                          ),
+                                        )));
+                              },
+                              child: Container(
+                                margin: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.black12,
+                                    width: 1,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      spreadRadius: 1,
+                                      blurRadius: 2,
+                                      offset: Offset(
+                                          0, 0), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                          height: (MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      4 -
+                                                  20) /
+                                              2,
+                                          child: Center(
+                                            child: Text(
+                                              context
+                                                  .read<HotSearchBloc>()
+                                                  .listHotSearch[index]
+                                                  .keyword,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                letterSpacing: 0.5,
+                                              ),
+                                            ),
+                                          )),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        height:
+                                            (MediaQuery.of(context).size.height /
+                                                        4 -
+                                                    20) /
+                                                2,
+                                        child: CachedNetworkImage(
+                                          imageUrl: context
+                                              .read<HotSearchBloc>()
+                                              .listHotSearch[index]
+                                              .linkImage,
+                                          placeholder: (context, url) => Center(
+                                              child: CircularProgressIndicator()),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -858,7 +1042,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
 //                            padding: EdgeInsets.symmetric(
 //                                horizontal: 5, vertical: 5),
                             color: Color(0xffE7E7E7),
-                            height: MediaQuery.of(context).size.height-300,
+                            height: MediaQuery.of(context).size.height - 300,
                             child: CustomScrollView(
                                 shrinkWrap: true,
                                 primary: false,
@@ -888,6 +1072,36 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                       (BuildContext context, int index) {
                                         return GestureDetector(
                                             child: ProductCard(
+                                              onTapSimilar: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder:
+                                                            (_) => BlocProvider
+                                                                    .value(
+                                                                  value: context
+                                                                      .read<
+                                                                          CartBloc>(),
+                                                                  child:
+                                                                      BlocProvider(
+                                                                    create: (_) => SimilarProductBloc(
+                                                                        InitialSimilarProductState())
+                                                                      ..add(InitiateSimilarProductEvent(
+                                                                          productId: productBloc
+                                                                              .listdata[index]
+                                                                              .id
+                                                                              .toString())),
+                                                                    child: SimilarProductScreen(
+                                                                        interactingProduct:
+                                                                            productBloc.listdata[
+                                                                                index],
+                                                                        userId: context
+                                                                            .read<AccountBloc>()
+                                                                            .user
+                                                                            .id!),
+                                                                  ),
+                                                                )));
+                                              },
                                               onTapFavorite: () {},
                                               height: MediaQuery.of(context)
                                                       .size
@@ -910,16 +1124,14 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                               providers: [
                                                                 BlocProvider(
                                                                     create: (_) =>
-                                                                    ProductDetailBloc(InitialProductDetail())
-                                                                      ..add(ProductDetailLoadEvent(
-                                                                        id: productBloc
-                                                                            .listdata[index].id,
-                                                                        person_id: context
-                                                                            .read<AccountBloc>()
-                                                                            .user
-                                                                            .id
-                                                                            .toString(),
-                                                                      ))),
+                                                                        ProductDetailBloc(
+                                                                            InitialProductDetail())
+                                                                          ..add(
+                                                                              ProductDetailLoadEvent(
+                                                                            id: productBloc.listdata[index].id,
+                                                                            person_id:
+                                                                                context.read<AccountBloc>().user.id.toString(),
+                                                                          ))),
                                                                 BlocProvider
                                                                     .value(
                                                                   value: context

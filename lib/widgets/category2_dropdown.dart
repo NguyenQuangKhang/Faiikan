@@ -1,17 +1,24 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
+import 'package:faiikan/blocs/product_bloc/ProductState.dart';
 import 'package:faiikan/models/category.dart';
+import 'package:faiikan/screens/product_screen/ProductWithCatLv3_Screen.dart';
 import 'package:faiikan/utils/server_name.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 class Category2Dropdown extends StatefulWidget {
   final SubCategory data;
   final VoidCallback onTap;
   final VoidCallback onTapDropdownItem;
+  final int userId;
 
-  const Category2Dropdown({required this.data, required this.onTap, required this.onTapDropdownItem});
+  const Category2Dropdown({required this.data, required this.onTap, required this.onTapDropdownItem,required this.userId});
 
   @override
   _Category2DropdownState createState() => _Category2DropdownState();
@@ -73,17 +80,51 @@ class _Category2DropdownState extends State<Category2Dropdown> {
                   itemBuilder: (context,index) {
                 return InkWell(
                   onTap: () {
-//                      Navigator.push(context,MaterialPageRoute(
-//                          builder: (context)=> BlocProvider<ProductBloc>(
-//                            create: (context){
-//                              return ProductBloc(
-//
-//                              )..add(ProductByCategoryCodeEvent(categoryPath: subCat[index].categoryPath));
-//                            },
-//                            child:  Products_Screen(title: subCat[index].name, categoryPath: subCat[index].categoryPath),
-//                          )
-//                      )
-//                      );
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              BlocProvider<ProductBloc>(
+                                create: (_) {
+                                  return ProductBloc(
+                                    InitialProductState(
+                                      data: [],
+                                      error: "",
+                                      sortBy: 0,
+                                    ),
+                                  )..add(ProductByCategoryCodeEvent(
+                                      categoryId: widget.data
+                                          .subCategory[index]
+                                          .id
+                                          .toString(),
+                                      filter: "popular"));
+                                },
+                                child: BlocProvider.value(
+                                    value: context.read<CartBloc>(),
+                                    child: ProductWithSubCat_Screen(
+                                        userId: widget.userId,
+                                        title: widget.data
+                                            .subCategory[index]
+                                            .name,
+                                        category: new Category(
+                                          id: widget.data
+                                              .subCategory[index]
+                                              .id,
+                                          name: widget.data
+                                              .subCategory[index]
+                                              .name,
+                                          icon: widget.data
+                                              .subCategory[index]
+                                              .icon,
+                                          level: widget.data
+                                              .subCategory[index]
+                                              .level,
+                                          subCat:widget.data
+                                              .subCategory[index]
+                                              .subCategory,
+                                        ))),
+                              ),
+                        ));
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width/4,

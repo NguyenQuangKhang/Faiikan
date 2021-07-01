@@ -67,3 +67,19 @@ class LoadingAddtoCart extends ProductDetailState {
   // TODO: implement props
   List<Object?> get props => [];
 }
+class AddtoCartSuccess extends ProductDetailState {
+
+  AddtoCartSuccess();
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+class FavoriteTapSuccess extends ProductDetailState {
+
+  FavoriteTapSuccess();
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}

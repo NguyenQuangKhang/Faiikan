@@ -25,7 +25,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     if (event is FavoriteLoadEvent) {
       yield FavoriteLoading(data: listdata);
       final response1 = await http.get(
-          Uri.parse("http://$server:8080/api/v1/recommend/top-rating/67493"));
+          Uri.parse( "http://$server:8080/api/v1/user/${event.person_id}/products-also-like"));
       listRecommendTopRating = json
           .decode(response1.body)
           .cast<Map<String, dynamic>>()
@@ -42,6 +42,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
         yield FavoriteLoaded2State(data: listdata);
       else
         yield FavoriteLoadedState(data: listdata);
+
     }
     if (event is FavoriteTap) {
       listdata[event.index].isLiked = !listdata[event.index].isLiked;

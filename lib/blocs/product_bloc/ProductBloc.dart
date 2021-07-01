@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:faiikan/models/product.dart';
+import 'package:faiikan/models/search_item.dart';
 import 'package:faiikan/utils/server_name.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,12 +13,12 @@ import 'ProductState.dart';
 class ProductBloc extends Bloc<ProductEvent, ProductsState> {
   List<Product> listdata = [];
   int currentPage = 1;
-  List<Product> listRecommendTopRating = [];
   List<Product> listdataFilter = [];
   int currentPageFilter = 1;
   List<Product> listdataByCategory = [];
   int currentPageByCateGory = 1;
-
+  List<SearchItem> hotSearchItems =[];
+  List<Product> listSeenProduct = [];
   ProductBloc(ProductsState initialState) : super(initialState);
 
   @override
@@ -55,12 +56,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
         yield Loading(sortBy: state.sortBy, error: "", data: listdata);
 
         final response = await http.get(
-            Uri.parse(
-              "http://$server:8080/api/v1/cat/20/products?p=${currentPage.toString()}&filter=popular",
-            ),
-            headers: {
-              HttpHeaders.contentTypeHeader: 'application/json',
-            });
+            Uri.parse("http://$server:8080/api/v1/recommend/top-rating/${event.userId}?p=${currentPage.toString()}"));
+
         listdata.addAll(json
             .decode(response.body)
             .cast<Map<String, dynamic>>()
@@ -77,7 +74,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
 //          filterRules: state.filterRules,
           data: state.data);
       final response = await http.get(Uri.parse(
-          "http://${server}:8080api/v1/cat/${event.categoryId}/products?filter=${event.filter}&p=${currentPageByCateGory.toString()}"));
+          "http://$server:8080/api/v1/cat/${event.categoryId}/products?filter=${event.filter}&p=${currentPageByCateGory.toString()}"));
       listdataByCategory = json
           .decode(response.body)
           .cast<Map<String, dynamic>>()
@@ -93,78 +90,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
             data: listdataByCategory, sortBy: state.sortBy, error: '');
     }
 
-//    if (event is FilterandSortByEvent) {
-//      print(event.SortBy);
-//      QueryResult result;
-//
-//      yield Loading(
-//          sortBy: state.sortBy,
-//          error: state.error,
-//          filterRules: state.filterRules,
-//          data: state.data);
-////      if (event.filter != null) {
-////        currentPageFilter = 1;
-////        listdataFilter = [];
-////
-////        result = await _client.query(
-////            QueryOptions(documentNode: gql(getProductByCategory), variables: {
-////          "level_code": event.filter.level_code,
-////          "pageNumber": currentPageFilter,
-////          "colors": event.filter.colorID,
-////          "sizes": event.filter.sizeID,
-////          "price_min": event.filter.min_price,
-////          "price_max": event.filter.max_price,
-////          "sort": event.SortBy == null ? state.sortBy : event.SortBy
-////        }));
-////      } else {
-////        currentPageFilter = 1;
-////        listdataFilter = [];
-////        result = await _client.query(
-////            QueryOptions(documentNode: gql(getProductByCategory), variables: {
-////          "level_code": event.level_code,
-////          "pageNumber": currentPageFilter,
-////          "colors": state.filterRules == null ? [] : state.filterRules.colorID,
-////          "sizes": state.filterRules == null ? [] : state.filterRules.sizeID,
-////          "price_min":
-////              state.filterRules == null ? 0 : state.filterRules.min_price,
-////          "price_max":
-////              state.filterRules == null ? 0 : state.filterRules.max_price,
-////          "sort": event.SortBy == null ? state.sortBy : event.SortBy
-////        }));
-////      }
-////
-////      if (!result.hasException) {
-////        List<LazyCacheMap> list_to_add =
-////            (result.data["getProductByCategory"] as List<dynamic>)
-////                .cast<LazyCacheMap>();
-////
-////        for (int i = 0; i < list_to_add.length; i++) {
-////          listdataFilter.add(new Product(
-////              list_to_add[i]["_id"],
-////              list_to_add[i]["name"],
-////              list_to_add[i]["img_url"],
-////              list_to_add[i]["price"],
-////              list_to_add[i]["promotion_percent"],
-////              list_to_add[i]["final_price"],
-////              null,
-////              list_to_add[i]["stock_status"],
-////              list_to_add[i]["record_status"]));
-////        }
-////        currentPageFilter++;
-////      }
-//      if (state is ProductsGridViewState)
-//        yield ProductsAddmoreState(
-//            filterRules:
-//                event.filter == null ? state.filterRules : event.filter,
-//            data: listdataFilter,
-//            sortBy: event.SortBy == null ? state.sortBy : event.SortBy);
-//      else
-//        yield ProductsGridViewState(
-//            filterRules:
-//                event.filter == null ? state.filterRules : event.filter,
-//            data: listdataFilter,
-//            sortBy: event.SortBy == null ? state.sortBy : event.SortBy);
-//    }
+
 
     if (event is ProductGetMoreDataByCategoryCodeEvent) {
       yield Loading(
@@ -173,7 +99,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
 //          filterRules: state.filterRules,
           data: state.data);
       final response = await http.get(Uri.parse(
-          "http://${server}:8080api/v1/cat/${event.catId}/products?filter=${event.filter}&p=${currentPageByCateGory.toString()}"));
+          "http://${server}:8080/api/v1/cat/${event.catId}/products?filter=${event.filter}&p=${currentPageByCateGory.toString()}"));
       listdataByCategory.addAll(json
           .decode(response.body)
           .cast<Map<String, dynamic>>()
@@ -188,6 +114,30 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
         yield ProductsGridViewState(
             data: listdataByCategory, sortBy: state.sortBy, error: '');
     }
-    if (event is RecommendTopRatingEvent) {}
+
+    if(event is SeenProductEvent)
+      {
+        final response = await http.get(
+            Uri.parse("http://$server:8080/api/v1/${event.userId}/get-seen-products"));
+
+
+        listSeenProduct = json
+            .decode(response.body)
+            .cast<Map<String, dynamic>>()
+            .map<Product>((json) => Product.fromJson(json))
+            .toList();
+
+
+
+        if (state is ProductsGridViewState)
+          yield ProductsAddmoreState(
+              data: listdata, sortBy: state.sortBy, error: '');
+        else
+          yield ProductsGridViewState(
+              data: listdata, sortBy: state.sortBy, error: '');
+      }
+    if (event is RecommendTopRatingEvent) {
+
+    }
   }
 }

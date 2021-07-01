@@ -31,6 +31,10 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
   @override
   void initState() {
+    context.read<AddressBloc>().selectedProvice = null;
+    context.read<AddressBloc>().selectedWard = null;
+    context.read<AddressBloc>().selectedDistric = null;
+    context.read<AddressBloc>().isChangeParent=false;
     context.read<AddressBloc>().districts = [];
     context.read<AddressBloc>().wards = [];
     context.read<AddressBloc>().add(
@@ -60,6 +64,10 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
               .add(InitialAddressEvent(userId: widget.userId));
           Navigator.of(context).pop();
         }
+        if(state is InitialAddressState)
+          setState(() {
+
+          });
       },
       child: Scaffold(
         appBar: AppBar(
@@ -109,7 +117,10 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                           ),
                         ),
                         Flexible(
-                          child: TextField(
+                          child: TextFormField(
+                            onChanged: (value) {
+                              setState(() {});
+                            },
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
@@ -135,6 +146,23 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                       ],
                     ),
                   ),
+                  if (txtName.text.isEmpty)
+                    Column(
+                      children: [
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Text(
+                            "Vui lòng điền phần bắt buộc",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   Container(
                     height: 1,
                     color: Colors.black.withOpacity(0.2),
@@ -158,8 +186,11 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                           ),
                         ),
                         Flexible(
-                          child: TextField(
+                          child: TextFormField(
                             controller: txtNumberPhone,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
@@ -188,6 +219,23 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                       ],
                     ),
                   ),
+                  if (txtNumberPhone.text.isEmpty)
+                    Column(
+                      children: [
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Text(
+                            "Vui lòng điền phần bắt buộc",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   Container(
                     height: 1,
                     color: Colors.black.withOpacity(0.2),
@@ -211,12 +259,26 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                           ),
                         ),
                         InkWell(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => BlocProvider.value(value: context.read<AddressBloc>(),child: ChooseProvinceScreen())));
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                        value: context.read<AddressBloc>(),
+                                        child: ChooseProvinceScreen())));
                           },
                           child: Row(
                             children: [
-                              Text(context.read<AddressBloc>().selectedProvice==null? widget.address.province.name: context.read<AddressBloc>().provinces[context.read<AddressBloc>().selectedProvice!].name,
+                              Text(
+                                context.read<AddressBloc>().selectedProvice ==
+                                        null
+                                    ? widget.address.province.name
+                                    : context
+                                        .read<AddressBloc>()
+                                        .provinces[context
+                                            .read<AddressBloc>()
+                                            .selectedProvice!]
+                                        .name,
                                 style: TextStyle(
                                   color: Colors.black.withOpacity(0.5),
                                   fontWeight: FontWeight.w500,
@@ -257,79 +319,41 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                             letterSpacing: 0.5,
                           ),
                         ),
-                        Row(
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / 2,
-                              child: BlocBuilder<AddressBloc, AddressState>(
-                                  builder: (context, state) {
-                                return DropdownButton<int>(
-                                  value: districtValue,
-                                  isExpanded: true,
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  iconSize: 24,
-                                  dropdownColor: Colors.white,
-                                  elevation: 18,
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.5,
-                                  ),
-                                  hint: Text("Chọn"),
-//                  underline: Container(
-//                    height: 2,
-//                    color: Colors.deepPurpleAccent,
-//                  ),
-                                  onChanged: (int? newValue) {
-                                    int? value = newValue;
-                                    wardValue = null;
-                                    setState(() {
-                                      districtValue = newValue!;
-                                    });
-                                    if (districtValue != null &&
-                                        districtValue != value) {
-                                      context.read<AddressBloc>().add(
-                                          GetWardEvent(
-                                              districtId:
-                                                  districtValue.toString()));
-                                    }
-                                  },
-                                  items: context
-                                      .read<AddressBloc>()
-                                      .districts
-                                      .map<DropdownMenuItem<int>>((value) {
-                                    return DropdownMenuItem<int>(
-                                      value: value.id,
-                                      child: Text(
-                                        value.name,
-                                        style: TextStyle(
-                                          color: Colors.black.withOpacity(0.5),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          letterSpacing: 0.5,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                );
-                              }),
-                            ),
-//                    Text(
-//                      "Chọn",
-//                      style: TextStyle(
-//                        color: Colors.black.withOpacity(0.5),
-//                        fontWeight: FontWeight.w500,
-//                        fontSize: 18,
-//                        letterSpacing: 0.5,
-//                      ),
-//                    ),
-//                    Icon(
-//                      Icons.arrow_forward_ios_sharp,
-//                      size: 20,
-//                      color: Colors.black.withOpacity(0.5),
-//                    )
-                          ],
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                        value: context.read<AddressBloc>(),
+                                        child: ChooseDistrictScreen())));
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                context.read<AddressBloc>().selectedDistric ==
+                                        null
+                                    ? context.read<AddressBloc>().isChangeParent? "Chọn Quận/Huyện" :widget.address.district.name
+                                    : context
+                                        .read<AddressBloc>()
+                                        .districts[context
+                                            .read<AddressBloc>()
+                                            .selectedDistric!]
+                                        .name,
+                                style: TextStyle(
+                                  color: Colors.black.withOpacity(0.5),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios_sharp,
+                                size: 20,
+                                color: Colors.black.withOpacity(0.5),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -356,70 +380,40 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                             letterSpacing: 0.5,
                           ),
                         ),
-                        Row(
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / 2,
-                              child: BlocBuilder<AddressBloc, AddressState>(
-                                  builder: (context, state) {
-                                return DropdownButton<int>(
-                                  value: wardValue,
-                                  isExpanded: true,
-                                  dropdownColor: Colors.white,
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  iconSize: 24,
-                                  elevation: 18,
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.5,
-                                  ),
-                                  hint: Text("Chọn"),
-//                  underline: Container(
-//                    height: 2,
-//                    color: Colors.deepPurpleAccent,
-//                  ),
-                                  onChanged: (int? newValue) {
-                                    setState(() {
-                                      wardValue = newValue!;
-                                    });
-                                  },
-                                  items: context
-                                      .read<AddressBloc>()
-                                      .wards
-                                      .map<DropdownMenuItem<int>>((value) {
-                                    return DropdownMenuItem<int>(
-                                      value: value.id,
-                                      child: Text(
-                                        value.name,
-                                        style: TextStyle(
-                                          color: Colors.black.withOpacity(0.5),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          letterSpacing: 0.5,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                );
-                              }),
-                            ),
-//                    Text(
-//                      "Chọn",
-//                      style: TextStyle(
-//                        color: Colors.black.withOpacity(0.5),
-//                        fontWeight: FontWeight.w500,
-//                        fontSize: 18,
-//                        letterSpacing: 0.5,
-//                      ),
-//                    ),
-//                    Icon(
-//                      Icons.arrow_forward_ios_sharp,
-//                      size: 20,
-//                      color: Colors.black.withOpacity(0.5),
-//                    )
-                          ],
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                        value: context.read<AddressBloc>(),
+                                        child: ChooseWardScreen())));
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                context.read<AddressBloc>().selectedWard == null
+                                    ? context.read<AddressBloc>().isChangeParent? "Chọn Phường/Xã" : widget.address.ward.name
+                                    : context
+                                        .read<AddressBloc>()
+                                        .wards[context
+                                            .read<AddressBloc>()
+                                            .selectedWard!]
+                                        .name,
+                                style: TextStyle(
+                                  color: Colors.black.withOpacity(0.5),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios_sharp,
+                                size: 20,
+                                color: Colors.black.withOpacity(0.5),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -515,13 +509,23 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
             ),
             InkWell(
               onTap: () {
-                context.read<AddressBloc>().add(UpdateAddressEvent(
-                    addressId: widget.address.id.toString(),
-                    name: txtName.text,
-                    specificAddress: txtSpecificAddress.text,
-                    numberPhone: txtNumberPhone.text,
-                    defaultIs: valueCheckBox,
-                    ward: wardValue.toString()));
+                if (txtName.text.isNotEmpty && txtNumberPhone.text.isNotEmpty)
+                  if (context.read<AddressBloc>().selectedWard == null)
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "Vui lòng chọn Phường/Xã."),
+                    ));
+                  else context.read<AddressBloc>().add(UpdateAddressEvent(
+                      addressId: widget.address.id.toString(),
+                      name: txtName.text,
+                      specificAddress: txtSpecificAddress.text,
+                      numberPhone: txtNumberPhone.text,
+                      defaultIs: valueCheckBox,
+                      ward: context
+                          .read<AddressBloc>()
+                          .wards[context
+                          .read<AddressBloc>()
+                          .selectedWard!].id.toString()));
               },
               child: Container(
                 height: 70,

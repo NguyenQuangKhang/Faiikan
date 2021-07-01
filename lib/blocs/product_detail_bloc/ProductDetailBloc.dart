@@ -15,6 +15,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   late String optionProductId;
   List<Product> listProductAlsoLike = [];
   List<Product> listSimilarProduct = [];
+  List<String> options =[];
   late int amount;
   int currentPage = 1;
   int currentSimilar = 1;
@@ -70,13 +71,16 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         },
       );
-
+     yield AddtoCartSuccess();
       yield ProductDetailShowState(data: productDetail);
     }
 
     if (event is FavoriteTapEvent) {
       http.post(Uri.parse(
-          "http://$server:8080/api/v1/${event.person_id}/${event.product_id}/update-favorite"));
+          "http://$server:8080/api/v1/${event.person_id}/${event.product_id}/update-favorite")).then((value) async {
+            this.add(ChangeToFavoriteTapSuccessEvent());
+
+      });
       yield ProductDetailShowState(data: productDetail);
     }
     if (event is LoadMoreProductAlsoLikeEvent) {
@@ -131,7 +135,12 @@ if(event is LoadRecommendAndAlsoLikeProductEvent)
         .map<Product>((json) => Product.fromJson(json))
         .toList();
     currentSimilar++;
-  }
     yield ProductDetailShowState(data: productDetail);
+  }
+   if(event is ChangeToFavoriteTapSuccessEvent)
+     {
+       print("Asdasdasda");
+       yield FavoriteTapSuccess();
+     }
   }
 }

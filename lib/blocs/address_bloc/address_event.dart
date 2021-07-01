@@ -92,3 +92,15 @@ class ChooseUnitAddressEvent extends AddressEvent {
   @override
   String toString() => 'LoginButtonPressed {  }';
 }
+class ChangeCurrentAddressEvent extends AddressEvent {
+
+  final int index;
+
+  ChangeCurrentAddressEvent({required this.index});
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => 'LoginButtonPressed {  }';
+}

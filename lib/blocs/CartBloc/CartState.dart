@@ -54,3 +54,17 @@ class ErrorCart extends CartState {
   final String error;
   ErrorCart({required this.error}) : super(data:[], totalPrice: 0,discount: 0.0);
 }
+class LoadingGetProductOptionState extends CartState {
+  LoadingGetProductOptionState({
+    required List<CartItem> data,
+    required int totalPrice,
+    required double discount,
+  }) : super(data: data, totalPrice: totalPrice, discount: discount);
+}
+class LoadedGetProductOptionState extends CartState {
+  LoadedGetProductOptionState({
+    required List<CartItem> data,
+    required int totalPrice,
+    required double discount,
+  }) : super(data: data, totalPrice: totalPrice, discount: discount);
+}

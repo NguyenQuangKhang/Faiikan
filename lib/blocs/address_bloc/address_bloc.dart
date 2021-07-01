@@ -19,6 +19,8 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
   int? selectedProvice;
   int? selectedDistric;
   int? selectedWard;
+  bool isChangeParent=false;
+  Address? currentAddress;
   AddressBloc(AddressState initialState) : super(initialState);
 
   @override
@@ -37,6 +39,8 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
           .cast<Map<String, dynamic>>()
           .map<Address>((json) => Address.fromJson(json))
           .toList();
+      currentAddress= myAddresses.where((element) => element.defaultIs==true).isEmpty? null : myAddresses.firstWhere((element) => element.defaultIs==true);
+      print(currentAddress);
       final response1 = await http
           .get(Uri.parse("http://$server:8080/api/v1/province/get-all"));
       provinces = json
@@ -71,6 +75,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
     }
     if (event is AddNewAddressEvent) {
       yield LoadAddress();
+
       final response = await http.post(
           Uri.http("$server:8080", "/api/v1/user/${event.userId}/add-address",
               {"ward": event.ward}),
@@ -126,17 +131,34 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
         switch(event.type){
           case "province":
           selectedProvice = event.index;
+          selectedDistric=null;
+          selectedWard=null;
+          isChangeParent=true;
+          yield InitialAddressState();
+          this.add(GetDistrictEvent(provinceId: provinces[selectedProvice!].id.toString()));
           break;
           case "district":
             selectedDistric = event.index;
+            print(selectedDistric);
+            selectedWard=null;
+            isChangeParent=true;
+            yield InitialAddressState();
+            this.add(GetWardEvent(districtId: districts[selectedDistric!].id.toString()));
             break;
           case "ward":
             selectedWard =event.index;
+            yield InitialAddressState();
             break;
           default:
             break;
         }
 
+
+      }
+    if(event is ChangeCurrentAddressEvent)
+      {
+        yield LoadAddress();
+        currentAddress= myAddresses[event.index];
         yield InitialAddressState();
       }
   }

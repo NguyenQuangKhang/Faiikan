@@ -5,11 +5,15 @@ import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
+import 'package:faiikan/blocs/hot_search_bloc/hot_search_bloc.dart';
+import 'package:faiikan/blocs/hot_search_bloc/hot_search_event.dart';
+import 'package:faiikan/blocs/hot_search_bloc/hot_search_state.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
 import 'package:faiikan/blocs/product_bloc/ProductState.dart';
 import 'package:faiikan/screens/cart_screen/cart_screen.dart';
 import 'package:faiikan/screens/main_screen/home_tab_tab/for_you_tab.dart';
+import 'package:faiikan/screens/main_screen/home_tab_tab/male_screen.dart';
 import 'package:faiikan/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,16 +28,14 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         appBar: CustomAppBar(
           onTapCart: () {
-            Navigator.push(context,
-                MaterialPageRoute(
-                    builder: (_) {
-                      return BlocProvider.value(
-                        value: context.read<CartBloc>(),
-                        child: CartScreen(
-                          person_id: context.read<AccountBloc>().user.id!,
-                        ),
-                      );
-                    }));
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return BlocProvider.value(
+                value: context.read<CartBloc>(),
+                child: CartScreen(
+                  person_id: context.read<AccountBloc>().user.id!,
+                ),
+              );
+            }));
           },
           onTapNotification: () {},
           isRedTitle: true,
@@ -47,7 +49,7 @@ class HomeScreen extends StatelessWidget {
             indicatorSize: TabBarIndicatorSize.tab,
             tabs: [
               Container(
-                width: MediaQuery.of(context).size.width / 4 - 30,
+//                width: MediaQuery.of(context).size.width / 4 - 30,
                 child: Tab(
                   child: Text(
                     "Cho bạn",
@@ -55,11 +57,12 @@ class HomeScreen extends StatelessWidget {
                       fontSize: 18,
                       letterSpacing: 0.5,
                     ),
+                    maxLines: 1,
                   ),
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 4 - 30,
+//                width: MediaQuery.of(context).size.width / 4 - 30,
                 child: Tab(
                   child: Text(
                     "Nam",
@@ -67,11 +70,12 @@ class HomeScreen extends StatelessWidget {
                       fontSize: 18,
                       letterSpacing: 0.5,
                     ),
+                    maxLines: 1,
                   ),
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 4 - 30,
+//                width: MediaQuery.of(context).size.width / 4 - 30,
                 child: Tab(
                   child: Text(
                     "Nữ",
@@ -79,11 +83,12 @@ class HomeScreen extends StatelessWidget {
                       fontSize: 18,
                       letterSpacing: 0.5,
                     ),
+                    maxLines: 1,
                   ),
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 4 - 30,
+//                width: MediaQuery.of(context).size.width / 4 - 30,
                 child: Tab(
                   child: Text(
                     "Làm đẹp",
@@ -91,6 +96,7 @@ class HomeScreen extends StatelessWidget {
                       fontSize: 18,
                       letterSpacing: 0.5,
                     ),
+                    maxLines: 1,
                   ),
                 ),
               ),
@@ -99,8 +105,24 @@ class HomeScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            ForYouScreen(),
-            Container(),
+            MultiBlocProvider(providers: [
+              BlocProvider(
+                create: (_) => HotSearchBloc(LoadHotSearch())
+                  ..add(InitiateHotSearchEvent()),
+              ),
+              BlocProvider(
+                create: (BuildContext context) =>
+                    CategoryBloc(LoadingCategory())
+                      ..add(InitiateEvent(catId: 16)),
+              ),
+            ], child: ForYouScreen()),
+            MultiBlocProvider(providers: [
+              BlocProvider(
+                create: (BuildContext context) =>
+                CategoryBloc(LoadingCategory())
+                  ..add(InitiateEvent(catId: 16)),
+              ),
+            ], child: MaleScreen()),
             Container(),
             Container(),
           ],

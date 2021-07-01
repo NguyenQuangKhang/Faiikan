@@ -724,3 +724,50 @@ class TotalCount {
   }
 
 }
+
+
+class ProductOption {
+
+  late List<Attributes> _attributes;
+  late List<Option_products> _optionProducts;
+  List<Attributes> get attributes => _attributes;
+
+  List<Option_products> get optionProducts => _optionProducts;
+  ProductOption(
+      {
+        required List<Attributes> attributes,
+        required List<Option_products> optionProducts,
+      }) {
+
+    _attributes = attributes;
+    _optionProducts = optionProducts;
+  }
+
+  ProductOption.fromJson(dynamic json) {
+
+    if (json["attributes"] != null) {
+      _attributes = [];
+      json["attributes"].forEach((v) {
+        _attributes.add(Attributes.fromJson(v));
+      });
+    }
+    if (json["product-options"] != null) {
+      _optionProducts = [];
+      json["product-options"].forEach((v) {
+        _optionProducts.add(Option_products.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    var map = <String, dynamic>{};
+
+    if (_attributes != null) {
+      map["attributes"] = _attributes.map((v) => v.toJson()).toList();
+    }
+    if (_optionProducts != null) {
+      map["product-options"] = _optionProducts.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+}

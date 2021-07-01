@@ -105,8 +105,8 @@ class Loading extends ProductsState {
   }
 }
 
-class Initial extends ProductsState {
-  Initial({
+class InitialProductState extends ProductsState {
+  InitialProductState({
     required List<Product> data,
     required int sortBy,
 //    Filter filterRules,
@@ -116,11 +116,5 @@ class Initial extends ProductsState {
             sortBy: sortBy,
             /*filterRules: filterRules,*/ error: error);
 
-  Initial getTiles() {
-    return Initial(
-      data: data,
-      sortBy: sortBy,
-      error: '', /*filterRules: filterRules*/
-    );
-  }
+
 }

@@ -1,13 +1,25 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/address_bloc/address_bloc.dart';
 import 'package:faiikan/blocs/address_bloc/address_event.dart';
 import 'package:faiikan/blocs/address_bloc/address_state.dart';
+import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
+import 'package:faiikan/blocs/my_order_bloc/my_order_event.dart';
+import 'package:faiikan/blocs/my_order_bloc/my_order_state.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
 import 'package:faiikan/blocs/product_bloc/ProductState.dart';
+import 'package:faiikan/blocs/similar_product_bloc/similar_product_bloc.dart';
+import 'package:faiikan/blocs/similar_product_bloc/similar_product_event.dart';
+import 'package:faiikan/blocs/similar_product_bloc/similar_product_state.dart';
 import 'package:faiikan/models/product.dart';
 import 'package:faiikan/screens/address_screen/my_address.dart';
+import 'package:faiikan/screens/my_order_screen/my_order_screen.dart';
 import 'package:faiikan/screens/register_login_screen/login_screen.dart';
 import 'package:faiikan/screens/register_login_screen/register_and_login_screen.dart';
+import 'package:faiikan/screens/review_screen/my_review_screen.dart';
+import 'package:faiikan/screens/seen_product/seen_product.dart';
+import 'package:faiikan/screens/similar_product_screen/similar_product_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:faiikan/styles/custom_icon_icons.dart';
 import 'package:faiikan/widgets/card/product_card.dart';
@@ -29,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height / 2 - 60,
+              height: MediaQuery.of(context).size.height / 2 - 30,
               child: Stack(
                 children: [
                   Container(
@@ -37,8 +49,8 @@ class ProfileScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Color(0xffF34646),
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
+                        bottomLeft: Radius.circular(50),
+                        bottomRight: Radius.circular(50),
                       ),
                     ),
                     child: Column(
@@ -147,7 +159,7 @@ class ProfileScreen extends StatelessWidget {
                                 ],
                               ),
                               SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
                               Container(
                                 width:
@@ -221,7 +233,8 @@ class ProfileScreen extends StatelessWidget {
                   Positioned(
                     top: MediaQuery.of(context).size.height / 2 -
                         60 -
-                        (MediaQuery.of(context).size.height / 2 - 300),
+                        MediaQuery.of(context).size.height / 12 -
+                        50,
                     child: Container(
                       margin: EdgeInsets.only(
                         right: 10,
@@ -265,21 +278,30 @@ class ProfileScreen extends StatelessWidget {
                                       letterSpacing: 0.5,
                                       fontWeight: FontWeight.normal),
                                 ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Xem lịch sử mua hàng",
-                                      style: TextStyle(
-                                          color: Colors.black.withOpacity(0.7),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios_sharp,
-                                      color: Color(0xff666666),
-                                      size: 10,
-                                    )
-                                  ],
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => MyOrderScreen(userId: userId.toString(),initialTab: 0,)));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Xem lịch sử mua hàng",
+                                        style: TextStyle(
+                                            color:
+                                                Colors.black.withOpacity(0.7),
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios_sharp,
+                                        color: Color(0xff666666),
+                                        size: 10,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -298,142 +320,174 @@ class ProfileScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     flex: 1,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/choxacnhan.png",
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          fit: BoxFit.contain,
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        AutoSizeText(
-                                          "Chờ xác nhận",
-                                          maxLines: 1,
-                                          minFontSize: 12,
-                                          maxFontSize: 20,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                Colors.black.withOpacity(0.7),
-                                            letterSpacing: 0.5,
+                                    child: InkWell(
+                                      onTap: (){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => MyOrderScreen(userId: userId.toString(),initialTab: 0,)));
+                                      },
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/choxacnhan.png",
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                20,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                20,
+                                            fit: BoxFit.contain,
                                           ),
-                                        )
-                                      ],
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          AutoSizeText(
+                                            "Chờ xác nhận",
+                                            maxLines: 1,
+                                            minFontSize: 12,
+                                            maxFontSize: 20,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color:
+                                                  Colors.black.withOpacity(0.7),
+                                              letterSpacing: 0.5,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   Expanded(
                                     flex: 1,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/cholayhang.png",
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          fit: BoxFit.contain,
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        AutoSizeText(
-                                          "Chờ lấy hàng",
-                                          maxLines: 1,
-                                          minFontSize: 12,
-                                          maxFontSize: 20,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                Colors.black.withOpacity(0.7),
-                                            letterSpacing: 0.5,
+                                    child: InkWell(
+                                      onTap: (){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => MyOrderScreen(userId: userId.toString(),initialTab: 1,)));
+                                      },
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/cholayhang.png",
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                20,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                20,
+                                            fit: BoxFit.contain,
                                           ),
-                                        )
-                                      ],
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          AutoSizeText(
+                                            "Chờ lấy hàng",
+                                            maxLines: 1,
+                                            minFontSize: 12,
+                                            maxFontSize: 20,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color:
+                                                  Colors.black.withOpacity(0.7),
+                                              letterSpacing: 0.5,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   Expanded(
                                     flex: 1,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/danggiao.png",
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          fit: BoxFit.contain,
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        AutoSizeText(
-                                          "Đang giao",
-                                          minFontSize: 12,
-                                          maxLines: 1,
-                                          maxFontSize: 20,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                Colors.black.withOpacity(0.7),
-                                            letterSpacing: 0.5,
+                                    child: InkWell(
+                                      onTap: (){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => MyOrderScreen(userId: userId.toString(),initialTab: 2,)));
+                                      },
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/danggiao.png",
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                20,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                20,
+                                            fit: BoxFit.contain,
                                           ),
-                                        )
-                                      ],
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          AutoSizeText(
+                                            "Đang giao",
+                                            minFontSize: 12,
+                                            maxLines: 1,
+                                            maxFontSize: 20,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color:
+                                                  Colors.black.withOpacity(0.7),
+                                              letterSpacing: 0.5,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   Expanded(
                                     flex: 1,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/dagiao.png",
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          fit: BoxFit.contain,
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        AutoSizeText(
-                                          "Đã giao",
-                                          minFontSize: 12,
-                                          maxFontSize: 20,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                Colors.black.withOpacity(0.7),
-                                            letterSpacing: 0.5,
+                                    child: InkWell(
+                                      onTap: (){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => MyOrderScreen(userId: userId.toString(),initialTab: 3,)));
+                                      },
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/dagiao.png",
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                20,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                20,
+                                            fit: BoxFit.contain,
                                           ),
-                                        )
-                                      ],
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          AutoSizeText(
+                                            "Đã giao",
+                                            minFontSize: 12,
+                                            maxFontSize: 20,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color:
+                                                  Colors.black.withOpacity(0.7),
+                                              letterSpacing: 0.5,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -447,50 +501,74 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.black.withOpacity(0.2),
-                    width: 1,
+            InkWell(
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          BlocProvider<ProductBloc>(
+                            create: (_) {
+                              return ProductBloc(
+                                InitialProductState(
+                                  data: [],
+                                  error: "",
+                                  sortBy: 0,
+                                ),
+                              )..add(
+                                  SeenProductEvent(userId: userId.toString()));
+                            },
+                            child: BlocProvider.value(
+                                value: context.read<CartBloc>(),
+                                child: SeenProductScreen(userId: userId,)),
+                          ),
+                    ));
+              },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black.withOpacity(0.2),
+                      width: 1,
+                    ),
                   ),
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        CustomIcon.recently_seen,
-                        color: Color(0xff2284CA),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "Đã xem gần đây",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          letterSpacing: 0.5,
-                          fontWeight: FontWeight.w400,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          CustomIcon.recently_seen,
+                          color: Color(0xff2284CA),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.arrow_forward_ios_sharp,
-                        color: Color(0xff666666),
-                        size: 20,
-                      )
-                    ],
-                  ),
-                ],
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Đã xem gần đây",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            letterSpacing: 0.5,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.arrow_forward_ios_sharp,
+                          color: Color(0xff666666),
+                          size: 20,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             Container(
@@ -504,39 +582,45 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        CustomIcon.my_review,
-                        color: Color(0xff1A7A24),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "Đánh giá của tôi",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          letterSpacing: 0.5,
-                          fontWeight: FontWeight.w400,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => MyReviewScreen()));
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          CustomIcon.my_review,
+                          color: Color(0xff1A7A24),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.arrow_forward_ios_sharp,
-                        color: Color(0xff666666),
-                        size: 20,
-                      )
-                    ],
-                  ),
-                ],
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Đánh giá của tôi",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            letterSpacing: 0.5,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.arrow_forward_ios_sharp,
+                          color: Color(0xff666666),
+                          size: 20,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             Container(
@@ -708,8 +792,12 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             BlocBuilder<ProductBloc, ProductsState>(builder: (context, state) {
-              if(state is Initial || state is Loading)
-                return Center(child: CircularProgressIndicator(backgroundColor: Colors.redAccent,),);
+              if (state is InitialProductState || state is Loading)
+                return Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
               return Column(
                 children: [
                   Row(
@@ -718,26 +806,49 @@ class ProfileScreen extends StatelessWidget {
                           height: MediaQuery.of(context).size.height / 4 + 20,
                           width: MediaQuery.of(context).size.width,
                           child: ListView.builder(
-
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               return Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: ProductCard(
+                                  onTapSimilar: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => BlocProvider.value(
+                                                  value:
+                                                      context.read<CartBloc>(),
+                                                  child: BlocProvider(
+                                                    create: (_) => SimilarProductBloc(
+                                                        InitialSimilarProductState())
+                                                      ..add(InitiateSimilarProductEvent(
+                                                          productId: context
+                                                              .read<
+                                                                  ProductBloc>()
+                                                              .listdata[index]
+                                                              .id
+                                                              .toString())),
+                                                    child: SimilarProductScreen(
+                                                        interactingProduct: context
+                                                            .read<ProductBloc>()
+                                                            .listdata[index],
+                                                        userId: userId),
+                                                  ),
+                                                )));
+                                  },
                                   onTapFavorite: () {},
                                   width: MediaQuery.of(context).size.width / 3,
                                   height:
                                       MediaQuery.of(context).size.height / 4,
                                   product: context
                                       .read<ProductBloc>()
-                                      .listRecommendTopRating[index],
+                                      .listdata[index],
                                   index: index,
                                 ),
                               );
                             },
-                            itemCount:context
-                                .read<ProductBloc>()
-                                .listRecommendTopRating.length ,
+                            itemCount:
+                                context.read<ProductBloc>().listdata.length,
                           )),
                     ],
                   ),

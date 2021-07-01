@@ -66,3 +66,27 @@ class ResetSearchEvent extends SearchEvent {
   String toString() =>
       'LoginButtonPressed {  }';
 }
+class RecommendSearchEvent extends SearchEvent {
+  final String text;
+
+
+  RecommendSearchEvent({required this.text,});
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() =>
+      'LoginButtonPressed {  }';
+}
+class RemoveHistorySearchEvent extends SearchEvent {
+  final String userId;
+
+
+  RemoveHistorySearchEvent({required this.userId,});
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() =>
+      'LoginButtonPressed {  }';
+}

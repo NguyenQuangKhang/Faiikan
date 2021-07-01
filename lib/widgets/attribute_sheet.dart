@@ -14,9 +14,10 @@ import 'package:intl/intl.dart';
 
 class AttributesSheet extends StatefulWidget {
   final List<String> images;
-  final bool isSheet;
+  final bool hasMuaHang;
+  final bool hasThemGioHang;
 
-  AttributesSheet({required this.images, required this.isSheet});
+  AttributesSheet({required this.images, required this.hasMuaHang,required this.hasThemGioHang});
 
   @override
   _AttributesSheetState createState() => _AttributesSheetState();
@@ -40,7 +41,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
         .productDetail
         .attributes
         .where((att) => att.code != "image" && att.code !="color").isNotEmpty)
-     height+= 80*context
+     height+= 90*context
          .read<ProductDetailBloc>()
          .productDetail
          .attributes
@@ -481,7 +482,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
             padding: const EdgeInsets.all(10),
             child: Row(
               children: [
-                Expanded(
+               if(widget.hasThemGioHang) Expanded(
                   child: InkWell(
                     onTap: () {
                       context.read<ProductDetailBloc>().optionProductId=context
@@ -525,24 +526,43 @@ class _AttributesSheetState extends State<AttributesSheet> {
                     ),
                   ),
                 ),
-                if (widget.isSheet)
+                if (widget.hasMuaHang && widget.hasThemGioHang)
                   SizedBox(
                     width: 10,
                   ),
-                if (widget.isSheet)
+                if (widget.hasMuaHang)
                   Expanded(
                     child: InkWell(
                       onTap: () {
-//                        Navigator.push(
-//                            context,
-//                            MaterialPageRoute(
-//                                builder: (context) =>
-//                                    BlocProvider(
-//                                        create: (BuildContext context) =>
-//                                        MyOrderBloc(InitialMyOrderState())
-//                                          ..add(InitiateMyOrderEvent(
-//                                              person_id: "person_id")),
-//                                        child: MyOrderScreen())));
+
+                        context.read<ProductDetailBloc>().optionProductId=context
+                            .read<ProductDetailBloc>()
+                            .productDetail.optionProducts.firstWhere((e) {
+                          for(int i=0;i<listIndexSelected.length;i++)
+                          {
+                            if(e.option.where((a) => a.id == context
+                                .read<ProductDetailBloc>()
+                                .productDetail
+                                .attributes
+                                .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
+                              return false;
+                          }
+                          return true;
+                        }).productOptionId.toString();
+                        context
+                            .read<ProductDetailBloc>().options=context.read<ProductDetailBloc>().productDetail.optionProducts.firstWhere((e) {
+                          for(int i=0;i<listIndexSelected.length;i++)
+                          {
+                            if(e.option.where((a) => a.id == context.read<ProductDetailBloc>().productDetail
+                                .attributes
+                                .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
+                              return false;
+                          }
+                          return true;
+                        }).option.where((e) => e.value.substring(0, 2) !=
+                            "ht").map((a) => a.value).toList();
+                        context.read<ProductDetailBloc>().amount=count;
+                      Navigator.of(context).pop("Mua ngay");
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(

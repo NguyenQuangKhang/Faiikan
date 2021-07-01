@@ -8,7 +8,11 @@ import 'package:faiikan/blocs/favorite_bloc/FavortieState.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailEvent.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailState.dart';
+import 'package:faiikan/blocs/similar_product_bloc/similar_product_bloc.dart';
+import 'package:faiikan/blocs/similar_product_bloc/similar_product_event.dart';
+import 'package:faiikan/blocs/similar_product_bloc/similar_product_state.dart';
 import 'package:faiikan/screens/product_detail_screen/product_detail_screen.dart';
+import 'package:faiikan/screens/similar_product_screen/similar_product_screen.dart';
 import 'package:faiikan/widgets/card/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,30 +23,13 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-  ScrollController _scrollController = ScrollController();
-  ScrollController _scrollController2 = ScrollController();
   bool flag = true;
   late FavoriteBloc productBloc;
 
   @override
   void initState() {
     productBloc = context.read<FavoriteBloc>();
-    _scrollController2.addListener(() {
-      if (_scrollController2.position.pixels ==
-          _scrollController2.position.maxScrollExtent)
-        setState(() {
-          flag = false;
-        });
-    });
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.minScrollExtent) {
-        setState(() {
-          flag = true;
-        });
-      }
-      super.initState();
-    });
+    super.initState();
   }
 
   @override
@@ -57,16 +44,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
             color: Colors.black,
-          ),
-        ),
-        leading: InkWell(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Icon(
-            Icons.arrow_back,
-            size: 25,
-            color: Colors.black.withOpacity(0.7),
           ),
         ),
       ),
@@ -96,7 +73,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
-              controller: _scrollController2,
               child: Column(
                 children: [
                   Row(
@@ -174,113 +150,124 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 2 / 3,
-//                      margin: EdgeInsets.only(top: 5, bottom: 5),
-                    margin: EdgeInsets.only(
-                      bottom: 5,
-                      left: 5,
-                      right: 5,
-                    ),
-                    child: CustomScrollView(
-                        shrinkWrap: true,
-                        primary: false,
-                        physics: flag == true
-                            ? NeverScrollableScrollPhysics()
-                            : ClampingScrollPhysics(),
-                        controller: _scrollController,
-                        scrollDirection: Axis.vertical,
-                        slivers: <Widget>[
-                          SliverGrid(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio:
-                                  (MediaQuery.of(context).size.width / 2 - 37) /
-                                      (MediaQuery.of(context).size.height / 3 -
-                                          7),
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing: 5,
-                              //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
+//                    margin: EdgeInsets.only(
+//                      bottom: 5,
+//                      left: 5,
+//                      right: 5,
+//                    ),
+                    child: GridView.count(
+                      // Create a grid with 2 columns. If you change the scrollDirection to
+                      // horizontal, this produces 2 rows.
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                      scrollDirection: Axis.vertical,
+                      childAspectRatio:
+                          (MediaQuery.of(context).size.width / 2 - 22 / 5) /
+                              (MediaQuery.of(context).size.height / 3 - 2.5),
+                      // Generate 100 widgets that display their index in the List.
+                      children:
+                          List.generate(productBloc.listdata.length, (index) {
+                        return GestureDetector(
+                            child: ProductCard(
+                              onTapSimilar: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => BlocProvider.value(
+                                              value: context.read<CartBloc>(),
+                                              child: BlocProvider(
+                                                create: (_) => SimilarProductBloc(
+                                                    InitialSimilarProductState())
+                                                  ..add(
+                                                      InitiateSimilarProductEvent(
+                                                          productId: productBloc
+                                                              .listdata[index]
+                                                              .id
+                                                              .toString())),
+                                                child: SimilarProductScreen(
+                                                    interactingProduct:
+                                                        productBloc
+                                                            .listdata[index],
+                                                    userId: context
+                                                        .read<AccountBloc>()
+                                                        .user
+                                                        .id!),
+                                              ),
+                                            )));
+                              },
+                              hasLike: true,
+                              liked: productBloc.listdata[index].isLiked,
+                              onTapFavorite: () {
+                                productBloc.add(FavoriteTap(
+                                    person_id: context
+                                        .read<AccountBloc>()
+                                        .user
+                                        .id!
+                                        .toString(),
+                                    product_id: productBloc.listdata[index].id
+                                        .toString(),
+                                    index: index));
+                              },
+                              height: MediaQuery.of(context).size.height / 3,
+                              width: MediaQuery.of(context).size.width / 2,
+                              product: productBloc.listdata[index],
+                              index: index,
                             ),
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return GestureDetector(
-                                    child: ProductCard(
-                                      hasLike: true,
-                                      liked: productBloc.listdata[index].isLiked,
-                                      onTapFavorite: () {
-
-
-                                        productBloc.add(
-                                            FavoriteTap(
-                                                person_id: context
-                                                    .read<AccountBloc>()
-                                                    .user
-                                                    .id!
-                                                    .toString(),
-                                                product_id: productBloc
-                                                    .listdata[index].id
-                                                    .toString(),index: index));
-                                      },
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              3,
-                                      width:
-                                          MediaQuery.of(context).size.width / 2,
-                                      product: productBloc.listdata[index],
-                                      index: index,
-                                    ),
-                                    onTap: () {
-                                      productBloc.index=index;
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => MultiBlocProvider(
-                                                      providers: [
-                                                        BlocProvider.value(
-                                                            value: context.read<
-                                                                ProductDetailBloc>()
-                                                              ..add(
-                                                                  ProductDetailLoadEvent(
-                                                                id: productBloc
-                                                                    .listdata[
-                                                                        index]
-                                                                    .id,
-                                                                person_id: context
-                                                                    .read<
-                                                                        AccountBloc>()
-                                                                    .user
-                                                                    .id
-                                                                    .toString(),
-                                                              ))),
-                                                        BlocProvider.value(
-                                                          value: context
-                                                              .read<CartBloc>(),
-                                                        ),
-                                                      ],
-                                                      child: ProductDetail(
-                                                        userId: context
+                            onTap: () {
+                              productBloc.index = index;
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => MultiBlocProvider(
+                                              providers: [
+                                                BlocProvider.value(
+                                                    value: context
+                                                        .read<FavoriteBloc>()),
+                                                BlocProvider(
+                                                    create: (_) => ProductDetailBloc(
+                                                        InitialProductDetail())
+                                                      ..add(
+                                                          ProductDetailLoadEvent(
+                                                        id: productBloc
+                                                            .listdata[index].id,
+                                                        person_id: context
                                                             .read<AccountBloc>()
                                                             .user
-                                                            .id!,
-                                                        percentStar: productBloc
-                                                            .listdata[index]
-                                                            .percentStar,
-                                                        countRating: productBloc
-                                                            .listdata[index]
-                                                            .countRating,
-                                                        price: productBloc
-                                                            .listdata[index]
-                                                            .price,
-                                                        productId: productBloc
-                                                            .listdata[index].id,
-                                                      ))));
-                                    });
-                              },
-                              childCount: productBloc.listdata.length,
-                            ),
-                          ),
-                        ]),
+                                                            .id
+                                                            .toString(),
+                                                      ))),
+                                                BlocProvider.value(
+                                                  value:
+                                                      context.read<CartBloc>(),
+                                                ),
+                                              ],
+                                              child: ProductDetail(
+                                                userId: context
+                                                    .read<AccountBloc>()
+                                                    .user
+                                                    .id!,
+//                                                isNavigatedFromFavorite: true,
+
+
+                                                percentStar: productBloc
+                                                    .listdata[index]
+                                                    .percentStar,
+                                                countRating: productBloc
+                                                    .listdata[index]
+                                                    .countRating,
+                                                price: productBloc
+                                                    .listdata[index].price,
+                                                productId: productBloc
+                                                    .listdata[index].id,
+                                              ))));
+                            });
+                      }),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
                   ),
                   Row(
                     children: [
@@ -317,6 +304,34 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               child: Container(
                                 margin: EdgeInsets.only(right: 5),
                                 child: ProductCard(
+                                  onTapSimilar: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => BlocProvider.value(
+                                                  value:
+                                                      context.read<CartBloc>(),
+                                                  child: BlocProvider(
+                                                    create: (_) => SimilarProductBloc(
+                                                        InitialSimilarProductState())
+                                                      ..add(InitiateSimilarProductEvent(
+                                                          productId: productBloc
+                                                              .listRecommendTopRating[
+                                                                  index]
+                                                              .id
+                                                              .toString())),
+                                                    child: SimilarProductScreen(
+                                                        interactingProduct:
+                                                            productBloc
+                                                                    .listRecommendTopRating[
+                                                                index],
+                                                        userId: context
+                                                            .read<AccountBloc>()
+                                                            .user
+                                                            .id!),
+                                                  ),
+                                                )));
+                                  },
                                   onTapFavorite: () {},
                                   height: MediaQuery.of(context).size.height /
                                               4 <
@@ -336,12 +351,16 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                         builder: (_) => MultiBlocProvider(
                                                 providers: [
                                                   BlocProvider.value(
+                                                      value: context
+                                                          .read<FavoriteBloc>()),
+                                                  BlocProvider.value(
                                                       value: context.read<
                                                           ProductDetailBloc>()
                                                         ..add(
                                                             ProductDetailLoadEvent(
                                                           id: productBloc
-                                                              .listdata[index]
+                                                              .listRecommendTopRating[
+                                                                  index]
                                                               .id,
                                                           person_id: context
                                                               .read<
@@ -360,6 +379,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                       .read<AccountBloc>()
                                                       .user
                                                       .id!,
+                                                  isInFavorite: true,
                                                   percentStar: productBloc
                                                       .listRecommendTopRating[
                                                           index]

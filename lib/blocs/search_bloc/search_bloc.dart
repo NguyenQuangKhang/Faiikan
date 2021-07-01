@@ -18,6 +18,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc(SearchState initialState) : super(initialState);
   List<Product> listSearch = [];
   List<String> listHistorySearch = [];
+  List<String> listHotSearch=[];
+  List<String> listRecommendSearch=[];
+  bool isSearchingText=false;
 
   SearchState get initialState => InitialSearchState();
 
@@ -34,11 +37,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           .cast<Map<String, dynamic>>()
           .map<String>((json) => json["keyword"] as String)
           .toList();
-      print(listHistorySearch);
+      final response1= await http.get(Uri.parse(
+          "http://$server:8080/api/v1/search/hot-search-text"));
+      listHotSearch = json
+          .decode(response1.body)
+          .map<String>((json) => json as String)
+          .toList();
+
       yield ShowHotSearchState();
     }
     if (event is SearchTextEvent) {
       yield LoadSearch();
+      isSearchingText=true;
       page = 1;
       final response = await http.get(
         Uri.http(
@@ -50,6 +60,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           }
       );
+      if(listHotSearch.isEmpty)
+        {
+          final response = await http.get(Uri.parse(
+              "http://$server:8080/api/v1/${event.userId}/get-history-search"));
+          listHistorySearch = json
+              .decode(response.body)
+              .cast<Map<String, dynamic>>()
+              .map<String>((json) => json["keyword"] as String)
+              .toList();
+          final response1= await http.get(Uri.parse(
+              "http://$server:8080/api/v1/search/hot-search-text"));
+          listHotSearch = json
+              .decode(response1.body)
+              .map<String>((json) => json as String)
+              .toList();
+        }
       print(response.body);
       listSearch = json
           .decode(response.body)
@@ -61,6 +87,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       listHistorySearch.add(event.text);
       page++;
       yield ShowResultState();
+      isSearchingText=false;
     }
     if (event is LoadMoreSearchEvent) {
       yield LoadMoreSearch();
@@ -78,6 +105,25 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if(event is ResetSearchEvent)
       {
         yield ShowHotSearchState();
+      }
+    if(event is RecommendSearchEvent)
+      {
+        print("recommend search" +event.text);
+        final response = await http.get(Uri.parse(
+            "http://$server:8080/api/v1/search/recommend-search?keyword=${event.text}"));
+        listRecommendSearch=json
+            .decode(response.body)
+            .map<String>((json) => json as String)
+            .toList();
+        if(state is RecommendSearchState)
+          yield RecommendSearchState2();
+        else yield RecommendSearchState();
+      }
+    if(event is RemoveHistorySearchEvent)
+      {
+        http.delete(Uri.parse(
+            "http://$server:8080/api/v1/${event.userId}/remove-history-search"));
+        listHistorySearch=[];
       }
   }
 }

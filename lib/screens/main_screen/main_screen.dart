@@ -18,6 +18,7 @@ import 'package:faiikan/screens/main_screen/favorite_tab.dart';
 import 'package:faiikan/screens/main_screen/home_tab.dart';
 import 'package:faiikan/screens/main_screen/message_tab.dart';
 import 'package:faiikan/screens/main_screen/profile_tab.dart';
+import 'package:faiikan/screens/post_screen/post_explorer.dart';
 import 'package:faiikan/styles/custom_icon_icons.dart';
 import 'package:faiikan/widgets/appbar.dart';
 import 'package:flutter/material.dart';
@@ -37,10 +38,7 @@ class _MainScreenState extends State<MainScreen> {
     tab = [
       MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (BuildContext context) =>
-                CategoryBloc(LoadingCategory())..add(InitiateEvent()),
-          ),
+
           BlocProvider(
             create: (BuildContext context) =>
                 CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
@@ -50,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BlocProvider(
             create: (BuildContext context) =>
-                ProductBloc(Initial(data: [], error: "", sortBy: 0))
+                ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))
                   ..add(ProductLoadEvent(
                       SortBy: 0, userId: context.read<AccountBloc>().user.id!)),
           ),
@@ -62,14 +60,18 @@ class _MainScreenState extends State<MainScreen> {
         ],
         child: HomeScreen(),
       ),
-      BlocProvider(
-        child: CategoryScreen(),
-        create: (BuildContext context) =>
-            CategoryBloc(LoadingCategory())..add(InitiateEvent()),
-      ),
+
+      PostExplorer(),
       MessageScreen(),
       MultiBlocProvider(
         providers: [
+          BlocProvider(
+            create: (BuildContext context) =>
+                CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
+                  ..add(GetCartEvent(
+                      person_id:
+                          context.read<AccountBloc>().user.id!.toString())),
+          ),
           BlocProvider(
             create: (BuildContext context) =>
                 FavoriteBloc(InitialFavorite(data: []))
@@ -80,14 +82,26 @@ class _MainScreenState extends State<MainScreen> {
         ],
         child: FavoriteScreen(),
       ),
-      BlocProvider(
-        create: (BuildContext context) =>
-        ProductBloc(Initial(data: [], error: "", sortBy: 0))
-          ..add(ProductLoadEvent(
-              SortBy: 0, userId: context.read<AccountBloc>().user.id!)),
-        child:   ProfileScreen(userId: context.read<AccountBloc>().user.id!,),
-      ),
-
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (BuildContext context) =>
+                CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
+                  ..add(GetCartEvent(
+                      person_id:
+                          context.read<AccountBloc>().user.id!.toString())),
+          ),
+          BlocProvider(
+            create: (BuildContext context) =>
+                ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))
+                  ..add(ProductLoadEvent(
+                      SortBy: 0, userId: context.read<AccountBloc>().user.id!)),
+          ),
+        ],
+        child: ProfileScreen(
+          userId: context.read<AccountBloc>().user.id!,
+        ),
+      )
     ];
     // TODO: implement initState
     super.initState();
@@ -113,7 +127,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(CustomIcon.category),
-              title: Text("Danh mục"),
+              title: Text("Bài viết"),
               backgroundColor: Color(0xffF05A5A),
             ),
             BottomNavigationBarItem(

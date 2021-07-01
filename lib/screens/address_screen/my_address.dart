@@ -175,7 +175,10 @@ class MyAddressScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    Text(
+                                   if(context
+                                        .read<AddressBloc>()
+                                        .myAddresses[index]
+                                        .specificAddress.isNotEmpty)   Text(
                                       context
                                           .read<AddressBloc>()
                                           .myAddresses[index]
@@ -188,11 +191,17 @@ class MyAddressScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       context
+                                          .read<AddressBloc>()
+                                          .myAddresses[index]
+                                          .ward.prefix +" " +   context
                                               .read<AddressBloc>()
                                               .myAddresses[index]
                                               .ward
                                               .name +
-                                          " - " +
+                                          " - " +  context
+                        .read<AddressBloc>()
+                        .myAddresses[index]
+                        .district.prefix +" " +
                                           context
                                               .read<AddressBloc>()
                                               .myAddresses[index]

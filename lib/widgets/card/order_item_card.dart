@@ -1,7 +1,9 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
+import 'package:faiikan/blocs/CartBloc/CartState.dart';
 import 'package:faiikan/models/cart_item.dart' as cart_item;
 import 'package:faiikan/widgets/attribute_sheet.dart';
+import 'package:faiikan/widgets/update_cart_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,14 +17,15 @@ class OrderItemCard extends StatelessWidget {
   final cart_item.CartItem orderItem;
   final int userId;
   final int index;
+  final bool isOrderDetail;
 
   const OrderItemCard(
-      {required this.userId,
+      {Key? key,
+      required this.userId,
       required this.orderItem,
       required this.index,
-      this.isOrderDetail = false});
-
-  final bool isOrderDetail;
+      this.isOrderDetail = false})
+      : super(key: key);
 
   Widget build(BuildContext context) {
     return Container(
@@ -78,19 +81,79 @@ class OrderItemCard extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        if (!isOrderDetail)
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AttributesSheet(
-                                  images: images,
-                                  isSheet: true,
-                                );
-                              });
-                      },
-                      child: Container(
+                    if (!isOrderDetail)
+                      BlocListener<CartBloc, CartState>(
+                        listenWhen: (beforeState, state) =>
+                            index == context.read<CartBloc>().index,
+                        listener: (context, state) async {
+                          if (state is LoadedGetProductOptionState) {
+                            await showModalBottomSheet(
+                                context: context,
+                                builder: (_) {
+                                  return BlocProvider.value(
+                                    value: context.read<CartBloc>(),
+                                    child: UpdateCartSheet(
+                                      images: images,
+                                      isSheet: false,
+                                    ),
+                                  );
+                                }).then((value) {
+                              if (value == "Update") {
+                                context.read<CartBloc>().add(
+                                    UpdateCartBySheetEvent(
+                                        userId: userId,
+                                        id: orderItem.cartId,
+                                        amount: context.read<CartBloc>().amount,
+                                        index: index,
+                                        optionId: context
+                                            .read<CartBloc>()
+                                            .optionProductId));
+                              }
+                            });
+                          }
+                        },
+                        child: GestureDetector(
+                          onTap: () {
+                            context.read<CartBloc>().index = index;
+                            context.read<CartBloc>().add(GetProductOptionEvent(
+                                  productId: orderItem.productId.toString(),
+                                ));
+                          },
+                          child: Container(
+                            color: Color(0xffEEEEEE),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "Phân loại: " +
+                                      checkNullColor(
+                                          orderItem.optionProduct.color) +
+                                      ", " +
+                                      checkNullSize(
+                                          orderItem.optionProduct.size),
+                                  style: TextStyle(
+                                    color: Colors.black.withOpacity(0.7),
+                                    fontSize: 12,
+                                    letterSpacing: 0.5,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                  size: 20,
+                                  color: Colors.black.withOpacity(0.7),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      Container(
                         color: Color(0xffEEEEEE),
                         padding: EdgeInsets.symmetric(
                           horizontal: 10,
@@ -99,11 +162,12 @@ class OrderItemCard extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                          Text(
+                            Text(
                               "Phân loại: " +
-                                 checkNullColor(orderItem.optionProduct.color )   +
+                                  checkNullColor(
+                                      orderItem.optionProduct.color) +
                                   ", " +
-                                 checkNullSize(orderItem.optionProduct.size),
+                                  checkNullSize(orderItem.optionProduct.size),
                               style: TextStyle(
                                 color: Colors.black.withOpacity(0.7),
                                 fontSize: 12,
@@ -119,7 +183,6 @@ class OrderItemCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -184,7 +247,7 @@ class OrderItemCard extends StatelessWidget {
                                 onTap: () {
                                   if (orderItem.amount > 0)
                                     context.read<CartBloc>().add(
-                                        UpdateCartEvent(
+                                        UpdateCartBySheetEvent(
                                             id: orderItem.cartId,
                                             userId: userId,
                                             amount: orderItem.amount - 1,
@@ -193,13 +256,13 @@ class OrderItemCard extends StatelessWidget {
                                                 .productOptionId));
                                 },
                                 child: Container(
-                                  width: 30,
-                                  height: 30,
+                                  width: 20,
+                                  height: 20,
                                   child: Center(
                                     child: Icon(
                                       Icons.remove,
                                       color: Colors.black,
-                                      size: 16,
+                                      size: 14,
                                     ),
                                   ),
                                   decoration: BoxDecoration(
@@ -211,8 +274,8 @@ class OrderItemCard extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                  height: 30,
-                                  width: 40,
+                                  height: 20,
+                                  width: 30,
                                   decoration: BoxDecoration(
 //                                      color: Color(0xffF34646),
                                       border: Border.all(
@@ -227,7 +290,7 @@ class OrderItemCard extends StatelessWidget {
                               InkWell(
                                 onTap: () {
                                   context.read<CartBloc>().add(UpdateCartEvent(
-                                    userId: userId,
+                                      userId: userId,
                                       id: orderItem.cartId,
                                       amount: orderItem.amount + 1,
                                       index: index,
@@ -235,13 +298,13 @@ class OrderItemCard extends StatelessWidget {
                                           .optionProduct.productOptionId));
                                 },
                                 child: Container(
-                                  width: 30,
-                                  height: 30,
+                                  width: 20,
+                                  height: 20,
                                   child: Center(
                                     child: Icon(
                                       Icons.add,
                                       color: Colors.black,
-                                      size: 16,
+                                      size: 14,
                                     ),
                                   ),
                                   decoration: BoxDecoration(
@@ -265,15 +328,16 @@ class OrderItemCard extends StatelessWidget {
   }
 }
 
-String checkNullColor(cart_item.Color? str)
-{
-  if(str ==null)
-  return "";
-  else return str.value.toString();
-}
-String checkNullSize(cart_item.Size? str)
-{
-  if(str ==null)
+String checkNullColor(cart_item.Color? str) {
+  if (str == null)
     return "";
-  else return str.value.toString();
+  else
+    return str.value.toString();
+}
+
+String checkNullSize(cart_item.Size? str) {
+  if (str == null)
+    return "";
+  else
+    return str.value.toString();
 }

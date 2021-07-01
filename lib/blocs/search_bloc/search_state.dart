@@ -16,4 +16,5 @@ class InitialSearchState extends SearchState {}
 
 class ShowResultState extends SearchState {}
 class ShowHotSearchState extends SearchState {}
-
+class RecommendSearchState extends SearchState {}
+class RecommendSearchState2 extends SearchState {}

@@ -1,5 +1,9 @@
+import 'package:faiikan/blocs/address_bloc/address_bloc.dart';
+import 'package:faiikan/blocs/address_bloc/address_event.dart';
+import 'package:faiikan/blocs/address_bloc/address_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'my_address.dart';
 
@@ -46,9 +50,12 @@ class _SelectAddressState extends State<SelectAddressScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MyAddressScreen(
-                            userId: widget.userId,
-                          )));
+                      builder: (_) => BlocProvider.value(
+                        value:  context.read<AddressBloc>(),
+                        child: MyAddressScreen(
+                              userId: widget.userId,
+                            ),
+                      )));
             },
             child: Center(
               child: Text(
@@ -63,107 +70,101 @@ class _SelectAddressState extends State<SelectAddressScreen> {
         ],
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        selected = index;
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(15),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                spacing: 10,
-                                direction: Axis.vertical,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Địa chỉ nhận hàng",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+      body:  BlocBuilder<AddressBloc,AddressState>(builder: (context,state){
+        if(state is LoadAddress)
+          return Center(child: CircularProgressIndicator(backgroundColor: Colors.redAccent,),);
+        return Column(
+          children: [
+
+            Expanded(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: context.read<AddressBloc>().myAddresses.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        context.read<AddressBloc>().add(ChangeCurrentAddressEvent(index: index));
+                        Navigator.of(context).pop();
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(15),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.start,
+                                  spacing: 10,
+                                  direction: Axis.vertical,
+                                  children: [
+                                    Row(
+                                      children: [
+
+                                        if (context.read<AddressBloc>().myAddresses[index].defaultIs == true)
+                                          Text(
+                                            "[Mặc định]",
+                                            style: TextStyle(
+                                              color: Color(0xffF83434),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                    Text(
+                                      context.read<AddressBloc>().myAddresses[index].name +
+                                          " | " +
+                                          context.read<AddressBloc>().myAddresses[index].numberPhone,
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.8),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
                                       ),
-                                      SizedBox(
-                                        width: 10,
+                                    ),
+                                    Text(
+                                      context.read<AddressBloc>().myAddresses[index].specificAddress,
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.8),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
                                       ),
-                                      if (index == defaultIndex)
-                                        Text(
-                                          "[Mặc định]",
-                                          style: TextStyle(
-                                            color: Color(0xffF83434),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        )
-                                    ],
-                                  ),
-                                  Text(
-                                    "Nguyễn Quang Khang" +
-                                        " | " +
-                                        "0967524699",
-                                    style: TextStyle(
-                                      color: Colors.black.withOpacity(0.8),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
                                     ),
-                                  ),
-                                  Text(
-                                    "Kí túc xá khu B - Đhqg tp.HCM",
-                                    style: TextStyle(
-                                      color: Colors.black.withOpacity(0.8),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
+                                    Text(
+                                        context.read<AddressBloc>().myAddresses[index].ward.prefix +" " +context.read<AddressBloc>().myAddresses[index].ward.name+" - "+      context.read<AddressBloc>().myAddresses[index].district.prefix +" " +context.read<AddressBloc>().myAddresses[index].district.name+" - "+ context.read<AddressBloc>().myAddresses[index].province.name,
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.8),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Dĩ An - Đông Hòa - Bình Dương",
-                                    style: TextStyle(
-                                      color: Colors.black.withOpacity(0.8),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              if (index == selected)
-                                Icon(
-                                  Icons.done_sharp,
-                                  size: 25,
-                                  color: Color(0xffF62D2D),
+                                  ],
                                 ),
-                            ],
+                                if (context.read<AddressBloc>().myAddresses[index].id == context.read<AddressBloc>().currentAddress!.id)
+                                  Icon(
+                                    Icons.done_sharp,
+                                    size: 25,
+                                    color: Color(0xffF62D2D),
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          height: 5,
-                          color: Colors.black.withOpacity(0.2),
-                        )
-                      ],
-                    ),
-                  );
-                }),
-          ),
-        ],
-      ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            height: 5,
+                            color: Colors.black.withOpacity(0.2),
+                          )
+                        ],
+                      ),
+                    );
+                  }),
+            ),
+          ],
+        );
+      }),
     );
   }
 }

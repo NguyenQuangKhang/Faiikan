@@ -1,4 +1,5 @@
 import 'package:faiikan/models/product.dart';
+import 'package:faiikan/screens/similar_product_screen/similar_product_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -12,14 +13,19 @@ class ProductCard extends StatelessWidget {
   bool hasLike;
   final VoidCallback onTapFavorite;
   bool liked;
+  final VoidCallback onTapSimilar;
+  bool hasPopupMenu;
+
   ProductCard({
     required this.product,
     required this.index,
     required this.height,
     required this.width,
     this.hasLike = false,
-    this.liked=false,
+    this.liked = false,
+    this.hasPopupMenu=true,
     required this.onTapFavorite,
+    required this.onTapSimilar,
   });
 
   @override
@@ -45,6 +51,7 @@ class ProductCard extends StatelessWidget {
       child: Stack(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               ClipRRect(
 //                  borderRadius: BorderRadius.only(
@@ -72,23 +79,21 @@ class ProductCard extends StatelessWidget {
                 child: Container(
 //                    width: 170,
                   height: 140,
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(top:10,bottom: 10,left: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
                         height: 30,
-                        child: Center(
-                          child: Text(
-                            product.name,
-                            maxLines: 1,
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Color(0xff4B4A5A),
-                                fontWeight: FontWeight.w500),
+                        child: Text(
+                          product.name,
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xff4B4A5A),
+                              fontWeight: FontWeight.w500),
 //                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       SizedBox(
@@ -143,15 +148,40 @@ class ProductCard extends StatelessWidget {
                                       ),
                                     )
                                   : Container(),
-                              if (hasLike)
-                                InkWell(
-                                  onTap: onTapFavorite,
-                                  child: Icon(
-                                    liked? Icons.favorite: Icons.favorite_outline_sharp,
-                                    color: liked?Colors.redAccent:Color(0xff4B4A5A).withOpacity(0.5),
-                                    size: 30,
+                              Row(
+                                children: [
+                                  if (hasLike)
+                                    InkWell(
+                                      onTap: onTapFavorite,
+                                      child: Icon(
+                                        liked
+                                            ? Icons.favorite
+                                            : Icons.favorite_outline_sharp,
+                                        color: liked
+                                            ? Colors.redAccent
+                                            : Color(0xff4B4A5A)
+                                                .withOpacity(0.5),
+                                        size: 30,
+                                      ),
+                                    ),
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                )
+                                  if(hasPopupMenu)PopupMenuButton(onSelected: (choice){
+                                    if(choice =="choice")
+                                      {
+                                        onTapSimilar();
+                                      }
+                                  },
+                                      itemBuilder: (BuildContext context) {
+                                    return [
+                                      PopupMenuItem<String>(
+                                        value: "choice",
+                                          child: Text("Sản phẩm tương tự"))
+                                    ];
+                                  })
+                                ],
+                              )
                             ],
                           ))
                     ],
