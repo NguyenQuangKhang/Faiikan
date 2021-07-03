@@ -135,7 +135,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height,
       color: Color(0xffE7E7E7),
       child: SingleChildScrollView(
         controller: _scrollController2,
@@ -149,7 +152,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
                     return CachedNetworkImage(
                       imageUrl: e,
                       fit: BoxFit.fill,
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       placeholder: (context, url) =>
                           Center(child: CircularProgressIndicator()),
                       errorWidget: (context, url, error) => Icon(Icons.error),
@@ -162,7 +168,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
                     enableInfiniteScroll: true,
                     autoPlay: true,
                     pauseAutoPlayOnTouch: true,
-                    height: MediaQuery.of(context).size.height / 3 - 50,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 3 - 50,
                     viewportFraction: 1,
                     scrollDirection: Axis.horizontal,
                     initialPage: 0,
@@ -178,7 +187,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
                   bottom: 0,
                   child: Container(
                     color: Colors.white.withOpacity(0.1),
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -215,7 +227,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
               ),
               color: Colors.white,
               child: Container(
-                height: MediaQuery.of(context).size.height / 4,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height / 4,
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(10),
@@ -280,7 +295,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                       (time % 3600 ~/ 60) >= 10
                                           ? (time % 3600 ~/ 60).toString()
                                           : "0" +
-                                              (time % 3600 ~/ 60).toString(),
+                                          (time % 3600 ~/ 60).toString(),
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 10),
                                     ),
@@ -320,7 +335,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height / 4 - 40,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height / 4 - 40,
                       child: ListView.builder(
                           padding: EdgeInsets.only(left: 10),
                           scrollDirection: Axis.horizontal,
@@ -350,7 +368,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                 margin: EdgeInsets.only(
                                   right: 20,
                                 ),
-                                width: MediaQuery.of(context).size.width / 4,
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width / 4,
                                 child: Column(
                                   children: [
                                     Expanded(
@@ -362,13 +383,14 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                             child: CachedNetworkImage(
                                               imageUrl: imagesFlashSale[index],
                                               fit: BoxFit.fill,
-                                              placeholder: (context, url) => Center(
-                                                  child: Center(
-                                                      child:
+                                              placeholder: (context, url) =>
+                                                  Center(
+                                                      child: Center(
+                                                          child:
                                                           CircularProgressIndicator())),
                                               errorWidget:
                                                   (context, url, error) =>
-                                                      Icon(Icons.error),
+                                                  Icon(Icons.error),
                                             ),
                                             decoration: BoxDecoration(
                                               boxShadow: [
@@ -390,17 +412,17 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                               decoration: BoxDecoration(
                                                   color: Color(0xffF05A5A),
                                                   borderRadius:
-                                                      BorderRadius.only(
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  20),
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  5))),
+                                                  BorderRadius.only(
+                                                      bottomRight:
+                                                      Radius.circular(
+                                                          20),
+                                                      topLeft:
+                                                      Radius.circular(
+                                                          5))),
                                               child: Center(
                                                 child: Text(
                                                   promotionFlashSale[index]
-                                                          .toString() +
+                                                      .toString() +
                                                       "%",
                                                   style: TextStyle(
                                                       color: Colors.white,
@@ -419,7 +441,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                         flex: 1,
                                         child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(
                                               priceFlashSale[index].toString() +
@@ -434,7 +456,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                             LinearPercentIndicator(
                                               center: Text(
                                                 soldAmountFlashSale[index]
-                                                        .toString() +
+                                                    .toString() +
                                                     " đã bán",
                                                 style: TextStyle(
                                                     fontSize: 10,
@@ -445,7 +467,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                               percent: 0.6,
                                               lineHeight: 18,
                                               backgroundColor:
-                                                  Color(0xffF9AEAE),
+                                              Color(0xffF9AEAE),
                                               progressColor: Color(0xffFF6161),
                                             )
                                           ],
@@ -508,15 +530,16 @@ class _ForYouScreenState extends State<ForYouScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => BlocProvider.value(
-                                  value: context.read<CategoryBloc>(),
-                                  child: BlocProvider.value(
-                                    value: context.read<CartBloc>(),
-                                    child: CategoryScreen(userId: context
-                                        .read<AccountBloc>()
-                                        .user
-                                        .id!,),
-                                  ))));
+                              builder: (_) =>
+                                  BlocProvider.value(
+                                      value: context.read<CategoryBloc>(),
+                                      child: BlocProvider.value(
+                                        value: context.read<CartBloc>(),
+                                        child: CategoryScreen(userId: context
+                                            .read<AccountBloc>()
+                                            .user
+                                            .id!,),
+                                      ))));
                     },
                   )
                 ],
@@ -524,21 +547,32 @@ class _ForYouScreenState extends State<ForYouScreen> {
             ),
             Container(
                 height: 10,
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 color: Colors.white),
             Row(
               children: <Widget>[
                 Container(
                     height: 100,
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     color: Colors.white,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount:
-                            context.read<CategoryBloc>().list_cat_1.length,
+                        context
+                            .read<CategoryBloc>()
+                            .list_cat_1
+                            .length,
                         itemBuilder: (context, index) {
                           Cate.Category category =
-                              context.read<CategoryBloc>().list_cat_1[index];
+                          context
+                              .read<CategoryBloc>()
+                              .list_cat_1[index];
                           return Padding(
                             padding: EdgeInsets.only(right: 0),
                             child: GestureDetector(
@@ -547,7 +581,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                   height: 100,
                                   margin: index != 0
                                       ? EdgeInsets.only(
-                                          top: 5, bottom: 5, left: 10)
+                                      top: 5, bottom: 5, left: 10)
                                       : EdgeInsets.only(top: 5, bottom: 5),
                                   decoration: BoxDecoration(),
                                   child: Column(
@@ -560,11 +594,11 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                           color: Colors.white,
                                           border: Border.all(
                                               color:
-                                                  Colors.grey.withOpacity(0.3)),
+                                              Colors.grey.withOpacity(0.3)),
                                           boxShadow: [
                                             BoxShadow(
                                               color:
-                                                  Colors.blue.withOpacity(0.3),
+                                              Colors.blue.withOpacity(0.3),
                                               spreadRadius: 1,
                                               blurRadius: 4,
                                               offset: Offset(0,
@@ -574,23 +608,24 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                         ),
                                         child: Center(
                                             child: ClipRRect(
-                                          borderRadius:
+                                              borderRadius:
                                               BorderRadius.circular(25),
-                                          child: CachedNetworkImage(
-                                            imageUrl: category.icon != ""
-                                                ? category.icon
-                                                : "https://i.pinimg.com/236x/30/87/8d/30878dc76c22265aa23b6c0328886113.jpg",
-                                            placeholder: (context, url) =>
-                                                CircularProgressIndicator(),
-                                            errorWidget:
-                                                (context, url, error) =>
+                                              child: CachedNetworkImage(
+                                                imageUrl: category.icon != ""
+                                                    ? category.icon
+                                                    : "https://i.pinimg.com/236x/30/87/8d/30878dc76c22265aa23b6c0328886113.jpg",
+                                                placeholder: (context, url) =>
+                                                    CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
                                                     Icon(Icons.error),
-                                            fit: BoxFit.fill,
-                                            width: 25,
-                                            height: 25,
-                                            colorBlendMode: BlendMode.colorBurn,
-                                          ),
-                                        )),
+                                                fit: BoxFit.fill,
+                                                width: 25,
+                                                height: 25,
+                                                colorBlendMode: BlendMode
+                                                    .colorBurn,
+                                              ),
+                                            )),
                                       ),
                                       Container(
                                         height: 40,
@@ -612,23 +647,26 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (_) =>
-                                              BlocProvider<ProductBloc>(
-                                                create: (_) {
-                                                  return ProductBloc(
-                                                    InitialProductState(
-                                                      data: [],
-                                                      error: "",
-                                                      sortBy: 0,
-                                                    ),
-                                                  )..add(
+                                        builder: (_) =>
+                                            BlocProvider<ProductBloc>(
+                                              create: (_) {
+                                                return ProductBloc(
+                                                  InitialProductState(
+                                                    data: [],
+                                                    error: "",
+                                                    sortBy: 0,
+                                                  ),
+                                                )
+                                                  ..add(
                                                       ProductByCategoryCodeEvent(
-                                                          categoryId: category.id.toString(),
+                                                          categoryId: category
+                                                              .id.toString(),
                                                           filter:
                                                           "popular"));
-                                                },
-                                                child: BlocProvider.value(
-                                                  value: context.read<CartBloc>(),
+                                              },
+                                              child: BlocProvider.value(
+                                                  value: context.read<
+                                                      CartBloc>(),
                                                   child: ProductWithSubCat_Screen(
                                                       userId: context
                                                           .read<AccountBloc>()
@@ -637,8 +675,8 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                       title: category
                                                           .name,
                                                       category: category)),
-                                                ),
-                                              ));
+                                            ),
+                                      ));
                                 }),
                           );
                         })),
@@ -694,7 +732,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
                     builder: (context, state) {
                       if (state is LoadHotSearch)
                         return Container(
-                          height: MediaQuery.of(context).size.height / 4,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height / 4,
                           child: GridView.count(
                             scrollDirection: Axis.vertical,
                             mainAxisSpacing: 10,
@@ -704,7 +745,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                             crossAxisCount: 2,
                             children: List.generate(4, (index) {
                               return InkWell(
-                                onTap: (){
+                                onTap: () {
 
                                 },
                                 child: Container(
@@ -731,17 +772,18 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                       Expanded(
                                         flex: 1,
                                         child: Container(
-                                            height: (MediaQuery.of(context)
-                                                            .size
-                                                            .height /
-                                                        4 -
-                                                    20) /
+                                            height: (MediaQuery
+                                                .of(context)
+                                                .size
+                                                .height /
+                                                4 -
+                                                20) /
                                                 2,
                                             child: Center(
                                               child: Shimmer.fromColors(
                                                 baseColor: Colors.grey,
                                                 highlightColor:
-                                                    Colors.grey.withOpacity(0.5),
+                                                Colors.grey.withOpacity(0.5),
                                                 child: Text(
                                                   "Loading...",
                                                   style: TextStyle(
@@ -758,13 +800,14 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                         child: Shimmer.fromColors(
                                           baseColor: Colors.grey,
                                           highlightColor:
-                                              Colors.grey.withOpacity(0.5),
+                                          Colors.grey.withOpacity(0.5),
                                           child: Container(
-                                            height: (MediaQuery.of(context)
-                                                            .size
-                                                            .height /
-                                                        4 -
-                                                    20) /
+                                            height: (MediaQuery
+                                                .of(context)
+                                                .size
+                                                .height /
+                                                4 -
+                                                20) /
                                                 2,
                                           ),
                                         ),
@@ -777,7 +820,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
                           ),
                         );
                       return Container(
-                        height: MediaQuery.of(context).size.height / 4,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height / 4,
                         child: GridView.count(
                           scrollDirection: Axis.vertical,
                           mainAxisSpacing: 10,
@@ -787,29 +833,34 @@ class _ForYouScreenState extends State<ForYouScreen> {
                           crossAxisCount: 2,
                           children: List.generate(4, (index) {
                             return InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => BlocProvider(
-                                          create: (_) =>
-                                          SearchBloc(InitialSearchState())
-                                            ..add(SearchTextEvent(text: context
-                                                .read<HotSearchBloc>()
-                                                .listHotSearch[index]
-                                                .keyword, userId: context
-                                                .read<AccountBloc>()
-                                                .user
-                                                .id!.toString())),
-                                          child: BlocProvider.value(
-                                            value: context.read<CartBloc>(),
-                                            child: SearchScreen(userId:context
-                                                .read<AccountBloc>()
-                                                .user
-                                                .id!
-                                              ,),
-                                          ),
-                                        )));
+                                        builder: (_) =>
+                                            BlocProvider(
+                                              create: (_) =>
+                                              SearchBloc(InitialSearchState())
+                                                ..add(SearchTextEvent(
+                                                    text: context
+                                                        .read<HotSearchBloc>()
+                                                        .listHotSearch[index]
+                                                        .keyword,
+                                                    userId: context
+                                                        .read<AccountBloc>()
+                                                        .user
+                                                        .id!
+                                                        .toString())),
+                                              child: BlocProvider.value(
+                                                value: context.read<CartBloc>(),
+                                                child: SearchScreen(
+                                                  userId: context
+                                                      .read<AccountBloc>()
+                                                      .user
+                                                      .id!
+                                                  ,),
+                                              ),
+                                            )));
                               },
                               child: Container(
                                 margin: EdgeInsets.all(2),
@@ -835,11 +886,12 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                     Expanded(
                                       flex: 1,
                                       child: Container(
-                                          height: (MediaQuery.of(context)
-                                                          .size
-                                                          .height /
-                                                      4 -
-                                                  20) /
+                                          height: (MediaQuery
+                                              .of(context)
+                                              .size
+                                              .height /
+                                              4 -
+                                              20) /
                                               2,
                                           child: Center(
                                             child: Text(
@@ -859,17 +911,21 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                       flex: 1,
                                       child: Container(
                                         height:
-                                            (MediaQuery.of(context).size.height /
-                                                        4 -
-                                                    20) /
-                                                2,
+                                        (MediaQuery
+                                            .of(context)
+                                            .size
+                                            .height /
+                                            4 -
+                                            20) /
+                                            2,
                                         child: CachedNetworkImage(
                                           imageUrl: context
                                               .read<HotSearchBloc>()
                                               .listHotSearch[index]
                                               .linkImage,
-                                          placeholder: (context, url) => Center(
-                                              child: CircularProgressIndicator()),
+                                          placeholder: (context, url) =>
+                                              Center(
+                                                  child: CircularProgressIndicator()),
                                           errorWidget: (context, url, error) =>
                                               Icon(Icons.error),
                                           fit: BoxFit.fill,
@@ -891,7 +947,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
             Row(
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                   color: Colors.white,
                   child: Text(
@@ -1042,7 +1101,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
 //                            padding: EdgeInsets.symmetric(
 //                                horizontal: 5, vertical: 5),
                             color: Color(0xffE7E7E7),
-                            height: MediaQuery.of(context).size.height - 300,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height - 300,
                             child: CustomScrollView(
                                 shrinkWrap: true,
                                 primary: false,
@@ -1054,22 +1116,26 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                 slivers: <Widget>[
                                   SliverGrid(
                                     gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                    SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
-                                      childAspectRatio: (MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2 -
-                                              22 / 5) /
-                                          (MediaQuery.of(context).size.height /
-                                                  3 -
+                                      childAspectRatio: (MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width /
+                                          2 -
+                                          22 / 5) /
+                                          (MediaQuery
+                                              .of(context)
+                                              .size
+                                              .height /
+                                              3 -
                                               2.5),
                                       mainAxisSpacing: 5,
                                       crossAxisSpacing: 5,
                                       //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
                                     ),
                                     delegate: SliverChildBuilderDelegate(
-                                      (BuildContext context, int index) {
+                                          (BuildContext context, int index) {
                                         return GestureDetector(
                                             child: ProductCard(
                                               onTapSimilar: () {
@@ -1077,42 +1143,49 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder:
-                                                            (_) => BlocProvider
-                                                                    .value(
-                                                                  value: context
-                                                                      .read<
-                                                                          CartBloc>(),
-                                                                  child:
-                                                                      BlocProvider(
-                                                                    create: (_) => SimilarProductBloc(
-                                                                        InitialSimilarProductState())
-                                                                      ..add(InitiateSimilarProductEvent(
+                                                            (_) =>
+                                                            BlocProvider
+                                                                .value(
+                                                              value: context
+                                                                  .read<
+                                                                  CartBloc>(),
+                                                              child:
+                                                              BlocProvider(
+                                                                create: (_) =>
+                                                                SimilarProductBloc(
+                                                                    InitialSimilarProductState())
+                                                                  ..add(
+                                                                      InitiateSimilarProductEvent(
                                                                           productId: productBloc
                                                                               .listdata[index]
                                                                               .id
                                                                               .toString())),
-                                                                    child: SimilarProductScreen(
-                                                                        interactingProduct:
-                                                                            productBloc.listdata[
-                                                                                index],
-                                                                        userId: context
-                                                                            .read<AccountBloc>()
-                                                                            .user
-                                                                            .id!),
-                                                                  ),
-                                                                )));
+                                                                child: SimilarProductScreen(
+                                                                    interactingProduct:
+                                                                    productBloc
+                                                                        .listdata[
+                                                                    index],
+                                                                    userId: context
+                                                                        .read<
+                                                                        AccountBloc>()
+                                                                        .user
+                                                                        .id!),
+                                                              ),
+                                                            )));
                                               },
                                               onTapFavorite: () {},
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height /
+                                              height: MediaQuery
+                                                  .of(context)
+                                                  .size
+                                                  .height /
                                                   3,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
+                                              width: MediaQuery
+                                                  .of(context)
+                                                  .size
+                                                  .width /
                                                   2,
                                               product:
-                                                  productBloc.listdata[index],
+                                              productBloc.listdata[index],
                                               index: index,
                                             ),
                                             onTap: () {
@@ -1123,46 +1196,54 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                           MultiBlocProvider(
                                                               providers: [
                                                                 BlocProvider(
-                                                                    create: (_) =>
-                                                                        ProductDetailBloc(
-                                                                            InitialProductDetail())
-                                                                          ..add(
-                                                                              ProductDetailLoadEvent(
-                                                                            id: productBloc.listdata[index].id,
+                                                                    create: (
+                                                                        _) =>
+                                                                    ProductDetailBloc(
+                                                                        InitialProductDetail())
+                                                                      ..add(
+                                                                          ProductDetailLoadEvent(
+                                                                            id: productBloc
+                                                                                .listdata[index]
+                                                                                .id,
                                                                             person_id:
-                                                                                context.read<AccountBloc>().user.id.toString(),
+                                                                            context
+                                                                                .read<
+                                                                                AccountBloc>()
+                                                                                .user
+                                                                                .id
+                                                                                .toString(),
                                                                           ))),
                                                                 BlocProvider
                                                                     .value(
                                                                   value: context
                                                                       .read<
-                                                                          CartBloc>(),
+                                                                      CartBloc>(),
                                                                 ),
                                                               ],
                                                               child:
-                                                                  ProductDetail(
+                                                              ProductDetail(
                                                                 userId: context
                                                                     .read<
-                                                                        AccountBloc>()
+                                                                    AccountBloc>()
                                                                     .user
                                                                     .id!,
                                                                 percentStar: productBloc
                                                                     .listdata[
-                                                                        index]
+                                                                index]
                                                                     .percentStar,
                                                                 countRating: productBloc
                                                                     .listdata[
-                                                                        index]
+                                                                index]
                                                                     .countRating,
                                                                 price: productBloc
                                                                     .listdata[
-                                                                        index]
+                                                                index]
                                                                     .price,
                                                                 productId:
-                                                                    productBloc
-                                                                        .listdata[
-                                                                            index]
-                                                                        .id,
+                                                                productBloc
+                                                                    .listdata[
+                                                                index]
+                                                                    .id,
                                                               ))));
                                             });
                                       },
@@ -1174,7 +1255,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
                           if (state is Loading)
                             Positioned(
                               bottom: 10,
-                              left: MediaQuery.of(context).size.width / 2 - 15,
+                              left: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 2 - 15,
                               child: Container(
                                 width: 30,
                                 height: 30,
