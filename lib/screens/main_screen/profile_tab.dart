@@ -185,7 +185,7 @@ class ProfileScreen extends StatelessWidget {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) =>
+                                                builder: (_) =>
                                                     BlocProvider.value(
                                                   value:
                                                       context.read<AccountBloc>(),

@@ -78,6 +78,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               hintText: "Email",
                               obscure: false,
                               controller: txtEmail,
+                              validator: (value){
+                                if(RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!))
+                                  return null;
+                                else return "Vui lòng nhập đúng định dạnh email.";
+                              },
                             ),
                             SizedBox(
                               height: 20,
@@ -86,6 +91,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               hintText: "Mật khẩu",
                               obscure: true,
                               controller: txtPassword,
+                              validator: (value){
+                                if(value!.length<6)
+                                  return "Password phải có ít nhất 6 kí tự";
+                                else return null;
+                              },
                             ),
                             SizedBox(
                               height: 30,

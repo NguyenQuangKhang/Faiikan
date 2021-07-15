@@ -15,7 +15,7 @@ import 'package:intl/intl.dart';
 
 List<String> list_status = [
   "Chờ xác nhận",
-  "Chờ lấy hàng",
+  "Đang xử lý",
   "Đang giao",
   "Đã giao",
   "Đã Hủy",

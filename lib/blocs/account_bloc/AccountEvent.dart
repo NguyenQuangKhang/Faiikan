@@ -14,6 +14,16 @@ class LogOutEvent extends AccountEvent {
   // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
+class RegisterEvent extends AccountEvent {
+  final String username;
+  final String password;
+  final String name;
+
+  RegisterEvent({required this.username,required this.password,required this.name});
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}
 class LoginButtonPressed extends AccountEvent {
   final String username;
   final String password;

@@ -11,7 +11,7 @@ import 'my_order_state.dart';
 
 Map<String,int> mapStatus = {
   "Chờ xác nhận": 1,
-  "Chờ lấy hàng" : 2,
+  "Đang xử lý" : 2,
   "Đang giao" : 3,
   "Đã giao" : 4,
   "Đã Hủy": 5,

@@ -115,6 +115,7 @@ class ListItem {
   String? _color;
   String? _size;
   String? _imageUrl;
+  bool? _reviewStatus;
 
   int? get id => _id;
   int? get productId => _productId;
@@ -125,6 +126,7 @@ class ListItem {
   String? get color => _color;
   String? get size => _size;
   String? get imageUrl => _imageUrl;
+  bool? get reviewStatus => _reviewStatus;
 
   ListItem({
       int? id, 
@@ -135,7 +137,7 @@ class ListItem {
       String? name, 
       String? color, 
       String? size, 
-      String? imageUrl}){
+      String? imageUrl,bool? reviewStatus,}){
     _id = id;
     _productId = productId;
     _productOptionId = productOptionId;
@@ -145,6 +147,7 @@ class ListItem {
     _color = color;
     _size = size;
     _imageUrl = imageUrl;
+    _reviewStatus=reviewStatus;
 }
 
   ListItem.fromJson(dynamic json) {
@@ -157,6 +160,7 @@ class ListItem {
     _color = json["color"];
     _size = json["size"];
     _imageUrl = json["imageUrl"];
+    _reviewStatus=json["reviewStatus"];
   }
 
   Map<String, dynamic> toJson() {

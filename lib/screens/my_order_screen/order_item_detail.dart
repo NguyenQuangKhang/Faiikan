@@ -441,52 +441,56 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                         )
                                       ],
                                     ),
-//                                    if (widget.status ==
-//                                        "Đã giao" /*&&
-//                                            orderDetail.listOrderItem[index].isReview ==
-//                                                false*/
-//                                    )
-                                    Positioned(
-                                      bottom: 20,
-                                      right: 10,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      BlocProvider.value(
-                                                        value: context.read<
-                                                            OrderDetailBloc>(),
-                                                        child:
-                                                            CreateReviewScreen(
-                                                          orderDetail: context
-                                                              .read<
-                                                                  OrderDetailBloc>()
-                                                              .orderDetail,
-                                                          userId: widget.userId,
-                                                          index: i,
-                                                        ),
-                                                      )));
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 5, horizontal: 10),
-                                          decoration: BoxDecoration(
-                                            color: Color(0xffDB3022),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              "Đánh giá",
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.white),
+                                    if (widget.status ==
+                                        "Đã giao" &&
+                                        context
+                                            .read<
+                                            OrderDetailBloc>()
+                                            .orderDetail.listItem![i].reviewStatus==
+                                                false
+                                    )
+                                      Positioned(
+                                        bottom: 20,
+                                        right: 10,
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        BlocProvider.value(
+                                                          value: context.read<
+                                                              OrderDetailBloc>(),
+                                                          child:
+                                                              CreateReviewScreen(
+                                                            orderDetail: context
+                                                                .read<
+                                                                    OrderDetailBloc>()
+                                                                .orderDetail,
+                                                            userId:
+                                                                widget.userId,
+                                                            index: i,
+                                                          ),
+                                                        )));
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 10),
+                                            decoration: BoxDecoration(
+                                              color: Color(0xffDB3022),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Đánh giá",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.white),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    )
+                                      )
                                   ],
                                 ),
                               );
@@ -954,13 +958,19 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                   ),
                                 ),
                               ),
-                            if (widget.status == "Chờ xác nhận" || widget.status == "Chờ lấy hàng")
+                            if (widget.status == "Chờ xác nhận" ||
+                                widget.status == "Đang xử lý")
                               InkWell(
                                 onTap: () async {
                                   await showModalBottomSheet(
                                       context: context,
                                       builder: (_) {
-                                        return BlocProvider.value(value: context.read<MyOrderBloc>(), child: ReasonCancelOrderSheet(orderId: widget.orderId,index: widget.index,));
+                                        return BlocProvider.value(
+                                            value: context.read<MyOrderBloc>(),
+                                            child: ReasonCancelOrderSheet(
+                                              orderId: widget.orderId,
+                                              index: widget.index,
+                                            ));
                                       }).then((value) {});
                                 },
                                 child: Container(

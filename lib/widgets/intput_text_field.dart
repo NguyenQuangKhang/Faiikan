@@ -6,7 +6,8 @@ class InputTextField extends StatefulWidget {
   final String hintText;
  bool obscure;
   TextEditingController controller;
-   InputTextField({required this.hintText,this.obscure=false,required this.controller});
+  FormFieldValidator<String>? validator;
+   InputTextField({required this.hintText,this.obscure=false,required this.controller,this.validator});
   @override
   _InputTextFieldState createState() => _InputTextFieldState();
 }
@@ -15,8 +16,10 @@ class _InputTextFieldState extends State<InputTextField> {
   bool isHidePassword=true;
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       maxLines: 1,
+      autovalidateMode: AutovalidateMode.always,
+      validator: widget.validator,
       controller: widget.controller,
       obscureText: widget.obscure?isHidePassword:widget.obscure,
       decoration: InputDecoration(

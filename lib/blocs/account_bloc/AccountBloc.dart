@@ -28,12 +28,10 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
     if(event is InitialAccount)
       {
-
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         print("userId: local "+prefs.getInt("userId").toString());
         if(prefs.getInt("userId") !=null) {
-
 
           user = User(id: prefs.getInt("userId"),
               active: true,
@@ -60,7 +58,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       }
     if (event is LoginButtonPressed) {
       yield AccountLoading();
-//      try {
+      try {
         final response = await http.post(
           Uri.parse("http://$server:8080/api/v1/account/login"),
           headers: <String, String>{
@@ -92,11 +90,35 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
           yield AccountFailure(error: "login failed");
         }
-//      } catch (error) {
-//        yield AccountInitial();
-//        yield AccountFailure(error: error.toString());
-//      }
+      } catch (error) {
+        yield AccountInitial();
+        yield AccountFailure(error: error.toString());
+      }
     }
+    if(event is RegisterEvent)
+      {
+        AccountLoading();
+        try {
+          final response = await http.post(
+            Uri.parse("http://$server:8080/api/v1/account/register"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, String>{
+              "username": event.username,
+              "password": event.password,
+              "name": event.name
+            }),
+          );
+          print(response.body);
+          print(response.reasonPhrase);
+          if(response.statusCode == 200)
+            yield AccountOk();
+          else yield AccountFailure(error: json.decode(response.body)['message'] );
+        }catch(error) {
+          yield  AccountFailure(error: error.toString());
+        }
+      }
   }
 }
 
