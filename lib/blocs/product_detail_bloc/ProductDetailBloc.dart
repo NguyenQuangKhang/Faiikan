@@ -26,7 +26,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   Stream<ProductDetailState> mapEventToState(event) async* {
     if (event is ProductDetailLoadEvent) {
 
-print()
+
       final response = await http.get(
           Uri.http("$server:8080", "/api/v1/product/${event.id.toString()}", {
             "user": event.person_id,
