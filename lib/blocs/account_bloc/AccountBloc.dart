@@ -30,7 +30,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
-        print("userId: local "+prefs.getInt("userId").toString());
+//        print("userId: local "+prefs.getInt("userId").toString());
         if(prefs.getInt("userId") !=null) {
 
           user = User(id: prefs.getInt("userId"),
