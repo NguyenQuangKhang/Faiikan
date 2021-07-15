@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "109617136248",
+    "project_id": "faiikan",
+    "storage_bucket": "faiikan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109617136248:android:564b34025578dd7ec4238d",
+        "android_client_info": {
+          "package_name": "com.example.faiikan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "109617136248-m3umvvn2jt8n26e08kocjiccgvgvdtu6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.faiikan",
+            "certificate_hash": "2d7cdd1aef2a14e85760f181542b1072b7469843"
+          }
+        },
+        {
+          "client_id": "109617136248-kidk9vul20ifacplpv873ctuijpkflsh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwpepRkWSFpYQbqJkMcfUkeSgClzmAszc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "109617136248-kidk9vul20ifacplpv873ctuijpkflsh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

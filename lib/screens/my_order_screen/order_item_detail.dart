@@ -1,3 +1,4 @@
+import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
 import 'package:faiikan/blocs/order_detail_bloc/order_detail_bloc.dart';
 import 'package:faiikan/blocs/order_detail_bloc/order_detail_state.dart';
 import 'package:faiikan/models/order_detail.dart';
@@ -12,12 +13,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class OrderDetailScreen extends StatefulWidget {
+  final int index;
+  final String orderId;
   final String status;
   final String userId;
-  List<bool> isExpanded=[];
-   OrderDetailScreen({
+  List<bool> isExpanded = [];
+
+  OrderDetailScreen({
     required this.status,
-     required this.userId,
+    required this.userId,
+    required this.index,
+    required this.orderId,
   });
 
   @override
@@ -25,8 +31,6 @@ class OrderDetailScreen extends StatefulWidget {
 }
 
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,16 +42,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             },
             child: Icon(
               Icons.arrow_back,
-              color: Colors.white,
+              color: Colors.black,
               size: 30,
             ),
           ),
           actions: <Widget>[],
           textTheme: TextTheme(),
-          backgroundColor: Color(0xFF4ab3b5),
+          backgroundColor: Color(0xFFffffff),
           title: Text(
             "Chi tiết đơn hàng",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           ),
         ),
         body: BlocBuilder<OrderDetailBloc, OrderDetailState>(
@@ -58,15 +62,18 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   backgroundColor: Colors.redAccent,
                 ),
               );
-            if(widget.isExpanded.isEmpty)
-              {
-                for (int a = 0; a < context
-                    .read<OrderDetailBloc>()
-                    .orderDetail.listItem!
-                    .length; a++) {
-                  widget.isExpanded.add(false);
-                }
+            if (widget.isExpanded.isEmpty) {
+              for (int a = 0;
+                  a <
+                      context
+                          .read<OrderDetailBloc>()
+                          .orderDetail
+                          .listItem!
+                          .length;
+                  a++) {
+                widget.isExpanded.add(false);
               }
+            }
             return Column(
               children: [
                 Expanded(
@@ -164,16 +171,19 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             color: Colors.white,
                           ),
                           child: Column(
-                            children:
-                              List.generate(context
-                                  .read<OrderDetailBloc>()
-                                  .orderDetail
-                                  .listItem!
-                                  .length, (i) {return Container(
+                            children: List.generate(
+                                context
+                                    .read<OrderDetailBloc>()
+                                    .orderDetail
+                                    .listItem!
+                                    .length, (i) {
+                              return Container(
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                 ),
-                                margin: EdgeInsets.only(bottom: 15),
+                                margin: EdgeInsets.only(
+                                  bottom: 15,
+                                ),
                                 child: Stack(
                                   children: <Widget>[
                                     Column(
@@ -188,98 +198,85 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                     .length, (i) {
                                               return Column(
                                                 children: [
-                                                  OrderItemCard(
-                                                    orderItem: new cartItem
-                                                        .CartItem(
-                                                        cartId: context
-                                                            .read<OrderDetailBloc>()
-                                                            .orderDetail.listItem![i]
-                                                            .id!,
-                                                        productId: context
-                                                            .read<OrderDetailBloc>()
-                                                            .orderDetail
-                                                            .listItem![i]
-                                                            .productId!,
-                                                        nameProduct: context
-                                                            .read<OrderDetailBloc>()
-                                                            .orderDetail
-                                                            .listItem![i]
-                                                            .name!,
-                                                        amount: context
-                                                            .read<OrderDetailBloc>()
-                                                            .orderDetail
-                                                            .listItem![i]
-                                                            .quantity!,
-                                                        optionProduct: new cartItem
-                                                            .OptionProduct(
-                                                            productOptionId:context
-                                                                .read<OrderDetailBloc>()
-                                                                .orderDetail
-                                                                .listItem![i]
-                                                                .productOptionId!,
-                                                            price: new cartItem
-                                                                .Price(
-                                                                id: 0,
-                                                                value: context
-                                                                    .read<OrderDetailBloc>()
-                                                                    .orderDetail
-                                                                    .listItem![i]
-                                                                    .price!
-                                                                    .toDouble()),
-                                                            quantity: new cartItem
-                                                                .Quantity(
-                                                                id: 0,
-                                                                value: context
-                                                                    .read<OrderDetailBloc>()
-                                                                    .orderDetail
-                                                                    .listItem![i]
-                                                                    .quantity!),
-                                                            color: new cartItem
-                                                                .Color(
-                                                                id: 0,
-                                                                value: context
-                                                                    .read<OrderDetailBloc>()
-                                                                    .orderDetail
-                                                                    .listItem![i]
-                                                                    .color ??
-                                                                    ""),
-                                                            size: new cartItem
-                                                                .Size(
-                                                                id: 0,
-                                                                value:
-                                                                context
-                                                                    .read<OrderDetailBloc>()
-                                                                    .orderDetail
-                                                                    .listItem![i]
-                                                                    .size ??
-                                                                    ""),
-                                                            image: new cartItem
-                                                                .Image(
-                                                                id: 0,
-                                                                value: context
-                                                                    .read<OrderDetailBloc>()
-                                                                    .orderDetail
-                                                                    .listItem![i]
-                                                                    .imageUrl!))),
-                                                    isOrderDetail: true,
-                                                    index: 0,
-                                                    userId: 1,
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 10),
+                                                    child: OrderItemCard(
+                                                      orderItem: new cartItem.CartItem(
+                                                          cartId: context
+                                                              .read<
+                                                                  OrderDetailBloc>()
+                                                              .orderDetail
+                                                              .listItem![i]
+                                                              .id!,
+                                                          productId: context
+                                                              .read<
+                                                                  OrderDetailBloc>()
+                                                              .orderDetail
+                                                              .listItem![i]
+                                                              .productId!,
+                                                          nameProduct: context
+                                                              .read<
+                                                                  OrderDetailBloc>()
+                                                              .orderDetail
+                                                              .listItem![i]
+                                                              .name!,
+                                                          amount: context
+                                                              .read<
+                                                                  OrderDetailBloc>()
+                                                              .orderDetail
+                                                              .listItem![i]
+                                                              .quantity!,
+                                                          optionProduct: new cartItem
+                                                                  .OptionProduct(
+                                                              productOptionId: context
+                                                                  .read<
+                                                                      OrderDetailBloc>()
+                                                                  .orderDetail
+                                                                  .listItem![i]
+                                                                  .productOptionId!,
+                                                              price: new cartItem.Price(
+                                                                  id: 0,
+                                                                  value: context
+                                                                      .read<
+                                                                          OrderDetailBloc>()
+                                                                      .orderDetail
+                                                                      .listItem![
+                                                                          i]
+                                                                      .price!
+                                                                      .toDouble()),
+                                                              quantity: new cartItem.Quantity(
+                                                                  id: 0,
+                                                                  value: context
+                                                                      .read<OrderDetailBloc>()
+                                                                      .orderDetail
+                                                                      .listItem![i]
+                                                                      .quantity!),
+                                                              color: new cartItem.Color(id: 0, value: context.read<OrderDetailBloc>().orderDetail.listItem![i].color ?? ""),
+                                                              size: new cartItem.Size(id: 0, value: context.read<OrderDetailBloc>().orderDetail.listItem![i].size ?? ""),
+                                                              image: new cartItem.Image(id: 0, value: context.read<OrderDetailBloc>().orderDetail.listItem![i].imageUrl!))),
+                                                      isOrderDetail: true,
+                                                      index: 0,
+                                                      userId: 1,
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     height: 10,
                                                   ),
                                                   if (context
-                                                      .read<OrderDetailBloc>()
-                                                      .orderDetail
-                                                      .listItem!
-                                                      .length >
-                                                      1 &&
+                                                              .read<
+                                                                  OrderDetailBloc>()
+                                                              .orderDetail
+                                                              .listItem!
+                                                              .length >
+                                                          1 &&
                                                       widget.isExpanded[i] ==
                                                           false)
                                                     Container(
                                                       decoration: BoxDecoration(
                                                           border: Border(
-                                                              bottom: BorderSide(
+                                                              bottom:
+                                                                  BorderSide(
                                                                 color: Colors
                                                                     .black12,
                                                                 width: 1,
@@ -289,28 +286,30 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                                     .black12,
                                                                 width: 1,
                                                               ))),
-                                                      padding: EdgeInsets
-                                                          .symmetric(
-                                                          vertical: 5),
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 5),
                                                       child: InkWell(
                                                         onTap: () {
                                                           setState(() {
-                                                            widget
-                                                                .isExpanded[i] =
-                                                            true;
+                                                            widget.isExpanded[
+                                                                i] = true;
                                                           });
                                                         },
                                                         child: Center(
                                                           child: Text(
                                                             "Xem thêm sản phẩm",
                                                             style: TextStyle(
-                                                              color: Colors.black
+                                                              color: Colors
+                                                                  .black
                                                                   .withOpacity(
-                                                                  0.5),
+                                                                      0.5),
                                                               fontSize: 12,
-                                                              letterSpacing: 0.5,
+                                                              letterSpacing:
+                                                                  0.5,
                                                               fontWeight:
-                                                              FontWeight.w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                             ),
                                                           ),
                                                         ),
@@ -323,108 +322,100 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                         else
                                           Column(
                                             children: [
-                                              OrderItemCard(
-                                                orderItem: new cartItem.CartItem(
-                                                    cartId: context
-                                                        .read<OrderDetailBloc>()
-                                                        .orderDetail
-                                                        .listItem![0]
-                                                        .id!,
-                                                    productId: context
-                                                        .read<OrderDetailBloc>()
-                                                        .orderDetail
-                                                        .listItem![0]
-                                                        .productId!,
-                                                    nameProduct: context
-                                                        .read<OrderDetailBloc>()
-                                                        .orderDetail
-                                                        .listItem![0]
-                                                        .name!,
-                                                    amount: context
-                                                        .read<OrderDetailBloc>()
-                                                        .orderDetail
-                                                        .listItem![0]
-                                                        .quantity!,
-                                                    optionProduct: new cartItem
-                                                        .OptionProduct(
-                                                        productOptionId: context
-                                                            .read<OrderDetailBloc>()
-                                                            .orderDetail
-                                                            .listItem![0]
-                                                            .productOptionId!,
-                                                        price: new cartItem.Price(
-                                                            id: 0,
-                                                            value: context
-                                                                .read<OrderDetailBloc>()
-                                                                .orderDetail
-                                                                .listItem![0]
-                                                                .price!
-                                                                .toDouble()),
-                                                        quantity: new cartItem
-                                                            .Quantity(
-                                                            id: 0,
-                                                            value: context
-                                                                .read<OrderDetailBloc>()
-                                                                .orderDetail
-                                                                .listItem![0]
-                                                                .quantity!),
-                                                        color: new cartItem.Color(
-                                                            id: 0,
-                                                            value: context
-                                                                .read<OrderDetailBloc>()
-                                                                .orderDetail
-                                                                .listItem![0]
-                                                                .color ??
-                                                                ""),
-                                                        size: new cartItem.Size(
-                                                            id: 0,
-                                                            value: context
-                                                                .read<OrderDetailBloc>()
-                                                                .orderDetail
-                                                                .listItem![0]
-                                                                .size ??
-                                                                ""),
-                                                        image:
-                                                        new cartItem.Image(
-                                                            id: 0, value: context
-                                                            .read<OrderDetailBloc>()
-                                                            .orderDetail
-                                                            .listItem![0]
-                                                            .imageUrl!))),
-                                                isOrderDetail: true,
-                                                index: 0,
-                                                userId: 1,
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(left: 10),
+                                                child: OrderItemCard(
+                                                  orderItem: new cartItem.CartItem(
+                                                      cartId: context
+                                                          .read<
+                                                              OrderDetailBloc>()
+                                                          .orderDetail
+                                                          .listItem![0]
+                                                          .id!,
+                                                      productId: context
+                                                          .read<
+                                                              OrderDetailBloc>()
+                                                          .orderDetail
+                                                          .listItem![0]
+                                                          .productId!,
+                                                      nameProduct: context
+                                                          .read<
+                                                              OrderDetailBloc>()
+                                                          .orderDetail
+                                                          .listItem![0]
+                                                          .name!,
+                                                      amount: context
+                                                          .read<
+                                                              OrderDetailBloc>()
+                                                          .orderDetail
+                                                          .listItem![0]
+                                                          .quantity!,
+                                                      optionProduct: new cartItem.OptionProduct(
+                                                          productOptionId: context
+                                                              .read<
+                                                                  OrderDetailBloc>()
+                                                              .orderDetail
+                                                              .listItem![0]
+                                                              .productOptionId!,
+                                                          price: new cartItem.Price(
+                                                              id: 0,
+                                                              value: context
+                                                                  .read<
+                                                                      OrderDetailBloc>()
+                                                                  .orderDetail
+                                                                  .listItem![0]
+                                                                  .price!
+                                                                  .toDouble()),
+                                                          quantity: new cartItem.Quantity(
+                                                              id: 0,
+                                                              value: context
+                                                                  .read<
+                                                                      OrderDetailBloc>()
+                                                                  .orderDetail
+                                                                  .listItem![0]
+                                                                  .quantity!),
+                                                          color: new cartItem.Color(
+                                                              id: 0,
+                                                              value: context.read<OrderDetailBloc>().orderDetail.listItem![0].color ?? ""),
+                                                          size: new cartItem.Size(id: 0, value: context.read<OrderDetailBloc>().orderDetail.listItem![0].size ?? ""),
+                                                          image: new cartItem.Image(id: 0, value: context.read<OrderDetailBloc>().orderDetail.listItem![0].imageUrl!))),
+                                                  isOrderDetail: true,
+                                                  index: 0,
+                                                  userId: 1,
+                                                ),
                                               ),
                                               SizedBox(
                                                 height: 10,
                                               ),
                                               if (context
-                                                  .read<OrderDetailBloc>()
-                                                  .orderDetail
-                                                  .listItem!
-                                                  .length >
-                                                  1 &&
-                                                  widget.isExpanded[i] ==
-                                                      false)
+                                                          .read<
+                                                              OrderDetailBloc>()
+                                                          .orderDetail
+                                                          .listItem!
+                                                          .length >
+                                                      1 &&
+                                                  widget.isExpanded[i] == false)
                                                 Container(
                                                   decoration: BoxDecoration(
                                                       border: Border(
                                                           bottom: BorderSide(
-                                                            color: Colors.black12,
+                                                            color:
+                                                                Colors.black12,
                                                             width: 1,
                                                           ),
                                                           top: BorderSide(
-                                                            color: Colors.black12,
+                                                            color:
+                                                                Colors.black12,
                                                             width: 1,
                                                           ))),
-                                                  padding:
-                                                  EdgeInsets.symmetric(
+                                                  padding: EdgeInsets.symmetric(
                                                       vertical: 5),
                                                   child: InkWell(
                                                     onTap: () {
                                                       setState(() {
                                                         widget.isExpanded[i] =
-                                                        true;
+                                                            true;
                                                       });
                                                     },
                                                     child: Center(
@@ -435,8 +426,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                               .withOpacity(0.5),
                                                           fontSize: 12,
                                                           letterSpacing: 0.5,
-                                                          fontWeight: FontWeight
-                                                              .w400,
+                                                          fontWeight:
+                                                              FontWeight.w400,
                                                         ),
                                                       ),
                                                     ),
@@ -444,7 +435,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 ),
                                             ],
                                           ),
-                                          Container(height: 1,color:Color(0xffC4C4C4),)
+                                        Container(
+                                          height: 1,
+                                          color: Color(0xffC4C4C4),
+                                        )
                                       ],
                                     ),
 //                                    if (widget.status ==
@@ -452,47 +446,51 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 //                                            orderDetail.listOrderItem[index].isReview ==
 //                                                false*/
 //                                    )
-                                      Positioned(
-                                        bottom: 20,
-                                        right: 10,
-                                        child: InkWell(
-                                          onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => BlocProvider.value(
-                                        value: context
-                                            .read<OrderDetailBloc>(),
-                                        child: CreateReviewScreen(orderDetail: context
-                                            .read<OrderDetailBloc>()
-                                            .orderDetail,userId: widget.userId,index: i,),
-                                      )
-                                  ));
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 10),
-                                            decoration: BoxDecoration(
-                                              color: Color(0xffDB3022),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                "Đánh giá",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                    FontWeight.w500,
-                                                    color: Colors.white),
-                                              ),
+                                    Positioned(
+                                      bottom: 20,
+                                      right: 10,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      BlocProvider.value(
+                                                        value: context.read<
+                                                            OrderDetailBloc>(),
+                                                        child:
+                                                            CreateReviewScreen(
+                                                          orderDetail: context
+                                                              .read<
+                                                                  OrderDetailBloc>()
+                                                              .orderDetail,
+                                                          userId: widget.userId,
+                                                          index: i,
+                                                        ),
+                                                      )));
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 10),
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffDB3022),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Đánh giá",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
-                                      )
+                                      ),
+                                    )
                                   ],
                                 ),
-                              ); }),
-
-
+                              );
+                            }),
                           ),
                         ),
                         Container(
@@ -630,9 +628,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                   )
                                 ],
                               ),
-                              SizedBox(height: 5,),
-                              Container(height: 5,color: Color(0xffC4C4C4).withOpacity(0.5),),
-                              SizedBox(height: 5,),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                height: 5,
+                                color: Color(0xffC4C4C4).withOpacity(0.5),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
@@ -703,11 +708,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                      NumberFormat.simpleCurrency(locale: "vi")
-                                          .format(context
-                                          .read<OrderDetailBloc>()
-                                          .orderDetail.discount!)
-                                          .toString(),
+                                    NumberFormat.simpleCurrency(locale: "vi")
+                                        .format(context
+                                            .read<OrderDetailBloc>()
+                                            .orderDetail
+                                            .discount!)
+                                        .toString(),
                                     maxLines: null,
                                     style: TextStyle(
                                         fontSize: 14,
@@ -746,10 +752,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             ],
                           ),
                         ),
-
-                        SizedBox(height: 5,),
-                        Container(height: 5,color: Color(0xffC4C4C4).withOpacity(0.5),),
-                        SizedBox(height: 5,),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 5,
+                          color: Color(0xffC4C4C4).withOpacity(0.5),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
                         Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
@@ -772,7 +784,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                     Text(
                                       context
                                           .read<OrderDetailBloc>()
-                                          .orderDetail.id!.toString(),
+                                          .orderDetail
+                                          .id!
+                                          .toString(),
                                       style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.black,
@@ -788,7 +802,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      widget.status=="Đã hủy"?"Thời gian hủy đơn":"Thời gian đặt hàng",
+                                      widget.status == "Đã hủy"
+                                          ? "Thời gian hủy đơn"
+                                          : "Thời gian đặt hàng",
                                       style: TextStyle(
                                           fontSize: 14,
                                           color: Color(0xff9B9B9B),
@@ -796,8 +812,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ),
                                     Text(
                                       context
-                                          .read<OrderDetailBloc>()
-                                          .orderDetail.payAt ?? "",
+                                              .read<OrderDetailBloc>()
+                                              .orderDetail
+                                              .payAt ??
+                                          "",
                                       style: TextStyle(
                                           fontSize: 14,
                                           color: Color(0xff9B9B9B),
@@ -821,8 +839,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ),
                                     Text(
                                       context
-                                          .read<OrderDetailBloc>()
-                                          .orderDetail.payAt ?? "",
+                                              .read<OrderDetailBloc>()
+                                              .orderDetail
+                                              .payAt ??
+                                          "",
                                       style: TextStyle(
                                           fontSize: 14,
                                           color: Color(0xff9B9B9B),
@@ -883,120 +903,131 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         SizedBox(
                           height: 1,
                         ),
-                        Wrap(direction: Axis.horizontal,spacing: 10,runSpacing: 10,children: [
-                          InkWell(
-                            onTap: (){},
-                            child: Container(
-                              width: (MediaQuery.of(context).size.width-20)/2,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(2),
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1,
-                                  )),
-                              padding: EdgeInsets.symmetric(horizontal:10,vertical: 10),
-                              child: Center(
-                                child: Text(
-                                  "Chat với Admin",
-                                  style:
-                                  TextStyle(fontSize: 16, letterSpacing: 0.5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          if (widget.status == "Đã giao")
+                        Wrap(
+                          direction: Axis.horizontal,
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: [
                             InkWell(
-                              onTap: (){},
+                              onTap: () {},
                               child: Container(
-                                width: (MediaQuery.of(context).size.width-20)/2,
+                                width:
+                                    (MediaQuery.of(context).size.width - 20) /
+                                        2,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(2),
                                     border: Border.all(
                                       color: Colors.grey,
                                       width: 1,
                                     )),
-                                padding: EdgeInsets.symmetric(vertical: 10),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
                                 child: Center(
                                   child: Text(
-                                    "Xem đánh giá",
-                                    style:
-                                    TextStyle(fontSize: 16, letterSpacing: 0.5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if (widget.status == "Chờ xác nhận")
-                            InkWell(
-                              onTap: () async {
-                                await showModalBottomSheet(
-                                    context: context,
-                                    builder: (_) {
-                                      return ReasonCancelOrderSheet();
-                                    }).then((value) {});
-                              },
-                              child: Container(
-                                width: (MediaQuery.of(context).size.width-20)/2,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    )),
-                                padding: EdgeInsets.symmetric(vertical: 10),
-                                child: Center(
-                                  child: Text(
-                                    "Hủy đơn hàng",
+                                    "Chat với Admin",
                                     style: TextStyle(
                                         fontSize: 16, letterSpacing: 0.5),
                                   ),
                                 ),
                               ),
                             ),
-                          if (widget.status == "Đã hủy")
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                            ReasonCancelOrderDetail()));
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 10),
-
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    )),
-                                padding: EdgeInsets.symmetric(vertical: 10),
-                                child: Center(
-                                  child: Text(
-                                    "Chi tiết hủy đơn",
-                                    style: TextStyle(
-                                        fontSize: 16, letterSpacing: 0.5),
+                            if (widget.status == "Đã giao")
+                              InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  width:
+                                      (MediaQuery.of(context).size.width - 20) /
+                                          2,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      )),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Center(
+                                    child: Text(
+                                      "Xem đánh giá",
+                                      style: TextStyle(
+                                          fontSize: 16, letterSpacing: 0.5),
+                                    ),
                                   ),
                                 ),
                               ),
-                            )
-                        ],),
-
+                            if (widget.status == "Chờ xác nhận" || widget.status == "Chờ lấy hàng")
+                              InkWell(
+                                onTap: () async {
+                                  await showModalBottomSheet(
+                                      context: context,
+                                      builder: (_) {
+                                        return BlocProvider.value(value: context.read<MyOrderBloc>(), child: ReasonCancelOrderSheet(orderId: widget.orderId,index: widget.index,));
+                                      }).then((value) {});
+                                },
+                                child: Container(
+                                  width:
+                                      (MediaQuery.of(context).size.width - 20) /
+                                          2,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      )),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Center(
+                                    child: Text(
+                                      "Hủy đơn hàng",
+                                      style: TextStyle(
+                                          fontSize: 16, letterSpacing: 0.5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            if (widget.status == "Đã hủy")
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              ReasonCancelOrderDetail()));
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      )),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Center(
+                                    child: Text(
+                                      "Chi tiết hủy đơn",
+                                      style: TextStyle(
+                                          fontSize: 16, letterSpacing: 0.5),
+                                    ),
+                                  ),
+                                ),
+                              )
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 ),
-
-
-                 if (widget.status == "Đã giao" || widget.status == "Đã hủy")
+                if (widget.status == "Đã giao" || widget.status == "Đã hủy")
                   Container(
-                    decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(0, 0))
-                    ],),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: Offset(0, 0))
+                      ],
+                    ),
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
@@ -1016,18 +1047,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   )
                 else
                   Container(
-                    decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(0, 0))
-                    ],),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: Offset(0, 0))
+                      ],
+                    ),
 //                    padding: EdgeInsets.all(8),
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
-
                         color: Color(0xffC4C4C4).withOpacity(0.5),
                         borderRadius: BorderRadius.circular(5),
                       ),

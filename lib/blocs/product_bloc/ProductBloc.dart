@@ -32,6 +32,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
           error: "null",
           /* filterRules: null,*/
           data: listdata);
+      print("http://$server:8080/api/v1/recommend/top-rating/${event.userId}?p=${currentPage.toString()}");
       final response = await http.get(
           Uri.parse("http://$server:8080/api/v1/recommend/top-rating/${event.userId}?p=${currentPage.toString()}"));
 
@@ -73,6 +74,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
           error: state.error,
 //          filterRules: state.filterRules,
           data: state.data);
+      print("http://$server:8080/api/v1/cat/${event.categoryId}/products?filter=${event.filter}&p=${currentPageByCateGory.toString()}");
       final response = await http.get(Uri.parse(
           "http://$server:8080/api/v1/cat/${event.categoryId}/products?filter=${event.filter}&p=${currentPageByCateGory.toString()}"));
       listdataByCategory = json

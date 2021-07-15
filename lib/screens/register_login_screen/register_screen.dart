@@ -81,7 +81,7 @@ class RegisterScreen extends StatelessWidget {
               ),
             ),
             Expanded(child: SizedBox()),
-            GoogleAndFacebookLogin(),
+            GoogleAndFacebookLogin(onTapLoginFacebook: (){},onTapLoginGoogle:(){} ,),
           ],
         ),
       ),

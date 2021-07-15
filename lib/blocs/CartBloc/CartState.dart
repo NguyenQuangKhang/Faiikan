@@ -33,6 +33,20 @@ class CartLoaded2State extends CartState {
     required double discount,
   }) : super(data: data, totalPrice: totalPrice, discount: discount);
 }
+class CreateOrderSuccessfulState extends CartState {
+  CreateOrderSuccessfulState({
+    required List<CartItem> data,
+    required int totalPrice,
+    required double discount,
+  }) : super(data: data, totalPrice: totalPrice, discount: discount);
+}
+class DeleteListItemSuccessfulState extends CartState {
+  DeleteListItemSuccessfulState({
+    required List<CartItem> data,
+    required int totalPrice,
+    required double discount,
+  }) : super(data: data, totalPrice: totalPrice, discount: discount);
+}
 
 class CartLoadingState extends CartState {
   CartLoadingState({

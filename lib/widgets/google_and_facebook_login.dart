@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class GoogleAndFacebookLogin extends StatelessWidget {
+  final VoidCallback onTapLoginGoogle;
+  final VoidCallback onTapLoginFacebook;
   final bool isLogin;
 
-  const GoogleAndFacebookLogin({ this.isLogin = false});
+  const GoogleAndFacebookLogin({ this.isLogin = false, required this.onTapLoginGoogle,required this.onTapLoginFacebook});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,6 +32,7 @@ class GoogleAndFacebookLogin extends StatelessWidget {
           height: 15,
         ),
         InkWell(
+          onTap: onTapLoginGoogle,
           child: Container(
             height: 50,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -71,6 +74,7 @@ class GoogleAndFacebookLogin extends StatelessWidget {
           height: 10,
         ),
         InkWell(
+          onTap: onTapLoginFacebook,
           child: Container(
             height: 50,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

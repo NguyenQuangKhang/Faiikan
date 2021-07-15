@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:faiikan/models/order_detail.dart';
 import 'package:faiikan/models/product.dart';
 import 'package:faiikan/utils/server_name.dart';

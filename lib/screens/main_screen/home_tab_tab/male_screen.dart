@@ -68,10 +68,10 @@ List<int> promotionFlashSale = [
 ];
 
 final items = [
-  "https://www.designbold.com/academy/wp-content/uploads/2018/08/Tutorial_40.jpg",
-  "https://i.ytimg.com/vi/U8HU_IuoGJ0/maxresdefault.jpg",
-  "https://designjiaoshi.com/wp-content/uploads/2019/09/6cbaf17f476f12e-4.jpg",
-  "https://image.freepik.com/free-vector/modern-fashion-sale-poster-collection_1361-1199.jpg",
+  "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/mens-clothing-store-design-template-eae000def39b8be63aed3b10868f04a6.jpg?ts=1566567308",
+  "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/mens-clothing-sale-portrait-flyer-template-1627835dd392414eb308cf84fde379a1.jpg?ts=1561727156",
+  "https://www.designbold.com/academy/wp-content/uploads/2016/10/instagram-fashion-sale-10.png",
+  "https://static.vecteezy.com/system/resources/previews/000/694/272/non_2x/fashion-sale-grunge-social-media-poster-vector.jpg",
 ];
 
 class MaleScreen extends StatefulWidget {
@@ -336,11 +336,11 @@ class _MaleScreenState extends State<MaleScreen> {
 ////                                        opacity: animation,
 ////                                        child: ProductDetail(
 ////                                          percentStar: productBloc
-////                                              .listdata[index].percentStar,
+////                                              .listdataByCategory[index].percentStar,
 ////                                          countRating: productBloc
-////                                              .listdata[index].countRating,
+////                                              .listdataByCategory[index].countRating,
 ////                                          price:
-////                                              productBloc.listdata[index].price,
+////                                              productBloc.listdataByCategory[index].price,
 ////                                          productId: 1,
 ////                                        ),
 ////                                      );
@@ -631,7 +631,7 @@ class _MaleScreenState extends State<MaleScreen> {
                                                   child: ProductWithSubCat_Screen(
                                                       userId: context
                                                           .read<AccountBloc>()
-                                                          .user
+                                                          .user!
                                                           .id!,
                                                       title: category.name,
                                                       category: category)),
@@ -897,7 +897,7 @@ class _MaleScreenState extends State<MaleScreen> {
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                   color: Colors.white,
                   child: Text(
-                    "Gợi ý cho bạn",
+                    "Danh sách sản phẩm",
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 18,
@@ -1065,7 +1065,7 @@ class _MaleScreenState extends State<MaleScreen> {
                                           22 / 5) /
                                           (MediaQuery.of(context).size.height /
                                               3 -
-                                              2.5),
+                                              2),
                                       mainAxisSpacing: 5,
                                       crossAxisSpacing: 5,
                                       //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
@@ -1090,16 +1090,16 @@ class _MaleScreenState extends State<MaleScreen> {
                                                                 InitialSimilarProductState())
                                                               ..add(InitiateSimilarProductEvent(
                                                                   productId: productBloc
-                                                                      .listdata[index]
+                                                                      .listdataByCategory[index]
                                                                       .id
                                                                       .toString())),
                                                             child: SimilarProductScreen(
                                                                 interactingProduct:
-                                                                productBloc.listdata[
+                                                                productBloc.listdataByCategory[
                                                                 index],
                                                                 userId: context
                                                                     .read<AccountBloc>()
-                                                                    .user
+                                                                    .user!
                                                                     .id!),
                                                           ),
                                                         )));
@@ -1114,7 +1114,7 @@ class _MaleScreenState extends State<MaleScreen> {
                                                   .width /
                                                   2,
                                               product:
-                                              productBloc.listdata[index],
+                                              productBloc.listdataByCategory[index],
                                               index: index,
                                             ),
                                             onTap: () {
@@ -1130,9 +1130,9 @@ class _MaleScreenState extends State<MaleScreen> {
                                                                         InitialProductDetail())
                                                                       ..add(
                                                                           ProductDetailLoadEvent(
-                                                                            id: productBloc.listdata[index].id,
+                                                                            id: productBloc.listdataByCategory[index].id,
                                                                             person_id:
-                                                                            context.read<AccountBloc>().user.id.toString(),
+                                                                            context.read<AccountBloc>().user!.id.toString(),
                                                                           ))),
                                                                 BlocProvider
                                                                     .value(
@@ -1146,29 +1146,29 @@ class _MaleScreenState extends State<MaleScreen> {
                                                                 userId: context
                                                                     .read<
                                                                     AccountBloc>()
-                                                                    .user
+                                                                    .user!
                                                                     .id!,
                                                                 percentStar: productBloc
-                                                                    .listdata[
+                                                                    .listdataByCategory[
                                                                 index]
                                                                     .percentStar,
                                                                 countRating: productBloc
-                                                                    .listdata[
+                                                                    .listdataByCategory[
                                                                 index]
                                                                     .countRating,
                                                                 price: productBloc
-                                                                    .listdata[
+                                                                    .listdataByCategory[
                                                                 index]
                                                                     .price,
                                                                 productId:
                                                                 productBloc
-                                                                    .listdata[
+                                                                    .listdataByCategory[
                                                                 index]
                                                                     .id,
                                                               ))));
                                             });
                                       },
-                                      childCount: productBloc.listdata.length,
+                                      childCount: productBloc.listdataByCategory.length,
                                     ),
                                   ),
                                 ]),

@@ -1,7 +1,14 @@
+import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
+import 'package:faiikan/blocs/my_order_bloc/my_order_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReasonCancelOrderSheet extends StatefulWidget {
+  final int index;
+  final String orderId;
+
+  const ReasonCancelOrderSheet({Key? key,required this.index,required this.orderId}) : super(key: key);
   @override
   _ReasonCancelOrderSheetState createState() => _ReasonCancelOrderSheetState();
 }
@@ -85,7 +92,7 @@ class _ReasonCancelOrderSheetState extends State<ReasonCancelOrderSheet> {
           padding: EdgeInsets.all(8),
           child: InkWell(
             onTap: (){
-
+context.read<MyOrderBloc>().add(UpdateSttMyOrderEvent(orderId: widget.orderId, status: "5", index: widget.index));
             },
             child: Container(
               decoration: BoxDecoration(

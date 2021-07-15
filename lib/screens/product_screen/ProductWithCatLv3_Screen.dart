@@ -79,15 +79,15 @@ class _ProductWithSubCat_ScreenState extends State<ProductWithSubCat_Screen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Center(child: Text(widget.title)),
-        backgroundColor: Color(0xFF4ab3b5),
+        title: Center(child: Text(widget.title,style: TextStyle(color: Colors.black),)),
+        backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Colors.black,
             size: 30,
           ),
         ),
@@ -497,7 +497,7 @@ class _ProductWithSubCat_ScreenState extends State<ProductWithSubCat_Screen> {
                                                         .size
                                                         .height /
                                                     3 -
-                                                2.5),
+                                                2),
                                         mainAxisSpacing: 5,
                                         crossAxisSpacing: 5,
                                     //mainAxisSpacing: 4.0,

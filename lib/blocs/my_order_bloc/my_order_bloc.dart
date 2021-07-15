@@ -47,5 +47,20 @@ class MyOrderBloc extends Bloc<MyOrderEvent, MyOrderState> {
 
       yield InitialMyOrderState();
     }
+    if(event is UpdateSttMyOrderEvent)
+      {
+        yield LoadMyOrder();
+       await http.put(
+          Uri.http("$server:8080",
+              "/api/v1/order/${event.orderId}/update-status", {
+                'stt' : event.status
+              }),
+          headers: <String, String>{
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          },
+        );
+        myOrders.removeAt(event.index);
+        yield InitialMyOrderState();
+      }
   }
 }

@@ -12,6 +12,7 @@ import 'package:faiikan/blocs/similar_product_bloc/similar_product_bloc.dart';
 import 'package:faiikan/blocs/similar_product_bloc/similar_product_event.dart';
 import 'package:faiikan/blocs/similar_product_bloc/similar_product_state.dart';
 import 'package:faiikan/screens/product_detail_screen/product_detail_screen.dart';
+import 'package:faiikan/screens/register_login_screen/register_and_login_screen.dart';
 import 'package:faiikan/screens/similar_product_screen/similar_product_screen.dart';
 import 'package:faiikan/widgets/card/product_card.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +29,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   @override
   void initState() {
-    productBloc = context.read<FavoriteBloc>();
+    if(context.read<AccountBloc>().userId!=0) productBloc = context.read<FavoriteBloc>();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return context.read<AccountBloc>().userId==0?BlocProvider.value(value: context.read<AccountBloc>(),child: RegisterAndLoginScreen(initialIndex: 1,),):Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
@@ -58,7 +59,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
                   ..add(GetCartEvent(
                       person_id:
-                          context.read<AccountBloc>().user.id!.toString())),
+                          context.read<AccountBloc>().user!.id!.toString())),
           ),
         ],
         child:
@@ -192,7 +193,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                             .listdata[index],
                                                     userId: context
                                                         .read<AccountBloc>()
-                                                        .user
+                                                        .user!
                                                         .id!),
                                               ),
                                             )));
@@ -200,11 +201,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               hasLike: true,
                               liked: productBloc.listdata[index].isLiked,
                               onTapFavorite: () {
-                                productBloc.add(FavoriteTap(
+                            if(context
+                                .read<AccountBloc>().userId!=0)    productBloc.add(FavoriteTap(
                                     person_id: context
                                         .read<AccountBloc>()
-                                        .user
-                                        .id!
+                                        .user!.id!
                                         .toString(),
                                     product_id: productBloc.listdata[index].id
                                         .toString(),
@@ -234,8 +235,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                             .listdata[index].id,
                                                         person_id: context
                                                             .read<AccountBloc>()
-                                                            .user
-                                                            .id
+                                                            .user!.id
                                                             .toString(),
                                                       ))),
                                                 BlocProvider.value(
@@ -246,7 +246,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                               child: ProductDetail(
                                                 userId: context
                                                     .read<AccountBloc>()
-                                                    .user
+                                                    .user!
                                                     .id!,
 //                                                isNavigatedFromFavorite: true,
 
@@ -327,8 +327,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                                 index],
                                                         userId: context
                                                             .read<AccountBloc>()
-                                                            .user
-                                                            .id!),
+                                                            .user!.id!),
                                                   ),
                                                 )));
                                   },
@@ -365,8 +364,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                           person_id: context
                                                               .read<
                                                                   AccountBloc>()
-                                                              .user
-                                                              .id
+                                                              .user!.id
                                                               .toString(),
                                                         ))),
                                                   BlocProvider.value(
@@ -377,8 +375,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                 child: ProductDetail(
                                                   userId: context
                                                       .read<AccountBloc>()
-                                                      .user
-                                                      .id!,
+                                                      .user!.id!,
                                                   isInFavorite: true,
                                                   percentStar: productBloc
                                                       .listRecommendTopRating[

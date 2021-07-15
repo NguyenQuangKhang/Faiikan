@@ -18,7 +18,7 @@ class RegisterAndLoginScreen extends StatelessWidget {
           isCenterRedTitle: true,
           onTapCart: (){},
           onTapNotification: (){},
-          isBack: false,
+          isBack: true,
           bottom: TabBar(
             indicatorColor: Colors.black,
             labelColor: Colors.black,

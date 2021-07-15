@@ -12,6 +12,7 @@ import 'package:faiikan/blocs/address_bloc/address_event.dart';
 import 'package:faiikan/blocs/address_bloc/address_state.dart';
 import 'package:faiikan/blocs/favorite_bloc/FavoriteBloc.dart';
 import 'package:faiikan/blocs/favorite_bloc/FavoriteEvent.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailEvent.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailState.dart';
@@ -106,7 +107,7 @@ class _ProductDetailState extends State<ProductDetail>
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         context.read<ProductDetailBloc>().add(
-            LoadMoreProductAlsoLikeEvent(person_id: widget.userId.toString()));
+            LoadMoreProductAlsoLikeEvent(person_id: context.read<AccountBloc>().userId ==0?"0":widget.userId.toString()));
       }
     });
     //AppBar
@@ -161,7 +162,8 @@ class _ProductDetailState extends State<ProductDetail>
           if(state is FavoriteTapSuccess)
             {
               print("asdasdasdasd");
-              context.read<FavoriteBloc>().add(FavoriteLoadEvent(person_id: widget.userId.toString()));
+              if(context.read<AccountBloc>().userId !=0)
+                context.read<FavoriteBloc>().add(FavoriteLoadEvent(person_id: widget.userId.toString()));
             }
         },
         child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
@@ -668,7 +670,7 @@ class _ProductDetailState extends State<ProductDetail>
                                 );
                                 productDetailBloc.add(ProductDetailResetEvent(
                                     id: productDetailBloc.productDetail.id,
-                                    person_id: widget.userId.toString()));
+                                    person_id: context.read<AccountBloc>().userId ==0?"0":widget.userId.toString()));
                               },
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.vertical,
@@ -1044,10 +1046,10 @@ class _ProductDetailState extends State<ProductDetail>
                                                                 );
                                                               }).then((value) {
                                                             if (value ==
-                                                                "Thêm vào giỏ hàng") {
+                                                                "Thêm vào giỏ hàng" && context.read<AccountBloc>().userId !=0) {
 
                                                               productDetailBloc.add(AddtocartEvent(
-                                                                  person_id: widget
+                                                                  person_id: context.read<AccountBloc>().userId ==0?"0":widget
                                                                       .userId
                                                                       .toString(),
                                                                   product_id:
@@ -1064,7 +1066,7 @@ class _ProductDetailState extends State<ProductDetail>
 
 //
                                                             }
-                                                            if(value =="Mua ngay")
+                                                            if(value =="Mua ngay" && context.read<AccountBloc>().userId !=0)
                                                               {
                                                                 var optionProduct = productDetailBloc
                                                                     .productDetail.optionProducts
@@ -1081,36 +1083,41 @@ class _ProductDetailState extends State<ProductDetail>
                                                                           child:BlocProvider(
                                                                             create: (_) => AddressBloc(LoadAddress())
                                                                               ..add(InitialAddressEvent(userId: widget.userId.toString())),
-                                                                            child:  PaymentScreen(
-                                                                              userId: widget.userId
-                                                                                  .toString(),
-                                                                              listItems: [
-                                                                                CartItem.CartItem(
-                                                                                    cartId: 0,
-                                                                                    productId: productDetailBloc
-                                                                                        .productDetail.id,
-                                                                                    nameProduct: productDetailBloc
-                                                                                        .productDetail
-                                                                                        .name,
-                                                                                    amount: productDetailBloc
-                                                                                        .amount,
-                                                                                    optionProduct: CartItem.OptionProduct(
-                                                                                        productOptionId: optionProduct
-                                                                                            .productOptionId,
-                                                                                        price: CartItem.Price(
-                                                                                            value: optionProduct
-                                                                                                .price
-                                                                                                .value,
-                                                                                            id: optionProduct
-                                                                                                .price
-                                                                                                .id),
-                                                                                        quantity: CartItem.Quantity(
-                                                                                            value: optionProduct.quantity.value,
-                                                                                            id: optionProduct.quantity.id),
-                                                                                        color: CartItem.Color(value: productDetailBloc.options.length > 1 ? productDetailBloc.options[1] : "", id: 0),
-                                                                                        size: CartItem.Size(id: 0, value: productDetailBloc.options[0]),
-                                                                                        image: CartItem.Image(value: images[0], id: 0)))
-                                                                              ],
+                                                                            child:  BlocProvider.value(
+                                                                              value: context.read<AccountBloc>(),
+                                                                              child: BlocProvider.value(value: context.read<ProductBloc>(),
+                                                                                child: PaymentScreen(
+                                                                                  userId: widget.userId
+                                                                                      .toString(),
+                                                                                  listItems: [
+                                                                                    CartItem.CartItem(
+                                                                                        cartId: 0,
+                                                                                        productId: productDetailBloc
+                                                                                            .productDetail.id,
+                                                                                        nameProduct: productDetailBloc
+                                                                                            .productDetail
+                                                                                            .name,
+                                                                                        amount: productDetailBloc
+                                                                                            .amount,
+                                                                                        optionProduct: CartItem.OptionProduct(
+                                                                                            productOptionId: optionProduct
+                                                                                                .productOptionId,
+                                                                                            price: CartItem.Price(
+                                                                                                value: optionProduct
+                                                                                                    .price
+                                                                                                    .value,
+                                                                                                id: optionProduct
+                                                                                                    .price
+                                                                                                    .id),
+                                                                                            quantity: CartItem.Quantity(
+                                                                                                value: optionProduct.quantity.value,
+                                                                                                id: optionProduct.quantity.id),
+                                                                                            color: CartItem.Color(value: productDetailBloc.options.length > 1 ? productDetailBloc.options[1] : "", id: 0),
+                                                                                            size: CartItem.Size(id: 0, value: productDetailBloc.options[0]),
+                                                                                            image: CartItem.Image(value: images[0], id: 0)))
+                                                                                  ],
+                                                                                ),
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                         )));
@@ -1986,161 +1993,165 @@ class _ProductDetailState extends State<ProductDetail>
 //                                  ),
 // SizedBox(height: 10,),
                                     /// Có thể bạn cũng thích
-                                    Row(
+                                if(context.read<AccountBloc>().userId!=0)   Column(
                                       children: [
-                                        Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 10),
-                                          color: Colors.white,
-                                          child: Text(
-                                            "Có thể bạn cũng thích",
-                                            style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 18,
-                                              letterSpacing: 0.5,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Stack(
-                                      children: <Widget>[
-                                        Container(
-//                            padding: EdgeInsets.symmetric(
-//                                horizontal: 5, vertical: 5),
-                                          color: Color(0xffE7E7E7),
-                                          height:
-                                              MediaQuery.of(context).size.height -
-                                                  300,
-                                          child: CustomScrollView(
-                                              shrinkWrap: true,
-                                              primary: false,
-                                              physics: flag == true
-                                                  ? NeverScrollableScrollPhysics()
-                                                  : ClampingScrollPhysics(),
-                                              controller: _scrollController,
-                                              scrollDirection: Axis.vertical,
-                                              slivers: <Widget>[
-                                                SliverGrid(
-                                                  gridDelegate:
-                                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 2,
-                                                    childAspectRatio:
-                                                        (MediaQuery.of(context)
-                                                                        .size
-                                                                        .width /
-                                                                    2 -
-                                                                22 / 5) /
-                                                            (MediaQuery.of(context)
-                                                                        .size
-                                                                        .height /
-                                                                    3 -
-                                                                2.5),
-                                                    mainAxisSpacing: 5,
-                                                    crossAxisSpacing: 5,
-                                                    //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
-                                                  ),
-                                                  delegate:
-                                                      SliverChildBuilderDelegate(
-                                                    (BuildContext context,
-                                                        int index) {
-                                                      return GestureDetector(
-                                                          child: ProductCard(
-                                                            onTapSimilar: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (_) =>
-                                                                          BlocProvider
-                                                                              .value(
-                                                                            value:
-                                                                                context.read<CartBloc>(),
-                                                                            child:
-                                                                                BlocProvider(
-                                                                              create: (_) => SimilarProductBloc(InitialSimilarProductState())
-                                                                                ..add(InitiateSimilarProductEvent(productId: productDetailBloc.listProductAlsoLike[index].id.toString())),
-                                                                              child:
-                                                                                  SimilarProductScreen(interactingProduct: productDetailBloc.listProductAlsoLike[index], userId: widget.userId),
-                                                                            ),
-                                                                          )));
-                                                            },
-                                                            onTapFavorite: () {},
-                                                            height: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .height /
-                                                                3,
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width /
-                                                                2,
-                                                            product: productDetailBloc
-                                                                    .listProductAlsoLike[
-                                                                index],
-                                                            index: index,
-                                                          ),
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (_) =>
-                                                                        MultiBlocProvider(
-                                                                            providers: [
-                                                                              BlocProvider(
-                                                                                  create: (_) => ProductDetailBloc(InitialProductDetail())
-                                                                                    ..add(ProductDetailLoadEvent(
-                                                                                      id: productDetailBloc.listProductAlsoLike[index].id,
-                                                                                      person_id: context.read<AccountBloc>().user.id.toString(),
-                                                                                    ))),
-                                                                              BlocProvider.value(
-                                                                                value: context.read<CartBloc>(),
-                                                                              ),
-                                                                            ],
-                                                                            child:
-                                                                                ProductDetail(
-                                                                              userId:
-                                                                                  context.read<AccountBloc>().user.id!,
-                                                                              percentStar:
-                                                                                  productDetailBloc.listProductAlsoLike[index].percentStar,
-                                                                              countRating:
-                                                                                  productDetailBloc.listProductAlsoLike[index].countRating,
-                                                                              price:
-                                                                                  productDetailBloc.listProductAlsoLike[index].price,
-                                                                              productId:
-                                                                                  productDetailBloc.listProductAlsoLike[index].id,
-                                                                            ))));
-                                                          });
-                                                    },
-                                                    childCount: productDetailBloc
-                                                        .listProductAlsoLike
-                                                        .length,
-                                                  ),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width:
+                                                  MediaQuery.of(context).size.width,
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 8, horizontal: 10),
+                                              color: Colors.white,
+                                              child: Text(
+                                                "Có thể bạn cũng thích",
+                                                style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 18,
+                                                  letterSpacing: 0.5,
+                                                  fontWeight: FontWeight.w500,
                                                 ),
-                                              ]),
-                                        ),
-                                        if (state is LoadingProductAlsoLikeState)
-                                          Positioned(
-                                            bottom: 10,
-                                            left: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2 -
-                                                15,
-                                            child: Container(
-                                              width: 30,
-                                              height: 30,
-                                              child: CircularProgressIndicator(
-                                                backgroundColor: Colors.red,
                                               ),
                                             ),
-                                          ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Stack(
+                                          children: <Widget>[
+                                            Container(
+//                            padding: EdgeInsets.symmetric(
+//                                horizontal: 5, vertical: 5),
+                                              color: Color(0xffE7E7E7),
+                                              height:
+                                                  MediaQuery.of(context).size.height -
+                                                      300,
+                                              child: CustomScrollView(
+                                                  shrinkWrap: true,
+                                                  primary: false,
+                                                  physics: flag == true
+                                                      ? NeverScrollableScrollPhysics()
+                                                      : ClampingScrollPhysics(),
+                                                  controller: _scrollController,
+                                                  scrollDirection: Axis.vertical,
+                                                  slivers: <Widget>[
+                                                    SliverGrid(
+                                                      gridDelegate:
+                                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 2,
+                                                        childAspectRatio:
+                                                            (MediaQuery.of(context)
+                                                                            .size
+                                                                            .width /
+                                                                        2 -
+                                                                    22 / 5) /
+                                                                (MediaQuery.of(context)
+                                                                            .size
+                                                                            .height /
+                                                                        3 -
+                                                                    2.5),
+                                                        mainAxisSpacing: 5,
+                                                        crossAxisSpacing: 5,
+                                                        //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
+                                                      ),
+                                                      delegate:
+                                                          SliverChildBuilderDelegate(
+                                                        (BuildContext context,
+                                                            int index) {
+                                                          return GestureDetector(
+                                                              child: ProductCard(
+                                                                onTapSimilar: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (_) =>
+                                                                              BlocProvider
+                                                                                  .value(
+                                                                                value:
+                                                                                    context.read<CartBloc>(),
+                                                                                child:
+                                                                                    BlocProvider(
+                                                                                  create: (_) => SimilarProductBloc(InitialSimilarProductState())
+                                                                                    ..add(InitiateSimilarProductEvent(productId: productDetailBloc.listProductAlsoLike[index].id.toString())),
+                                                                                  child:
+                                                                                      SimilarProductScreen(interactingProduct: productDetailBloc.listProductAlsoLike[index], userId: widget.userId),
+                                                                                ),
+                                                                              )));
+                                                                },
+                                                                onTapFavorite: () {},
+                                                                height: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height /
+                                                                    3,
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width /
+                                                                    2,
+                                                                product: productDetailBloc
+                                                                        .listProductAlsoLike[
+                                                                    index],
+                                                                index: index,
+                                                              ),
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (_) =>
+                                                                            MultiBlocProvider(
+                                                                                providers: [
+                                                                                  BlocProvider(
+                                                                                      create: (_) => ProductDetailBloc(InitialProductDetail())
+                                                                                        ..add(ProductDetailLoadEvent(
+                                                                                          id: productDetailBloc.listProductAlsoLike[index].id,
+                                                                                          person_id: context.read<AccountBloc>().user!.id.toString(),
+                                                                                        ))),
+                                                                                  BlocProvider.value(
+                                                                                    value: context.read<CartBloc>(),
+                                                                                  ),
+                                                                                ],
+                                                                                child:
+                                                                                    ProductDetail(
+                                                                                  userId:
+                                                                                      context.read<AccountBloc>().user!.id!,
+                                                                                  percentStar:
+                                                                                      productDetailBloc.listProductAlsoLike[index].percentStar,
+                                                                                  countRating:
+                                                                                      productDetailBloc.listProductAlsoLike[index].countRating,
+                                                                                  price:
+                                                                                      productDetailBloc.listProductAlsoLike[index].price,
+                                                                                  productId:
+                                                                                      productDetailBloc.listProductAlsoLike[index].id,
+                                                                                ))));
+                                                              });
+                                                        },
+                                                        childCount: productDetailBloc
+                                                            .listProductAlsoLike
+                                                            .length,
+                                                      ),
+                                                    ),
+                                                  ]),
+                                            ),
+                                            if (state is LoadingProductAlsoLikeState)
+                                              Positioned(
+                                                bottom: 10,
+                                                left: MediaQuery.of(context)
+                                                            .size
+                                                            .width /
+                                                        2 -
+                                                    15,
+                                                child: Container(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: CircularProgressIndicator(
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -2165,27 +2176,32 @@ class _ProductDetailState extends State<ProductDetail>
                                 flex: 1,
                                 child: InkWell(
                                   onTap: () {
-                                    setState(() {
-                                      productDetailBloc.productDetail.isLiked =
-                                          !productDetailBloc
-                                              .productDetail.isLiked;
-                                    });
+                                    if(context.read<AccountBloc>().userId !=0)
+                                    {
+                                      setState(() {
+                                        productDetailBloc.productDetail
+                                            .isLiked =
+                                        !productDetailBloc
+                                            .productDetail.isLiked;
+                                      });
 
-                                    if (widget.isNavigatedFromFavorite) {
-                                      context.read<FavoriteBloc>().add(
-                                          FavoriteTap(
-                                              person_id: widget.userId.toString(),
-                                              index: context
-                                                  .read<FavoriteBloc>()
-                                                  .index,
-                                              product_id:
-                                                  widget.productId.toString()));
-                                    } else {
-                                      productDetailBloc.add(FavoriteTapEvent(
-                                          person_id: widget.userId.toString(),
-                                          product_id: productDetailBloc
-                                              .productDetail.id
-                                              .toString()));
+                                      if (widget.isNavigatedFromFavorite) {
+                                        context.read<FavoriteBloc>().add(
+                                            FavoriteTap(
+                                                person_id: widget.userId
+                                                    .toString(),
+                                                index: context
+                                                    .read<FavoriteBloc>()
+                                                    .index,
+                                                product_id:
+                                                widget.productId.toString()));
+                                      } else {
+                                        productDetailBloc.add(FavoriteTapEvent(
+                                            person_id: widget.userId.toString(),
+                                            product_id: productDetailBloc
+                                                .productDetail.id
+                                                .toString()));
+                                      }
                                     }
                                   },
                                   child: Container(
@@ -2215,6 +2231,7 @@ class _ProductDetailState extends State<ProductDetail>
                                 flex: 4,
                                 child: InkWell(
                                   onTap: () async {
+                                    if(context.read<AccountBloc>().userId !=0)
                                     await showModalBottomSheet(
                                         context: context,
                                         builder: (_) {
@@ -2277,6 +2294,7 @@ class _ProductDetailState extends State<ProductDetail>
                                 flex: 4,
                                 child: InkWell(
                                   onTap: () async {
+                                    if(context.read<AccountBloc>().userId !=0)
                                     await showModalBottomSheet(
                                         context: context,
                                         builder: (_) {
@@ -2305,37 +2323,42 @@ class _ProductDetailState extends State<ProductDetail>
                                                   child: BlocProvider(
                                                     create: (_) => AddressBloc(LoadAddress())
                                                       ..add(InitialAddressEvent(userId: widget.userId.toString())),
-                                                    child:  PaymentScreen(
-                                                          userId: widget.userId
-                                                              .toString(),
-                                                          listItems: [
-                                                            CartItem.CartItem(
-                                                                cartId: 0,
-                                                                productId: productDetailBloc
-                                                                    .productDetail.id,
-                                                                nameProduct: productDetailBloc
-                                                                    .productDetail
-                                                                    .name,
-                                                                amount: productDetailBloc
-                                                                    .amount,
-                                                                optionProduct: CartItem.OptionProduct(
-                                                                    productOptionId: optionProduct
-                                                                        .productOptionId,
-                                                                    price: CartItem.Price(
-                                                                        value: optionProduct
-                                                                            .price
-                                                                            .value,
-                                                                        id: optionProduct
-                                                                            .price
-                                                                            .id),
-                                                                    quantity: CartItem.Quantity(
-                                                                        value: optionProduct.quantity.value,
-                                                                        id: optionProduct.quantity.id),
-                                                                    color: CartItem.Color(value: productDetailBloc.options.length > 1 ? productDetailBloc.options[1] : "", id: 0),
-                                                                    size: CartItem.Size(id: 0, value: productDetailBloc.options[0]),
-                                                                    image: CartItem.Image(value: images[0], id: 0)))
-                                                          ],
-                                                        ),
+                                                    child: BlocProvider.value(value: context.read<ProductBloc>(),
+                                                      child: BlocProvider.value(
+                                                        value: context.read<AccountBloc>(),
+                                                        child: PaymentScreen(
+                                                              userId: widget.userId
+                                                                  .toString(),
+                                                              listItems: [
+                                                                CartItem.CartItem(
+                                                                    cartId: 0,
+                                                                    productId: productDetailBloc
+                                                                        .productDetail.id,
+                                                                    nameProduct: productDetailBloc
+                                                                        .productDetail
+                                                                        .name,
+                                                                    amount: productDetailBloc
+                                                                        .amount,
+                                                                    optionProduct: CartItem.OptionProduct(
+                                                                        productOptionId: optionProduct
+                                                                            .productOptionId,
+                                                                        price: CartItem.Price(
+                                                                            value: optionProduct
+                                                                                .price
+                                                                                .value,
+                                                                            id: optionProduct
+                                                                                .price
+                                                                                .id),
+                                                                        quantity: CartItem.Quantity(
+                                                                            value: optionProduct.quantity.value,
+                                                                            id: optionProduct.quantity.id),
+                                                                        color: CartItem.Color(value: productDetailBloc.options.length > 1 ? productDetailBloc.options[1] : "", id: 0),
+                                                                        size: CartItem.Size(id: 0, value: productDetailBloc.options[0]),
+                                                                        image: CartItem.Image(value: images[0], id: 0)))
+                                                              ],
+                                                            ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 )));
                                       }
@@ -2426,8 +2449,12 @@ class _ProductDetailState extends State<ProductDetail>
                                       MaterialPageRoute(builder: (_) {
                                     return BlocProvider.value(
                                       value: context.read<CartBloc>(),
-                                      child: CartScreen(
-                                        person_id: widget.userId,
+                                      child:  BlocProvider.value(value: context.read<AccountBloc>(),
+                                        child: BlocProvider.value(value: context.read<ProductBloc>(),
+                                          child: CartScreen(
+                                            person_id: widget.userId,
+                                          ),
+                                        ),
                                       ),
                                     );
                                   }));
@@ -3453,36 +3480,41 @@ class _ProductDetailState extends State<ProductDetail>
                                                                       child:BlocProvider(
                                                                         create: (_) => AddressBloc(LoadAddress())
                                                                           ..add(InitialAddressEvent(userId: widget.userId.toString())),
-                                                                        child:  PaymentScreen(
-                                                                          userId: widget.userId
-                                                                              .toString(),
-                                                                          listItems: [
-                                                                            CartItem.CartItem(
-                                                                                cartId: 0,
-                                                                                productId: productDetailBloc
-                                                                                    .productDetail.id,
-                                                                                nameProduct: productDetailBloc
-                                                                                    .productDetail
-                                                                                    .name,
-                                                                                amount: productDetailBloc
-                                                                                    .amount,
-                                                                                optionProduct: CartItem.OptionProduct(
-                                                                                    productOptionId: optionProduct
-                                                                                        .productOptionId,
-                                                                                    price: CartItem.Price(
-                                                                                        value: optionProduct
-                                                                                            .price
-                                                                                            .value,
-                                                                                        id: optionProduct
-                                                                                            .price
-                                                                                            .id),
-                                                                                    quantity: CartItem.Quantity(
-                                                                                        value: optionProduct.quantity.value,
-                                                                                        id: optionProduct.quantity.id),
-                                                                                    color: CartItem.Color(value: productDetailBloc.options.length > 1 ? productDetailBloc.options[1] : "", id: 0),
-                                                                                    size: CartItem.Size(id: 0, value: productDetailBloc.options[0]),
-                                                                                    image: CartItem.Image(value: images[0], id: 0)))
-                                                                          ],
+                                                                        child:  BlocProvider.value(value: context.read<ProductBloc>(),
+                                                                          child: BlocProvider.value(
+                                                                            value: context.read<AccountBloc>(),
+                                                                            child: PaymentScreen(
+                                                                              userId: widget.userId
+                                                                                  .toString(),
+                                                                              listItems: [
+                                                                                CartItem.CartItem(
+                                                                                    cartId: 0,
+                                                                                    productId: productDetailBloc
+                                                                                        .productDetail.id,
+                                                                                    nameProduct: productDetailBloc
+                                                                                        .productDetail
+                                                                                        .name,
+                                                                                    amount: productDetailBloc
+                                                                                        .amount,
+                                                                                    optionProduct: CartItem.OptionProduct(
+                                                                                        productOptionId: optionProduct
+                                                                                            .productOptionId,
+                                                                                        price: CartItem.Price(
+                                                                                            value: optionProduct
+                                                                                                .price
+                                                                                                .value,
+                                                                                            id: optionProduct
+                                                                                                .price
+                                                                                                .id),
+                                                                                        quantity: CartItem.Quantity(
+                                                                                            value: optionProduct.quantity.value,
+                                                                                            id: optionProduct.quantity.id),
+                                                                                        color: CartItem.Color(value: productDetailBloc.options.length > 1 ? productDetailBloc.options[1] : "", id: 0),
+                                                                                        size: CartItem.Size(id: 0, value: productDetailBloc.options[0]),
+                                                                                        image: CartItem.Image(value: images[0], id: 0)))
+                                                                              ],
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     )));
@@ -4358,7 +4390,7 @@ class _ProductDetailState extends State<ProductDetail>
 //                                  ),
 // SizedBox(height: 10,),
                                   /// Có thể bạn cũng thích
-                                  Row(
+                                if(context.read<AccountBloc>().userId !=0)  Row(
                                     children: [
                                       Container(
                                         width:
@@ -4381,7 +4413,7 @@ class _ProductDetailState extends State<ProductDetail>
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Stack(
+                                 if(context.read<AccountBloc>().userId !=0) Stack(
                                     children: <Widget>[
                                       Container(
 //                            padding: EdgeInsets.symmetric(
@@ -4413,7 +4445,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                           .size
                                                           .height /
                                                           3 -
-                                                          2.5),
+                                                          2),
                                                   mainAxisSpacing: 5,
                                                   crossAxisSpacing: 5,
                                                   //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
@@ -4469,7 +4501,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                                                 create: (_) => ProductDetailBloc(InitialProductDetail())
                                                                                   ..add(ProductDetailLoadEvent(
                                                                                     id: productDetailBloc.listProductAlsoLike[index].id,
-                                                                                    person_id: context.read<AccountBloc>().user.id.toString(),
+                                                                                    person_id: context.read<AccountBloc>().user!.id.toString(),
                                                                                   ))),
                                                                             BlocProvider.value(
                                                                               value: context.read<CartBloc>(),
@@ -4478,7 +4510,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                                           child:
                                                                           ProductDetail(
                                                                             userId:
-                                                                            context.read<AccountBloc>().user.id!,
+                                                                            context.read<AccountBloc>().user!.id!,
                                                                             percentStar:
                                                                             productDetailBloc.listProductAlsoLike[index].percentStar,
                                                                             countRating:
@@ -4587,7 +4619,7 @@ class _ProductDetailState extends State<ProductDetail>
                               flex: 4,
                               child: InkWell(
                                 onTap: () async {
-                                  await showModalBottomSheet(
+                                 if(context.read<AccountBloc>().userId !=0) await showModalBottomSheet(
                                       context: context,
                                       builder: (_) {
                                         return BlocProvider.value(
@@ -4649,7 +4681,7 @@ class _ProductDetailState extends State<ProductDetail>
                               flex: 4,
                               child: InkWell(
                                 onTap: () async {
-                                  await showModalBottomSheet(
+                                if(context.read<AccountBloc>().userId !=0)  await showModalBottomSheet(
                                       context: context,
                                       builder: (_) {
                                         return BlocProvider.value(
@@ -4677,36 +4709,41 @@ class _ProductDetailState extends State<ProductDetail>
                                                 child: BlocProvider(
                                                   create: (_) => AddressBloc(LoadAddress())
                                                     ..add(InitialAddressEvent(userId: widget.userId.toString())),
-                                                  child:  PaymentScreen(
-                                                    userId: widget.userId
-                                                        .toString(),
-                                                    listItems: [
-                                                      CartItem.CartItem(
-                                                          cartId: 0,
-                                                          productId: productDetailBloc
-                                                              .productDetail.id,
-                                                          nameProduct: productDetailBloc
-                                                              .productDetail
-                                                              .name,
-                                                          amount: productDetailBloc
-                                                              .amount,
-                                                          optionProduct: CartItem.OptionProduct(
-                                                              productOptionId: optionProduct
-                                                                  .productOptionId,
-                                                              price: CartItem.Price(
-                                                                  value: optionProduct
-                                                                      .price
-                                                                      .value,
-                                                                  id: optionProduct
-                                                                      .price
-                                                                      .id),
-                                                              quantity: CartItem.Quantity(
-                                                                  value: optionProduct.quantity.value,
-                                                                  id: optionProduct.quantity.id),
-                                                              color: CartItem.Color(value: productDetailBloc.options.length > 1 ? productDetailBloc.options[1] : "", id: 0),
-                                                              size: CartItem.Size(id: 0, value: productDetailBloc.options[0]),
-                                                              image: CartItem.Image(value: images[0], id: 0)))
-                                                    ],
+                                                  child: BlocProvider.value(
+                                                    value: context.read<AccountBloc>(),
+                                                    child: BlocProvider.value(value: context.read<ProductBloc>(),
+                                                      child: PaymentScreen(
+                                                        userId: widget.userId
+                                                            .toString(),
+                                                        listItems: [
+                                                          CartItem.CartItem(
+                                                              cartId: 0,
+                                                              productId: productDetailBloc
+                                                                  .productDetail.id,
+                                                              nameProduct: productDetailBloc
+                                                                  .productDetail
+                                                                  .name,
+                                                              amount: productDetailBloc
+                                                                  .amount,
+                                                              optionProduct: CartItem.OptionProduct(
+                                                                  productOptionId: optionProduct
+                                                                      .productOptionId,
+                                                                  price: CartItem.Price(
+                                                                      value: optionProduct
+                                                                          .price
+                                                                          .value,
+                                                                      id: optionProduct
+                                                                          .price
+                                                                          .id),
+                                                                  quantity: CartItem.Quantity(
+                                                                      value: optionProduct.quantity.value,
+                                                                      id: optionProduct.quantity.id),
+                                                                  color: CartItem.Color(value: productDetailBloc.options.length > 1 ? productDetailBloc.options[1] : "", id: 0),
+                                                                  size: CartItem.Size(id: 0, value: productDetailBloc.options[0]),
+                                                                  image: CartItem.Image(value: images[0], id: 0)))
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               )));
@@ -4832,7 +4869,14 @@ class _ProductDetailState extends State<ProductDetail>
                                                 width: 1,
                                               )),
                                           child: Center(
-                                            child: BlocBuilder<CartBloc,
+                                            child: context.read<AccountBloc>().userId ==0?Text(
+                                              "",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                  fontSize: 10),
+                                            ):BlocBuilder<CartBloc,
                                                 CartState>(
                                               builder: (context, state) {
                                                 if (state is InitialCart)

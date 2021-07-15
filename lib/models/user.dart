@@ -22,6 +22,7 @@ class User {
   String? get timeCreated => _timeCreated;
   String? get timeUpdated => _timeUpdated;
   ImageAvatar? get imageAvatar => _imageAvatar;
+  set id(int? id){this.id=id;}
 
   User({
       int? id,

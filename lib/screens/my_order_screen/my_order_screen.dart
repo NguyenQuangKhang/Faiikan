@@ -170,30 +170,34 @@ class _MyOrder_TabPageState extends State<MyOrder_TabPage> {
                                                     .myOrders[index]
                                                     .id!
                                                     .toString())),
-                                          child: OrderDetailScreen(
-                                            status: widget.status,
-                                            userId: widget.userId,
+                                          child: BlocProvider.value(
+                                            value: context.read<MyOrderBloc>(),
+                                            child: OrderDetailScreen(
+                                              status: widget.status,
+                                              userId: widget.userId,
+                                              index: index,
+                                              orderId: context.read<MyOrderBloc>().myOrders[index].id!.toString(),
+                                            ),
                                           ),
                                         )));
                           },
                           child: Container(
                             margin: index != 0
                                 ? EdgeInsets.only(
-                                left: 10, bottom: 10, right: 10)
+                                left: 0, bottom: 10, right: 0)
                                 : EdgeInsets.only(
-                                left: 10, bottom: 10, right: 10, top: 10),
+                                left: 0, bottom: 10, right: 0, top: 10),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 3,
-                                  offset: Offset(
-                                      0, 0), // changes position of shadow
-                                ),
-                              ],
+//                              boxShadow: [
+//                                BoxShadow(
+//                                  color: Colors.black.withOpacity(0.5),
+//                                  spreadRadius: 1,
+//                                  blurRadius: 3,
+//                                  offset: Offset(
+//                                      0, 0), // changes position of shadow
+//                                ),
+//                              ],
                             ),
                             child: Column(
                               children: <Widget>[

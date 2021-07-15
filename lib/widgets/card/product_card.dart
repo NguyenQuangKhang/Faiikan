@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
     required this.width,
     this.hasLike = false,
     this.liked = false,
-    this.hasPopupMenu=true,
+    this.hasPopupMenu = true,
     required this.onTapFavorite,
     required this.onTapSimilar,
   });
@@ -79,7 +79,7 @@ class ProductCard extends StatelessWidget {
                 child: Container(
 //                    width: 170,
                   height: 140,
-                  padding: EdgeInsets.only(top:10,bottom: 10,left: 10),
+                  padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -167,19 +167,18 @@ class ProductCard extends StatelessWidget {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  if(hasPopupMenu)PopupMenuButton(onSelected: (choice){
-                                    if(choice =="choice")
-                                      {
+                                  if (hasPopupMenu)
+                                    PopupMenuButton(onSelected: (choice) {
+                                      if (choice == "choice") {
                                         onTapSimilar();
                                       }
-                                  },
-                                      itemBuilder: (BuildContext context) {
-                                    return [
-                                      PopupMenuItem<String>(
-                                        value: "choice",
-                                          child: Text("Sản phẩm tương tự"))
-                                    ];
-                                  })
+                                    }, itemBuilder: (BuildContext context) {
+                                      return [
+                                        PopupMenuItem<String>(
+                                            value: "choice",
+                                            child: Text("Sản phẩm tương tự"))
+                                      ];
+                                    })
                                 ],
                               )
                             ],

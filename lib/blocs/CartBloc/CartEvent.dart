@@ -51,6 +51,17 @@ class DeleteCartEvent extends CartEvent {
   @override
   String toString() => 'ProductButtonPressed { ... }';
 }
+class DeleteListCartItemEvent extends CartEvent {
+  final List<String> id;
+
+  DeleteListCartItemEvent({required this.id});
+
+  @override
+  List<Object> get props => [id];
+
+  @override
+  String toString() => 'ProductButtonPressed { ... }';
+}
 
 class CheckItemCartEvent extends CartEvent {
   final int index;

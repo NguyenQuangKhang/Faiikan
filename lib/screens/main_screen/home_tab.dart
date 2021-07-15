@@ -14,9 +14,13 @@ import 'package:faiikan/blocs/product_bloc/ProductState.dart';
 import 'package:faiikan/screens/cart_screen/cart_screen.dart';
 import 'package:faiikan/screens/main_screen/home_tab_tab/for_you_tab.dart';
 import 'package:faiikan/screens/main_screen/home_tab_tab/male_screen.dart';
+import 'package:faiikan/screens/register_login_screen/register_and_login_screen.dart';
 import 'package:faiikan/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'home_tab_tab/beauty_screen.dart';
+import 'home_tab_tab/female_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -29,10 +33,10 @@ class HomeScreen extends StatelessWidget {
         appBar: CustomAppBar(
           onTapCart: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return BlocProvider.value(
+              return context.read<AccountBloc>().userId==0?BlocProvider.value(value: context.read<AccountBloc>(),child: RegisterAndLoginScreen(initialIndex: 1,),):BlocProvider.value(
                 value: context.read<CartBloc>(),
                 child: CartScreen(
-                  person_id: context.read<AccountBloc>().user.id!,
+                  person_id: context.read<AccountBloc>().user!.id!,
                 ),
               );
             }));
@@ -107,6 +111,12 @@ class HomeScreen extends StatelessWidget {
           children: [
             MultiBlocProvider(providers: [
               BlocProvider(
+                create: (BuildContext context) =>
+                ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))
+                  ..add(ProductLoadEvent(
+                      SortBy: 0, userId: context.read<AccountBloc>().userId==0?0:context.read<AccountBloc>().user!.id!)),
+              ),
+              BlocProvider(
                 create: (_) => HotSearchBloc(LoadHotSearch())
                   ..add(InitiateHotSearchEvent()),
               ),
@@ -115,16 +125,36 @@ class HomeScreen extends StatelessWidget {
                     CategoryBloc(LoadingCategory())
                       ..add(InitiateEvent(catId: 16)),
               ),
+
             ], child: ForYouScreen()),
+
             MultiBlocProvider(providers: [
+              BlocProvider(create: (BuildContext context) =>
+              ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))..add(ProductByCategoryCodeEvent(filter: "popular",categoryId: "16")),),
               BlocProvider(
                 create: (BuildContext context) =>
                 CategoryBloc(LoadingCategory())
                   ..add(InitiateEvent(catId: 16)),
               ),
             ], child: MaleScreen()),
-            Container(),
-            Container(),
+            MultiBlocProvider(providers: [
+              BlocProvider(create: (BuildContext context) =>
+              ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))..add(ProductByCategoryCodeEvent(filter: "popular",categoryId: "17")),),
+              BlocProvider(
+                create: (BuildContext context) =>
+                CategoryBloc(LoadingCategory())
+                  ..add(InitiateEvent(catId: 17)),
+              ),
+            ], child: FemaleScreen()),
+            MultiBlocProvider(providers: [
+              BlocProvider(create: (BuildContext context) =>
+              ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))..add(ProductByCategoryCodeEvent(filter: "popular",categoryId: "324")),),
+              BlocProvider(
+                create: (BuildContext context) =>
+                CategoryBloc(LoadingCategory())
+                  ..add(InitiateEvent(catId: 324)),
+              ),
+            ], child: BeautyScreen()),
           ],
         ),
       ),

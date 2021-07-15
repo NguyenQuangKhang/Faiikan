@@ -1,9 +1,11 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
 import 'package:faiikan/blocs/CartBloc/CartState.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/address_bloc/address_bloc.dart';
 import 'package:faiikan/blocs/address_bloc/address_event.dart';
 import 'package:faiikan/blocs/address_bloc/address_state.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/models/cart_item.dart' as cart;
 import 'package:faiikan/models/order_item.dart';
 import 'package:faiikan/screens/main_screen/home_tab_tab/for_you_tab.dart';
@@ -546,7 +548,7 @@ class _CartScreenState extends State<CartScreen> {
                                       child: BlocProvider(
                                           create: (_) => AddressBloc(LoadAddress())
                                             ..add(InitialAddressEvent(userId: widget.person_id.toString())),
-                                          child: PaymentScreen(userId: widget.person_id.toString(),listItems: list_chosen,))),
+                                          child:  BlocProvider.value(value: context.read<AccountBloc>(),child:BlocProvider.value(value: context.read<ProductBloc>(),child: PaymentScreen(userId: widget.person_id.toString(),listItems: list_chosen,))))),
                                 ));
                           },
                         ),

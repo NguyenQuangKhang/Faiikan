@@ -31,7 +31,7 @@ class OrderItemCard extends StatelessWidget {
     return Container(
 //      margin: EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: isOrderDetail ? Color(0xffEFEBEB) : Colors.white,
+        color: Colors.white,
 //        boxShadow: [
 //          BoxShadow(
 //            color: Colors.black.withOpacity(0.5),
@@ -45,6 +45,11 @@ class OrderItemCard extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: isOrderDetail ? EdgeInsets.all(15) : EdgeInsets.zero,
+            decoration: BoxDecoration(
+                border: Border.all(
+              color: Color(0xffC4C4C4).withOpacity(0.5),
+              width: 1,
+            )),
             child: Image.network(
               orderItem.optionProduct.image.value,
               fit: BoxFit.fill,
@@ -142,11 +147,12 @@ class OrderItemCard extends StatelessWidget {
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                                Icon(
-                                  Icons.keyboard_arrow_down_sharp,
-                                  size: 20,
-                                  color: Colors.black.withOpacity(0.7),
-                                ),
+                                if (!isOrderDetail)
+                                  Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 20,
+                                    color: Colors.black.withOpacity(0.7),
+                                  ),
                               ],
                             ),
                           ),
@@ -154,7 +160,7 @@ class OrderItemCard extends StatelessWidget {
                       )
                     else
                       Container(
-                        color: Color(0xffEEEEEE),
+                        color: Color(0xffffffff),
                         padding: EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: 5,
@@ -174,11 +180,6 @@ class OrderItemCard extends StatelessWidget {
                                 letterSpacing: 0.5,
                                 fontWeight: FontWeight.w400,
                               ),
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_down_sharp,
-                              size: 20,
-                              color: Colors.black.withOpacity(0.7),
                             ),
                           ],
                         ),

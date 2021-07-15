@@ -628,15 +628,15 @@ class Listrating {
   Listrating.fromJson(dynamic json) {
     if(json["image-avatar"]==null)
       _imageAvatar="";
-   else _imageAvatar = json["image-avatar"];
+   else _imageAvatar = json["image_avatar"];
     if(json["comment"]==null)
       _comment="";
    else _comment = json["comment"];
     _star = json["star"];
-    _timeUpdated = json["time-updated"];
-    if (json["images-rating"] != []) {
+    _timeUpdated = json["time_updated"];
+    if (json["file_rating"] != []) {
       _imageRating=[];
-      json["images-rating"].forEach((v) {
+      json["file_rating"].forEach((v) {
         _imageRating.add(v);
       });
     }

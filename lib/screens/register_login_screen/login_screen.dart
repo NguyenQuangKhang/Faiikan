@@ -1,17 +1,31 @@
 import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/account_bloc/AccountEvent.dart';
 import 'package:faiikan/blocs/account_bloc/AccountState.dart';
+import 'package:faiikan/blocs/login_social_bloc/login_social_blocs.dart';
 import 'package:faiikan/screens/main_screen/main_screen.dart';
+import 'package:faiikan/utils/loading_manager.dart';
 import 'package:faiikan/widgets/google_and_facebook_login.dart';
 import 'package:faiikan/widgets/intput_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController txtEmail = TextEditingController();
+
   TextEditingController txtPassword = TextEditingController();
 
+   late LoginSocialBloc _loginSocialBloc;
+ @override
+  void initState() {
+   _loginSocialBloc = LoginSocialBloc();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -22,9 +36,12 @@ class LoginScreen extends StatelessWidget {
         child: BlocListener(
           bloc: context.read<AccountBloc>(),
           listener: (context, state) {
-            if (state is AccountOk)
+            if (state is AccountOk) {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => BlocProvider.value(value: context.read<AccountBloc>(),child: MainScreen())));
+                  MaterialPageRoute(builder: (_) =>
+                      BlocProvider.value(value: context.read<AccountBloc>(),
+                          child: MainScreen())));
+            }
             if (state is AccountFailure)
               showDialog(
                   context: context,
@@ -121,9 +138,29 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       Expanded(child: SizedBox()),
-                      GoogleAndFacebookLogin(
-                        isLogin: true,
+                      BlocListener(
+                        bloc: _loginSocialBloc,
+                        listener: (context, state) {
+                          if (state is LoginSocialLoading) {
+                            LoadingManager().show(context);
+                          }
+                          else if (state is LoginSocialSuccess) {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) =>
+                                    BlocProvider.value(value: context.read<AccountBloc>()..add(InitialAccount()),
+                                        child: MainScreen())));
+
+                          } else if (state is LoginSocialFailure) {
+                            LoadingManager().hide(context);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error),duration: Duration(seconds: 3),));
+
+                          }
+                        },
+                        child: GoogleAndFacebookLogin(
+                          isLogin: true, onTapLoginFacebook: () { _loginSocialBloc.add(LoggedInFacebook()); }, onTapLoginGoogle: () { _loginSocialBloc.add(LoggedInGoogle()); },
+                        ),
                       ),
+
                     ],
                   ),
                   if (state is AccountLoading)

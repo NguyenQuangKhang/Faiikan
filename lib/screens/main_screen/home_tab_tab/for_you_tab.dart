@@ -6,6 +6,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
+import 'package:faiikan/blocs/category_bloc/category_event.dart';
+import 'package:faiikan/blocs/category_bloc/category_state.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_bloc.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_event.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_state.dart';
@@ -531,13 +533,13 @@ class _ForYouScreenState extends State<ForYouScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (_) =>
-                                  BlocProvider.value(
-                                      value: context.read<CategoryBloc>(),
+                                  BlocProvider(
+                                      create: (_) => CategoryBloc( LoadingCategory())..add(InitiateEvent(catId: 16,)),
                                       child: BlocProvider.value(
                                         value: context.read<CartBloc>(),
-                                        child: CategoryScreen(userId: context
+                                        child: CategoryScreen(isBack: true,userId: context
                                             .read<AccountBloc>()
-                                            .user
+                                            .user!
                                             .id!,),
                                       ))));
                     },
@@ -670,7 +672,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                   child: ProductWithSubCat_Screen(
                                                       userId: context
                                                           .read<AccountBloc>()
-                                                          .user
+                                                          .user!
                                                           .id!,
                                                       title: category
                                                           .name,
@@ -848,15 +850,14 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                         .keyword,
                                                     userId: context
                                                         .read<AccountBloc>()
-                                                        .user
-                                                        .id!
+                                                        .user!.id!
                                                         .toString())),
                                               child: BlocProvider.value(
                                                 value: context.read<CartBloc>(),
                                                 child: SearchScreen(
                                                   userId: context
                                                       .read<AccountBloc>()
-                                                      .user
+                                                      .user!
                                                       .id!
                                                   ,),
                                               ),
@@ -1036,60 +1037,60 @@ class _ForYouScreenState extends State<ForYouScreen> {
               decoration: BoxDecoration(color: Colors.white),
               child: Column(
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            top: BorderSide(
-                              color: Color(0xffE7E7E7),
-                              width: 5,
-                            ),
-                            bottom: BorderSide(
-                              color: Color(0xffE7E7E7),
-                              width: 5,
-                            ))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.filter_list,
-                              size: 30,
-                              color: Color(0xff222222),
-                            ),
-                            Text(
-                              "Lọc",
-                              style: TextStyle(
-                                color: Color(0xff222222),
-                                fontSize: 14,
-                                letterSpacing: 0.5,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(
-                              Icons.refresh_rounded,
-                              color: Color(0xff222222),
-                              size: 30,
-                            ),
-                            Text(
-                              "Phổ biến",
-                              style: TextStyle(
-                                color: Color(0xff222222),
-                                fontSize: 14,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+//                  Container(
+//                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+//                    decoration: BoxDecoration(
+//                        border: Border(
+//                            top: BorderSide(
+//                              color: Color(0xffE7E7E7),
+//                              width: 5,
+//                            ),
+//                            bottom: BorderSide(
+//                              color: Color(0xffE7E7E7),
+//                              width: 5,
+//                            ))),
+//                    child: Row(
+//                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                      children: [
+//                        Row(
+//                          children: [
+//                            Icon(
+//                              Icons.filter_list,
+//                              size: 30,
+//                              color: Color(0xff222222),
+//                            ),
+//                            Text(
+//                              "Lọc",
+//                              style: TextStyle(
+//                                color: Color(0xff222222),
+//                                fontSize: 14,
+//                                letterSpacing: 0.5,
+//                                fontWeight: FontWeight.w500,
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                        Row(
+//                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                          children: [
+//                            Icon(
+//                              Icons.refresh_rounded,
+//                              color: Color(0xff222222),
+//                              size: 30,
+//                            ),
+//                            Text(
+//                              "Phổ biến",
+//                              style: TextStyle(
+//                                color: Color(0xff222222),
+//                                fontSize: 14,
+//                                letterSpacing: 0.5,
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                      ],
+//                    ),
+//                  ),
 //                  SizedBox(
 //                    height: 10,
 //                  ),
@@ -1129,7 +1130,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                               .size
                                               .height /
                                               3 -
-                                              2.5),
+                                              2),
                                       mainAxisSpacing: 5,
                                       crossAxisSpacing: 5,
                                       //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
@@ -1168,7 +1169,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                                     userId: context
                                                                         .read<
                                                                         AccountBloc>()
-                                                                        .user
+                                                                        .user!
                                                                         .id!),
                                                               ),
                                                             )));
@@ -1195,6 +1196,8 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                       builder: (_) =>
                                                           MultiBlocProvider(
                                                               providers: [
+                                                                BlocProvider.value(value: context.read<AccountBloc>()),
+                                                                BlocProvider.value(value: context.read<ProductBloc>()),
                                                                 BlocProvider(
                                                                     create: (
                                                                         _) =>
@@ -1206,14 +1209,15 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                                                 .listdata[index]
                                                                                 .id,
                                                                             person_id:
-                                                                            context
+                                                                            context.read<AccountBloc>().userId ==0?"0":context
                                                                                 .read<
                                                                                 AccountBloc>()
-                                                                                .user
+                                                                                .user!
                                                                                 .id
                                                                                 .toString(),
                                                                           ))),
-                                                                BlocProvider
+                                                               if(context.read<AccountBloc>().userId !=0)
+                                                                 BlocProvider
                                                                     .value(
                                                                   value: context
                                                                       .read<
@@ -1222,11 +1226,10 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                               ],
                                                               child:
                                                               ProductDetail(
-                                                                userId: context
+                                                                userId: context.read<AccountBloc>().userId ==0?0:context
                                                                     .read<
                                                                     AccountBloc>()
-                                                                    .user
-                                                                    .id!,
+                                                                    .user!.id!,
                                                                 percentStar: productBloc
                                                                     .listdata[
                                                                 index]
@@ -1253,12 +1256,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                 ]),
                           ),
                           if (state is Loading)
-                            Positioned(
-                              bottom: 10,
-                              left: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 2 - 15,
+                            Center(
                               child: Container(
                                 width: 30,
                                 height: 30,

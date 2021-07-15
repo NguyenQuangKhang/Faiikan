@@ -122,7 +122,7 @@ class SeenProductScreen extends StatelessWidget {
                                   (MediaQuery.of(context).size.width / 2 -
                                           22 / 5) /
                                       (MediaQuery.of(context).size.height / 3 -
-                                          2.5),
+                                          2),
                               mainAxisSpacing: 5,
                               crossAxisSpacing: 5,
                               //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,

@@ -2,6 +2,7 @@ import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
 import 'package:faiikan/blocs/CartBloc/CartState.dart';
 import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountState.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
@@ -16,13 +17,14 @@ import 'package:faiikan/blocs/product_detail_bloc/ProductDetailState.dart';
 import 'package:faiikan/screens/main_screen/category_tab.dart';
 import 'package:faiikan/screens/main_screen/favorite_tab.dart';
 import 'package:faiikan/screens/main_screen/home_tab.dart';
-import 'package:faiikan/screens/main_screen/message_tab.dart';
 import 'package:faiikan/screens/main_screen/profile_tab.dart';
 import 'package:faiikan/screens/post_screen/post_explorer.dart';
 import 'package:faiikan/styles/custom_icon_icons.dart';
 import 'package:faiikan/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'chat_screen/message_tab.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -36,22 +38,18 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     tab = [
-      MultiBlocProvider(
+      if(context.read<AccountBloc>().userId!=0)  MultiBlocProvider(
         providers: [
+
 
           BlocProvider(
             create: (BuildContext context) =>
                 CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
                   ..add(GetCartEvent(
                       person_id:
-                          context.read<AccountBloc>().user.id!.toString())),
+                      context.read<AccountBloc>().userId==0?"0":context.read<AccountBloc>().user!.id!.toString())),
           ),
-          BlocProvider(
-            create: (BuildContext context) =>
-                ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))
-                  ..add(ProductLoadEvent(
-                      SortBy: 0, userId: context.read<AccountBloc>().user.id!)),
-          ),
+
 //          BlocProvider<ProductDetailBloc>(
 //            create: (BuildContext context) {
 //              return ProductDetailBloc(InitialProductDetail());
@@ -59,47 +57,44 @@ class _MainScreenState extends State<MainScreen> {
 //          ),
         ],
         child: HomeScreen(),
-      ),
+      )
+      else HomeScreen(),
 
+      BlocProvider(
+          create: (_) => CategoryBloc( LoadingCategory())..add(InitiateEvent(catId: 16)),
+          child: BlocProvider(
+            create: (BuildContext context) =>
+            CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
+              ..add(GetCartEvent(
+                  person_id:
+                  context.read<AccountBloc>().userId==0?"0":context.read<AccountBloc>().user!.id!.toString())),
+            child: CategoryScreen(userId: context.read<AccountBloc>().userId==0?0:context
+                .read<AccountBloc>()
+                .user!
+                .id!,),
+          )),
+      BlocProvider.value(value: context.read<AccountBloc>(),child: MessageScreen()),
       PostExplorer(),
-      MessageScreen(),
+
       MultiBlocProvider(
         providers: [
-          BlocProvider(
+         if(context.read<AccountBloc>().userId!=0) BlocProvider(
             create: (BuildContext context) =>
                 CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
                   ..add(GetCartEvent(
                       person_id:
-                          context.read<AccountBloc>().user.id!.toString())),
+                          context.read<AccountBloc>().user!.id!.toString())),
           ),
-          BlocProvider(
-            create: (BuildContext context) =>
-                FavoriteBloc(InitialFavorite(data: []))
-                  ..add(FavoriteLoadEvent(
-                      person_id:
-                          context.read<AccountBloc>().user.id!.toString())),
-          )
-        ],
-        child: FavoriteScreen(),
-      ),
-      MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (BuildContext context) =>
-                CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
-                  ..add(GetCartEvent(
-                      person_id:
-                          context.read<AccountBloc>().user.id!.toString())),
-          ),
+          BlocProvider.value(value: context.read<AccountBloc>()),
           BlocProvider(
             create: (BuildContext context) =>
                 ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))
                   ..add(ProductLoadEvent(
-                      SortBy: 0, userId: context.read<AccountBloc>().user.id!)),
+                      SortBy: 0, userId: context.read<AccountBloc>().userId==0?0:context.read<AccountBloc>().user!.id!)),
           ),
         ],
         child: ProfileScreen(
-          userId: context.read<AccountBloc>().user.id!,
+          userId: context.read<AccountBloc>().userId==0?0:context.read<AccountBloc>().user!.id!,
         ),
       )
     ];
@@ -109,50 +104,53 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 0,
-      child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentIndex,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Color(0xFFF05A5A),
-          unselectedFontSize: 14,
-          unselectedIconTheme: IconThemeData(size: 20, color: Colors.black54),
-          backgroundColor: Colors.white,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text("Trang chủ"),
-              backgroundColor: Color(0xffF05A5A),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CustomIcon.category),
-              title: Text("Bài viết"),
-              backgroundColor: Color(0xffF05A5A),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CustomIcon.message),
-              title: Text("Tin nhắn"),
-              backgroundColor: Color(0xffF05A5A),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              title: Text("Yêu thích"),
-              backgroundColor: Color(0xffF05A5A),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              title: Text("Tôi"),
-              backgroundColor: Color(0xffF05A5A),
-            ),
-          ],
-          onTap: (index) {
-            setState(() {
-              currentIndex = index;
-            });
-          },
+    return BlocBuilder<AccountBloc,AccountState>(
+
+      builder: (context,state) =>DefaultTabController(
+        length: 5,
+        child: Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: currentIndex,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Color(0xFFF05A5A),
+            unselectedFontSize: 14,
+            unselectedIconTheme: IconThemeData(size: 20, color: Colors.black54),
+            backgroundColor: Colors.white,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text("Trang chủ"),
+                backgroundColor: Color(0xffF05A5A),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(CustomIcon.category),
+                title: Text("Danh mục"),
+                backgroundColor: Color(0xffF05A5A),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(CustomIcon.message),
+                title: Text("Tin nhắn"),
+                backgroundColor: Color(0xffF05A5A),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.explore),
+                title: Text("Bài viết"),
+                backgroundColor: Color(0xffF05A5A),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle),
+                title: Text("Tôi"),
+                backgroundColor: Color(0xffF05A5A),
+              ),
+            ],
+            onTap: (index) {
+              setState(() {
+                currentIndex = index;
+              });
+            },
+          ),
+          body: tab[currentIndex],
         ),
-        body: tab[currentIndex],
       ),
     );
   }

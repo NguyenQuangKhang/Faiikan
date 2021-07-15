@@ -18,8 +18,10 @@ class SimilarProductScreen extends StatefulWidget {
   final Product interactingProduct;
   final int userId;
 
-  const SimilarProductScreen(
-      {required this.interactingProduct, required this.userId});
+  const SimilarProductScreen({
+    required this.interactingProduct,
+    required this.userId,
+  });
 
   @override
   _SimilarProductScreenState createState() => _SimilarProductScreenState();
@@ -46,12 +48,15 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text("Sản phẩm tương tự",style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-          color: Colors.black,
-        ),),
+        title: Text(
+          "Sản phẩm tương tự",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+            color: Colors.black,
+          ),
+        ),
         leading: BackButton(
           onPressed: () {
             Navigator.pop(context);
@@ -66,9 +71,17 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
               Container(
                 margin: EdgeInsets.all(10),
                 padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(color: Colors.white,boxShadow: [
-                  BoxShadow(color: Colors.redAccent.withOpacity(0.5),offset: Offset(0,0),spreadRadius: 1,blurRadius: 2)
-                ],border: Border.all(color: Colors.redAccent.withOpacity(0.5))),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.redAccent.withOpacity(0.5),
+                          offset: Offset(0, 0),
+                          spreadRadius: 1,
+                          blurRadius: 2)
+                    ],
+                    border:
+                        Border.all(color: Colors.redAccent.withOpacity(0.5))),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -121,7 +134,9 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                SizedBox(width: 5,),
+                                SizedBox(
+                                  width: 5,
+                                ),
                                 widget.interactingProduct.promotionPercent != 0
                                     ? Align(
                                         alignment: Alignment.centerLeft,
@@ -139,7 +154,9 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
                                         ),
                                       )
                                     : Container(),
-                                SizedBox(width: 5,),
+                                SizedBox(
+                                  width: 5,
+                                ),
                                 widget.interactingProduct.promotionPercent != 0
                                     ? Container(
 //            padding: EdgeInsets.symmetric(horizontal: 5,vertical: 3),
@@ -177,20 +194,50 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
               Positioned(
                   bottom: 20,
                   right: 20,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.redAccent,
-                        )),
-                    child: Text(
-                      "Mua ngay",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 16,
-                        letterSpacing: 0.5,
-                        fontWeight: FontWeight.w600
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider(
+                                            create: (_) => ProductDetailBloc(
+                                                InitialProductDetail())
+                                              ..add(ProductDetailLoadEvent(
+                                                id: widget
+                                                    .interactingProduct.id,
+                                                person_id:
+                                                    widget.userId.toString(),
+                                              ))),
+                                        BlocProvider.value(
+                                          value: context.read<CartBloc>(),
+                                        ),
+                                      ],
+                                      child: ProductDetail(
+                                        userId: widget.userId,
+                                        percentStar: widget
+                                            .interactingProduct.percentStar,
+                                        countRating: widget
+                                            .interactingProduct.countRating,
+                                        price: widget.interactingProduct.price,
+                                        productId: widget.interactingProduct.id,
+                                      ))));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.redAccent,
+                          )),
+                      child: Text(
+                        "Mua ngay",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            letterSpacing: 0.5,
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                   )),
@@ -208,7 +255,10 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
               ),
             ),
           ),
-          Container(height: 5,color: Color(0xffE7E7E7),),
+          Container(
+            height: 5,
+            color: Color(0xffE7E7E7),
+          ),
           Expanded(
             child: BlocBuilder<SimilarProductBloc, SimilarProductState>(
               builder: (context, state) {
@@ -240,7 +290,7 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
                                             22 / 5) /
                                         (MediaQuery.of(context).size.height /
                                                 3 -
-                                            2.5),
+                                            2),
                                 mainAxisSpacing: 5,
                                 crossAxisSpacing: 5,
                                 //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
@@ -250,9 +300,7 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
                                   return GestureDetector(
                                       child: ProductCard(
                                         hasPopupMenu: false,
-                                        onTapSimilar: () {
-
-                                        },
+                                        onTapSimilar: () {},
                                         onTapFavorite: () {},
                                         height:
                                             MediaQuery.of(context).size.height /

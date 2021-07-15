@@ -151,6 +151,27 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         this.add(GetCartEvent(person_id: userId));
       }
     }
+    if (event is DeleteListCartItemEvent) {
+      try {
+        for(int i =0;i<event.id.length;i++)
+        {
+          await http.delete(
+            Uri.parse("http://$server:8080/api/v1/cart/${event.id[i]}/remove"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+          );
+        }
+        yield DeleteListItemSuccessfulState(
+            data: list_data,
+            discount: state.discount,
+            totalPrice: (totalPrice - totalPrice * state.discount).toInt());
+      } catch (e) {
+        print(e.toString());
+        yield ErrorCart(error: e.toString());
+        this.add(GetCartEvent(person_id: userId));
+      }
+    }
     if (event is CheckItemCartEvent) {
       list_data[event.index].isChosen = event.value;
 
@@ -240,16 +261,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             });
-        if (state is CartLoadedState)
-          yield CartLoaded2State(
+
+          yield CreateOrderSuccessfulState(
               data: list_data,
               discount: state.discount,
               totalPrice: (totalPrice - totalPrice * state.discount).toInt());
-        else
-          yield CartLoadedState(
-              data: list_data,
-              discount: state.discount,
-              totalPrice: (totalPrice - totalPrice * state.discount).toInt());
+
       }
   }
 }

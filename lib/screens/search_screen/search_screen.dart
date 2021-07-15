@@ -83,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 fontSize: 16,
                 color: Colors.grey,
                 letterSpacing: 0.5,
-              )),
+              ),),
           onChanged: (value) {
             setState(() {});
             if (controller.text.isEmpty) {
@@ -330,7 +330,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                               .size
                                                               .height /
                                                           3 -
-                                                      2.5),
+                                                      2),
                                           mainAxisSpacing: 5,
                                           crossAxisSpacing: 5,
                                           //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,

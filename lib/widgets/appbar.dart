@@ -77,14 +77,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                                   ..add(InitiateSearchEvent(
                                                       userId: context
                                                           .read<AccountBloc>()
-                                                          .user
+                                                          .user!
                                                           .id!
                                                           .toString())),
                                             child: BlocProvider.value(
                                               value: context.read<CartBloc>(),
                                               child: SearchScreen(userId:context
                                                   .read<AccountBloc>()
-                                                  .user
+                                                  .user!
                                                   .id!
                                                    ,),
                                             ),
@@ -160,7 +160,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   width: 1,
                                 )),
                             child: Center(
-                              child: BlocBuilder<CartBloc, CartState>(
+                              child: context.read<AccountBloc>().userId==0? Text(
+                              "",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10),
+                            ): BlocBuilder<CartBloc, CartState>(
                                 builder: (context, state) {
                                   if (state is InitialCart)
                                     return Text(
@@ -171,7 +177,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                           fontSize: 10),
                                     );
                                   return Text(
-                                    context
+                                   context
                                         .read<CartBloc>()
                                         .list_data
                                         .length

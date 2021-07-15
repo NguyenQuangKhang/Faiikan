@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
@@ -37,36 +38,40 @@ class _Category2DropdownState extends State<Category2Dropdown> {
               color: Colors.white, borderRadius: BorderRadius.circular(5)),
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.only(bottom: 5),
-          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              InkWell(
-                onTap: widget.onTap,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      widget.data.name,
-                      style: TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.w600,letterSpacing: 0.5),
-                    ),
-                    Container(
-                      width: 1,
-                      color: Colors.black54,
+          child: InkWell(
+            onTap: widget.onTap,
+            child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          widget.data.name,
+                          style: TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.w600,letterSpacing: 0.5),
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        color: Colors.black54,
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Xem tất cả",style: TextStyle(color: Color(0xff0C73D2),fontSize: 10,letterSpacing: 0.5,fontWeight: FontWeight.w400,),),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 10,
+                      color: Color(0xff0C73D2),
                     ),
                   ],
                 ),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("Xem tất cả",style: TextStyle(color: Color(0xff0C73D2),fontSize: 10,letterSpacing: 0.5,fontWeight: FontWeight.w400,),),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 10,
-                    color: Color(0xff0C73D2),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       if(widget.data.subCategory.length>0)  Container(
