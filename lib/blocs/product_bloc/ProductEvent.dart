@@ -23,10 +23,10 @@ final int SortBy;
 }
 
 class ProductGetMoreDataEvent extends ProductEvent {
-
+  final String userId;
   final int SortBy;
 
-  ProductGetMoreDataEvent({required this.SortBy});
+  ProductGetMoreDataEvent({required this.SortBy,required this.userId});
 
 
   @override

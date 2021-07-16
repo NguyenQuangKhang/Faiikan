@@ -30,13 +30,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async* {
     if (event is InitiateSearchEvent) {
       yield LoadSearch();
-      final response = await http.get(Uri.parse(
-          "http://$server:8080/api/v1/${event.userId}/get-history-search"));
-      listHistorySearch = json
-          .decode(response.body)
-          .cast<Map<String, dynamic>>()
-          .map<String>((json) => json["keyword"] as String)
-          .toList();
+      if(event.userId != "0") {
+        final response = await http.get(Uri.parse(
+            "http://$server:8080/api/v1/${event.userId}/get-history-search"));
+        listHistorySearch = json
+            .decode(response.body)
+            .cast<Map<String, dynamic>>()
+            .map<String>((json) => json["keyword"] as String)
+            .toList();
+      }
       final response1= await http.get(Uri.parse(
           "http://$server:8080/api/v1/search/hot-search-text"));
       listHotSearch = json
@@ -82,9 +84,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           .cast<Map<String, dynamic>>()
           .map<Product>((json) => Product.fromJson(json["productItemDTO"]))
           .toList();
-      await http.post(Uri.parse(
-          "http://$server:8080/api/v1/${event.userId}/history-search?keyword=${event.text}"));
-      listHistorySearch.add(event.text);
+      if(event.userId != "0") {
+        await http.post(Uri.parse(
+            "http://$server:8080/api/v1/${event
+                .userId}/history-search?keyword=${event.text}"));
+        listHistorySearch.add(event.text);
+      }
       page++;
       yield ShowResultState();
       isSearchingText=false;
@@ -121,9 +126,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
     if(event is RemoveHistorySearchEvent)
       {
-        http.delete(Uri.parse(
-            "http://$server:8080/api/v1/${event.userId}/remove-history-search"));
-        listHistorySearch=[];
+        if(event.userId != "0") {
+          http.delete(Uri.parse(
+              "http://$server:8080/api/v1/${event
+                  .userId}/remove-history-search"));
+          listHistorySearch = [];
+        }
       }
   }
 }

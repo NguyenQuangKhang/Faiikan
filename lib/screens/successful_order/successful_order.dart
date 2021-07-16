@@ -56,7 +56,7 @@ class _SuccessfulOrderState extends State<SuccessfulOrder> {
 //
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent - 10) {
-        context.read<ProductBloc>().add(ProductGetMoreDataEvent(SortBy: 0));
+        context.read<ProductBloc>().add(ProductGetMoreDataEvent(SortBy: 0,userId: context.read<AccountBloc>().userId!.toString()));
       }
     });
   }
@@ -85,38 +85,33 @@ class _SuccessfulOrderState extends State<SuccessfulOrder> {
                   SizedBox(
                     width: 10,
                   ),
-                  InkWell(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => BlocProvider.value(value: context.read<AccountBloc>(),child: MainScreen(),)));
-                    },
-                    child: Expanded(
-                        flex: 1,
-                        child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => BlocProvider.value(
-                                          value: context.read<AccountBloc>(),
-                                          child: MainScreen())));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.redAccent,
-                                  border: Border.all(width: 1, color: Colors.white),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Center(
-                                child: Text(
-                                  "Trang chủ",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                  Expanded(
+                      flex: 1,
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                        value: context.read<AccountBloc>(),
+                                        child: MainScreen())));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.redAccent,
+                                border: Border.all(width: 1, color: Colors.white),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Center(
+                              child: Text(
+                                "Trang chủ",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
-                            ))),
-                  ),
+                            ),
+                          ))),
                   SizedBox(
                     width: 10,
                   ),

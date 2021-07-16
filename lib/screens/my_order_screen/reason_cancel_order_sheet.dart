@@ -8,7 +8,10 @@ class ReasonCancelOrderSheet extends StatefulWidget {
   final int index;
   final String orderId;
 
-  const ReasonCancelOrderSheet({Key? key,required this.index,required this.orderId}) : super(key: key);
+  const ReasonCancelOrderSheet(
+      {Key? key, required this.index, required this.orderId})
+      : super(key: key);
+
   @override
   _ReasonCancelOrderSheetState createState() => _ReasonCancelOrderSheetState();
 }
@@ -18,6 +21,12 @@ class _ReasonCancelOrderSheetState extends State<ReasonCancelOrderSheet> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Container(
+          width: 30,
+          height: 3,
+          margin: EdgeInsets.all(10),
+          color: Color(0xffC4C4C4),
+        ),
         Expanded(
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -32,86 +41,91 @@ class _ReasonCancelOrderSheetState extends State<ReasonCancelOrderSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Stack(
-                    children: [
-                      Row(
-                        children: [
-                          Center(
-                            child: Text(
-                              "Chọn lý do hủy",
-                              style: TextStyle(
-                                  letterSpacing: 0.5,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )
-                        ],
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: CloseButton(
-                          color: Colors.grey,
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      )
-                    ],
+                  Center(
+                    child: Text(
+                      "Lý do hủy đơn",
+                      style: TextStyle(
+                          letterSpacing: 0.5,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
-                  for (int i = 0; i < listReasons.length; i++)
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Checkbox(
-                        value: checkboxValue[i],
-                        onChanged: (value) {
-                          setState(() {
-                            checkboxValue[i] = value!;
-                          });
-                        },
-                        activeColor: Color(0xffF34646),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: listReasons.length,
+                      itemBuilder: (context, i) => Container(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Checkbox(
+                              value: checkboxValue[i],
+                              shape: CircleBorder(),
+                              onChanged: (value) {
+                                setState(() {
+                                  checkboxValue[i] = value!;
+                                });
+                              },
+                              activeColor: Color(0xffF34646),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Text(
+                                listReasons[i],
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 16,
+                                    letterSpacing: 0.5),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
+                  ),
                 ],
               ),
             ),
           ),
         ),
+        SizedBox(height: 10,),
         Container(
-          margin: EdgeInsets.only(top: 2),
-          decoration: BoxDecoration(boxShadow: [
+          margin: EdgeInsets.only(bottom: 2,top: 10, left: 10, right: 10),
+          decoration:
+              BoxDecoration(borderRadius: BorderRadius.circular(5), boxShadow: [
             BoxShadow(
                 color: Colors.grey,
                 spreadRadius: 1,
                 blurRadius: 2,
                 offset: Offset(0, 0))
           ]),
-          padding: EdgeInsets.all(8),
           child: InkWell(
-            onTap: (){
-context.read<MyOrderBloc>().add(UpdateSttMyOrderEvent(orderId: widget.orderId, status: "5", index: widget.index));
+            onTap: () {
+              if (checkboxValue.where((element) => element == true).isNotEmpty)  {
+                context.read<MyOrderBloc>().add(UpdateSttMyOrderEvent(
+                    orderId: widget.orderId, status: "5", index: widget.index));
+                Navigator.pop(context);
+                Navigator.pop(context);
+              }
             },
             child: Container(
+              padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
-                  color:
-                      checkboxValue.where((element) => element == true).length > 0
-                          ? Colors.redAccent
-                          : Color(0xffC4C4C4).withOpacity(0.5),
+                  color: Colors.redAccent,
                   borderRadius: BorderRadius.circular(3)),
               child: Center(
                 child: Text(
-                  "Đồng ý",
+                  "Hủy đơn",
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color:
-                        checkboxValue.where((element) => element == true).length >
-                                0
-                            ? Colors.white
-                            : Colors.grey,
+                    color: Colors.white,
                     letterSpacing: 0.5,
                   ),
                 ),

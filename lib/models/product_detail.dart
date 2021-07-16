@@ -12,8 +12,7 @@ class ProductDetailed {
   late int _orderCount;
   late bool _freeShip;
   late Category _category;
-  late String _categories;
-  late String _brand;
+  late Brand? _brand;
   late String _material;
   late String _purpose;
   late String _suitableSeason;
@@ -54,9 +53,8 @@ class ProductDetailed {
 
   Category get category => _category;
 
-  String get categories => _categories;
 
-  String get brand => _brand;
+  Brand? get brand => _brand;
 
   String get material => _material;
 
@@ -91,7 +89,7 @@ class ProductDetailed {
       required bool freeShip,
       required Category category,
       required String categories,
-      required String brand,
+      required Brand? brand,
       required String material,
       required String purpose,
       required String suitableSeason,
@@ -116,7 +114,6 @@ class ProductDetailed {
     _orderCount = orderCount;
     _freeShip = freeShip;
     _category = category;
-    _categories = categories;
     _brand = brand;
     _material = material;
     _purpose = purpose;
@@ -147,8 +144,9 @@ class ProductDetailed {
     _category = (json["category"] != null
         ? Category.fromJson(json["category"])
         : null)!;
-    _categories = json["categories"];
-    _brand = json["brand"];
+    _brand =  json["brand"] !=null?
+    Brand.fromJson(json["brand"])
+    : null;
     _material = json["material"];
     _ratings = (json["ratings"] != null ? Ratings.fromJson(json["ratings"]) : null)!;
     _ratingStar = (json["ratingStar"] != null ? RatingStar.fromJson(json["ratingStar"]) : null)!;
@@ -189,7 +187,7 @@ class ProductDetailed {
     if (_category != null) {
       map["category"] = _category.toJson();
     }
-    map["categories"] = _categories;
+
     map["brand"] = _brand;
     map["material"] = _material;
     if (_ratings != null) {
@@ -211,6 +209,39 @@ class ProductDetailed {
     }
     return map;
   }
+}
+class Brand {
+  int? _id;
+  String? _name;
+  String? _icon;
+
+  int? get id => _id;
+  String? get name => _name;
+  String? get icon => _icon;
+
+  Brand({
+    int? id,
+    String? name,
+    String? icon}){
+    _id = id;
+    _name = name;
+    _icon = icon;
+  }
+
+  Brand.fromJson(dynamic json) {
+    _id = json["id"];
+    _name = json["name"];
+    _icon = json["icon"];
+  }
+
+  Map<String, dynamic> toJson() {
+    var map = <String, dynamic>{};
+    map["id"] = _id;
+    map["name"] = _name;
+    map["icon"] = _icon;
+    return map;
+  }
+
 }
 
 class Option_products {

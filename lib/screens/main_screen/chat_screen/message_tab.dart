@@ -36,7 +36,7 @@ class _MessageScreenState extends State<MessageScreen> with LocalNotificationVie
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return context.read<AccountBloc>().userId==0?BlocProvider.value(value: context.read<AccountBloc>(),child: RegisterAndLoginScreen(initialIndex: 1,),):Scaffold(
+    return context.read<AccountBloc>().userId==0?BlocProvider.value(value: context.read<AccountBloc>(),child: RegisterAndLoginScreen(initialIndex: 1,),):Scaffold(backgroundColor: Colors.blue.withOpacity(0.2),
       appBar: AppBar(centerTitle: true,leading: Container(),backgroundColor: Colors.white,title: Center(child: Text("Chat List",style: TextStyle(color: Colors.black),),),),
       body:  StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
@@ -50,7 +50,7 @@ class _MessageScreenState extends State<MessageScreen> with LocalNotificationVie
               children: [
                 ListView(
                     children: userSnapshot.data!.docs.map((userData) {
-                      print(context.read<AccountBloc>().user!.id.toString() !='24071999');
+
                       if (userData['userId'] == context.read<AccountBloc>().user!.id.toString()) {
                         return Container();
                       } else if(context.read<AccountBloc>().user!.id.toString() !='24071999')
@@ -66,55 +66,78 @@ class _MessageScreenState extends State<MessageScreen> with LocalNotificationVie
                                   isEqualTo: "24071999")
                                   .snapshots(),
                               builder: (context, chatListSnapshot) {
-                                return ListTile(
-                                  leading: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: ImageController.instance
-                                        .cachedImage(userData['userImageUrl']),
-                                  ),
-                                  title: Text(userData['name']),
-                                  subtitle: Text((chatListSnapshot.hasData &&
-                                      chatListSnapshot.data!.docs.length >
-                                          0)
-                                      ? chatListSnapshot.data!.docs[0]
-                                  ['lastChat']
-                                      : userData['intro']),
-                                  trailing: Padding(
-                                      padding:
-                                      const EdgeInsets.fromLTRB(0, 8, 4, 4),
-                                      child: (chatListSnapshot.hasData &&
-                                          chatListSnapshot
-                                              .data!.docs.length >
-                                              0)
-                                          ? Container(
-                                        width: 60,
-                                        height: 50,
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              (chatListSnapshot.hasData &&
-                                                  chatListSnapshot
-                                                      .data!
-                                                      .docs
-                                                      .length >
-                                                      0)
-                                                  ? readTimestamp(
-                                                  chatListSnapshot
-                                                      .data!
-                                                      .docs[0]
-                                                  ['timestamp'])
-                                                  : '',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  size.width * 0.03),
-                                            ),
-                                            Padding(
-                                                padding: const EdgeInsets
-                                                    .fromLTRB(0, 5, 0, 0),
-                                                child: CircleAvatar(
-                                                  radius: 9,
-                                                  child: Text(
-                                                    (chatListSnapshot.data!
+                                return Container(
+                                  color: Colors.white,
+                                  child: ListTile(
+                                    leading: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: ImageController.instance
+                                          .cachedImage(userData['userImageUrl']),
+                                    ),
+                                    title: Text(userData['name']),
+                                    subtitle: Text((chatListSnapshot.hasData &&
+                                        chatListSnapshot.data!.docs.length >
+                                            0)
+                                        ? chatListSnapshot.data!.docs[0]
+                                    ['lastChat']
+                                        : userData['intro']),
+                                    trailing: Padding(
+                                        padding:
+                                        const EdgeInsets.fromLTRB(0, 8, 4, 4),
+                                        child: (chatListSnapshot.hasData &&
+                                            chatListSnapshot
+                                                .data!.docs.length >
+                                                0)
+                                            ? Container(
+                                          width: 60,
+                                          height: 50,
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                (chatListSnapshot.hasData &&
+                                                    chatListSnapshot
+                                                        .data!
+                                                        .docs
+                                                        .length >
+                                                        0)
+                                                    ? readTimestamp(
+                                                    chatListSnapshot
+                                                        .data!
+                                                        .docs[0]
+                                                    ['timestamp'])
+                                                    : '',
+                                                style: TextStyle(
+                                                    fontSize:
+                                                    size.width * 0.03),
+                                              ),
+                                              Padding(
+                                                  padding: const EdgeInsets
+                                                      .fromLTRB(0, 5, 0, 0),
+                                                  child: CircleAvatar(
+                                                    radius: 9,
+                                                    child: Text(
+                                                      (chatListSnapshot.data!
+                                                          .docs[0]
+                                                          .data()
+                                                      as Map<
+                                                          String,
+                                                          dynamic>)[
+                                                      'badgeCount'] ==
+                                                          null
+                                                          ? ''
+                                                          : (((chatListSnapshot
+                                                          .data!
+                                                          .docs[
+                                                      0]
+                                                          .data() as Map<String, dynamic>)['badgeCount'] !=
+                                                          0
+                                                          ? '${(chatListSnapshot.data!.docs[0].data() as Map<String, dynamic>)['badgeCount']}'
+                                                          : '')),
+                                                      style: TextStyle(
+                                                          fontSize: 10),
+                                                    ),
+                                                    backgroundColor: (chatListSnapshot
+                                                        .data!
                                                         .docs[0]
                                                         .data()
                                                     as Map<
@@ -122,50 +145,30 @@ class _MessageScreenState extends State<MessageScreen> with LocalNotificationVie
                                                         dynamic>)[
                                                     'badgeCount'] ==
                                                         null
-                                                        ? ''
-                                                        : (((chatListSnapshot
+                                                        ? Colors.transparent
+                                                        : (chatListSnapshot
                                                         .data!
-                                                        .docs[
-                                                    0]
-                                                        .data() as Map<String, dynamic>)['badgeCount'] !=
+                                                        .docs[0]
+                                                    [
+                                                    'badgeCount'] !=
                                                         0
-                                                        ? '${(chatListSnapshot.data!.docs[0].data() as Map<String, dynamic>)['badgeCount']}'
-                                                        : '')),
-                                                    style: TextStyle(
-                                                        fontSize: 10),
-                                                  ),
-                                                  backgroundColor: (chatListSnapshot
-                                                      .data!
-                                                      .docs[0]
-                                                      .data()
-                                                  as Map<
-                                                      String,
-                                                      dynamic>)[
-                                                  'badgeCount'] ==
-                                                      null
-                                                      ? Colors.transparent
-                                                      : (chatListSnapshot
-                                                      .data!
-                                                      .docs[0]
-                                                  [
-                                                  'badgeCount'] !=
-                                                      0
-                                                      ? Colors
-                                                      .red[400]
-                                                      : Colors
-                                                      .transparent),
-                                                  foregroundColor:
-                                                  Colors.white,
-                                                )),
-                                          ],
-                                        ),
-                                      )
-                                          : Text('')),
-                                  onTap: () => _moveTochatRoom(
-                                      userData['FCMToken'],
-                                      userData['userId'],
-                                      userData['name'],
-                                      userData['userImageUrl']),
+                                                        ? Colors
+                                                        .red[400]
+                                                        : Colors
+                                                        .transparent),
+                                                    foregroundColor:
+                                                    Colors.white,
+                                                  )),
+                                            ],
+                                          ),
+                                        )
+                                            : Text('')),
+                                    onTap: () => _moveTochatRoom(
+                                        userData['FCMToken'],
+                                        userData['userId'],
+                                        userData['name'],
+                                        userData['userImageUrl']),
+                                  ),
                                 );
                               });
                         }
@@ -322,7 +325,7 @@ class _MessageScreenState extends State<MessageScreen> with LocalNotificationVie
               builder: (_) => ChatRoom(
                   context.read<AccountBloc>().user!.id.toString(),
                   context.read<AccountBloc>().user!.name ?? "",
-                  context.read<AccountBloc>().user!.imageAvatar?.link ?? "",
+                  context.read<AccountBloc>().user!.imageUrl!,
                   selectedUserToken,
                   selectedUserID,
                   chatID,

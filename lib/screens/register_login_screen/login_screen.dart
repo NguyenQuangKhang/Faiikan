@@ -152,16 +152,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         bloc: _loginSocialBloc,
                         listener: (context, state) {
                           if (state is LoginSocialLoading) {
-                            LoadingManager().show(context);
+
                           }
                           else if (state is LoginSocialSuccess) {
+
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (_) =>
                                     BlocProvider.value(value: context.read<AccountBloc>()..add(InitialAccount()),
                                         child: MainScreen())));
 
                           } else if (state is LoginSocialFailure) {
-                            LoadingManager().hide(context);
+
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error),duration: Duration(seconds: 3),));
 
                           }

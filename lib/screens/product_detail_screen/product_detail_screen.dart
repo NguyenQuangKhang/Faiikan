@@ -1403,10 +1403,11 @@ class _ProductDetailState extends State<ProductDetail>
                                       padding: const EdgeInsets.all(10),
                                       child: Column(
                                         children: [
-                                          ProductPropertyDetail(
+                                      if(productDetailBloc
+                                          .productDetail.brand !=null)    ProductPropertyDetail(
                                             firstText: "THƯƠNG HIỆU",
                                             secondText: productDetailBloc
-                                                .productDetail.brand,
+                                                .productDetail.brand!.name!,
                                           ),
                                           ProductPropertyDetail(
                                             firstText: "CHẤT LIỆU",
@@ -3800,10 +3801,11 @@ class _ProductDetailState extends State<ProductDetail>
                                     padding: const EdgeInsets.all(10),
                                     child: Column(
                                       children: [
-                                        ProductPropertyDetail(
+                                 if(productDetailBloc
+                                     .productDetail.brand!=null)       ProductPropertyDetail(
                                           firstText: "THƯƠNG HIỆU",
                                           secondText: productDetailBloc
-                                              .productDetail.brand,
+                                              .productDetail.brand!.name!,
                                         ),
                                         ProductPropertyDetail(
                                           firstText: "CHẤT LIỆU",
@@ -4390,7 +4392,7 @@ class _ProductDetailState extends State<ProductDetail>
 //                                  ),
 // SizedBox(height: 10,),
                                   /// Có thể bạn cũng thích
-                                if(context.read<AccountBloc>().userId !=0)  Row(
+                              /*  if(context.read<AccountBloc>().userId !=0)*/  Row(
                                     children: [
                                       Container(
                                         width:
@@ -4413,7 +4415,7 @@ class _ProductDetailState extends State<ProductDetail>
                                   SizedBox(
                                     height: 5,
                                   ),
-                                 if(context.read<AccountBloc>().userId !=0) Stack(
+                                 /*if(context.read<AccountBloc>().userId !=0)*/ Stack(
                                     children: <Widget>[
                                       Container(
 //                            padding: EdgeInsets.symmetric(
@@ -4834,9 +4836,15 @@ class _ProductDetailState extends State<ProductDetail>
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (_) {
                                       return BlocProvider.value(
-                                        value: context.read<CartBloc>(),
-                                        child: CartScreen(
-                                          person_id: widget.userId,
+                                        value: context.read<AccountBloc>(),
+                                        child: BlocProvider.value(
+                                          value: context.read<ProductBloc>(),
+                                          child: BlocProvider.value(
+                                            value: context.read<CartBloc>(),
+                                            child: CartScreen(
+                                              person_id: widget.userId,
+                                            ),
+                                          ),
                                         ),
                                       );
                                     }));

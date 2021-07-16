@@ -1,9 +1,12 @@
+import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_event.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_state.dart';
 import 'package:faiikan/blocs/order_detail_bloc/order_detail_bloc.dart';
 import 'package:faiikan/blocs/order_detail_bloc/order_detail_event.dart';
 import 'package:faiikan/blocs/order_detail_bloc/order_detail_state.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/models/cart_item.dart' as cartItem;
 import 'package:faiikan/models/order.dart';
 import 'package:faiikan/screens/my_order_screen/order_item_detail.dart';
@@ -18,7 +21,7 @@ List<String> list_status = [
   "Đang xử lý",
   "Đang giao",
   "Đã giao",
-  "Đã Hủy",
+  "Đã hủy",
 ];
 
 class MyOrderScreen extends StatefulWidget {
@@ -92,11 +95,21 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                       MyOrderBloc(LoadMyOrder())
                         ..add(InitiateMyOrderEvent(
                             person_id: widget.userId, status: value)),
-                      child: MyOrder_TabPage(
-                        status: value,
-                        userId: widget.userId,
+                      child:  BlocProvider.value(
+                        value: context.read<CartBloc>(),
+                    child: BlocProvider.value(
+                    value: context.read<ProductBloc>(),
+                    child: BlocProvider.value(
+                    value: context.read<AccountBloc>(),
+                        child: MyOrder_TabPage(
+                          onChanged: (value){
+                            print("asd");
+                          },
+                          status: value,
+                          userId: widget.userId,
+                        ),
                       ),
-                    );
+                    )));
                   }).toList(),
                 ),
               ),
@@ -105,9 +118,10 @@ class _MyOrderScreenState extends State<MyOrderScreen>
 }
 
 class MyOrder_TabPage extends StatefulWidget {
+  MyOrder_TabPage({required this.status,required this.userId,required this.onChanged});
+ final ValueChanged<String> onChanged;
   final String status;
   final String userId;
-  MyOrder_TabPage({required this.status,required this.userId});
 
   List<bool> isExpanded = [];
 
@@ -118,77 +132,99 @@ class MyOrder_TabPage extends StatefulWidget {
 class _MyOrder_TabPageState extends State<MyOrder_TabPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyOrderBloc, MyOrderState>(builder: (context, state) {
-      if (state is InitialMyOrderState) {
-        if (widget.isExpanded.isEmpty) {
-          for (int a = 0; a < context
-              .read<MyOrderBloc>()
-              .myOrders
-              .length; a++) {
-            widget.isExpanded.add(false);
-          }
-        }
-        if (context
-            .read<MyOrderBloc>()
-            .myOrders
-            .isEmpty)
-          return Container(color: Color(0xffC4C4C4).withOpacity(0.5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, children: [
-              Image.asset(
-                "assets/images/emptyOrder.png",
-              ),
-              SizedBox(height: 5,),
-              Text("Chưa có đơn hàng.", style: TextStyle(
-                  letterSpacing: 0.5, color: Colors.black54, fontSize: 14),)
+    return Scaffold(
+      body: BlocListener(
+        bloc: context.read<MyOrderBloc>(),
+        listener: (context,state)
+        {
+          if(state is UpdateMyOrderState)
+            {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child:Text("Hủy đơn hàng thành công!")),duration:Duration(seconds: 2)));
+            }
+        },
+        child: BlocBuilder<MyOrderBloc, MyOrderState>(builder: (context, state) {
+          if (state is LoadMyOrder)
+            return Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.redAccent,
+                ));
+            else {
+            if (widget.isExpanded.isEmpty) {
+              for (int a = 0; a < context
+                  .read<MyOrderBloc>()
+                  .myOrders
+                  .length; a++) {
+                widget.isExpanded.add(false);
+              }
+            }
+            if (context
+                .read<MyOrderBloc>()
+                .myOrders
+                .isEmpty)
+              return Container(color: Color(0xffC4C4C4).withOpacity(0.5), width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Image.asset(
+                    "assets/images/emptyOrder.png",
+                  ),
+                  SizedBox(height: 5,),
+                  Text("Chưa có đơn hàng.", style: TextStyle(
+                      letterSpacing: 0.5, color: Colors.black54, fontSize: 14),)
 
-            ],),);
-        return Container(
-          color: Color(0xffC4C4C4).withOpacity(0.5),
-          child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Stack(
-                children: [
-                  Column(
-                      children: List.generate(
-                          context
-                              .read<MyOrderBloc>()
-                              .myOrders
-                              .length, (index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        BlocProvider(
-                                          create: (_) =>
-                                          OrderDetailBloc(LoadingOrderDetail())
-                                            ..add(InitiateOrderDetailEvent(
-                                                orderId: context
-                                                    .read<MyOrderBloc>()
-                                                    .myOrders[index]
-                                                    .id!
-                                                    .toString())),
-                                          child: BlocProvider.value(
-                                            value: context.read<MyOrderBloc>(),
-                                            child: OrderDetailScreen(
-                                              status: widget.status,
-                                              userId: widget.userId,
-                                              index: index,
-                                              orderId: context.read<MyOrderBloc>().myOrders[index].id!.toString(),
-                                            ),
-                                          ),
-                                        )));
-                          },
-                          child: Container(
-                            margin: index != 0
-                                ? EdgeInsets.only(
-                                left: 0, bottom: 10, right: 0)
-                                : EdgeInsets.only(
-                                left: 0, bottom: 10, right: 0, top: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
+                ],),);
+            return Container(
+              color: Color(0xffC4C4C4).withOpacity(0.5),
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Stack(
+                    children: [
+                      Column(
+                          children: List.generate(
+                              context
+                                  .read<MyOrderBloc>()
+                                  .myOrders
+                                  .length, (index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            BlocProvider(
+                                              create: (_) =>
+                                              OrderDetailBloc(LoadingOrderDetail())
+                                                ..add(InitiateOrderDetailEvent(
+                                                    orderId: context
+                                                        .read<MyOrderBloc>()
+                                                        .myOrders[index]
+                                                        .id!
+                                                        .toString())),
+                                              child: BlocProvider.value(
+                                                value: context.read<MyOrderBloc>(),
+                                                child:  BlocProvider.value(
+                                                  value: context.read<CartBloc>(),
+                                                  child: BlocProvider.value(
+                                                    value: context.read<ProductBloc>(),
+                                                    child: BlocProvider.value(
+                                                      value: context.read<AccountBloc>(),
+                                                  child: OrderDetailScreen(
+                                                    status: widget.status,
+                                                    userId: widget.userId,
+                                                    index: index,
+                                                    orderId: context.read<MyOrderBloc>().myOrders[index].id!.toString(),
+                                                  ),
+                                                ),
+                                              ),
+                                            )))));
+                              },
+                              child: Container(
+                                margin: index != 0
+                                    ? EdgeInsets.only(
+                                    left: 0, bottom: 10, right: 0)
+                                    : EdgeInsets.only(
+                                    left: 0, bottom: 10, right: 0, top: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
 //                              boxShadow: [
 //                                BoxShadow(
 //                                  color: Colors.black.withOpacity(0.5),
@@ -198,106 +234,245 @@ class _MyOrder_TabPageState extends State<MyOrder_TabPage> {
 //                                      0, 0), // changes position of shadow
 //                                ),
 //                              ],
-                            ),
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceBetween,
-                                    children: <Widget>[
-                                      Container(
-                                        width: MediaQuery
-                                            .of(context)
-                                            .size
-                                            .width / 2,
-                                        child: Text(
-                                          "Mã đơn hàng: " +
-                                              context
-                                                  .read<MyOrderBloc>()
-                                                  .myOrders[index]
-                                                  .id!
-                                                  .toString(),
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Color(0xff222222),
-                                              fontWeight: FontWeight.w500),
-                                          maxLines: null,
-                                        ),
+                                ),
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
+                                        children: <Widget>[
+                                          Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width / 2,
+                                            child: Text(
+                                              "Mã đơn hàng: " +
+                                                  context
+                                                      .read<MyOrderBloc>()
+                                                      .myOrders[index]
+                                                      .id!
+                                                      .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xff222222),
+                                                  fontWeight: FontWeight.w500),
+                                              maxLines: null,
+                                            ),
+                                          ),
+                                          Text(
+                                            context
+                                                .read<MyOrderBloc>()
+                                                .myOrders[index]
+                                                .status!,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xffDB4313)),
+                                            maxLines: 1,
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        context
-                                            .read<MyOrderBloc>()
-                                            .myOrders[index]
-                                            .status!,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Color(0xffDB4313)),
-                                        maxLines: 1,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: 1,
-                                  color: Colors.black12,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  child: Column(
-                                    children: [
-                                      if (widget.isExpanded[index] == true)
-                                        Column(
-                                          children: List.generate(
-                                              context
-                                                  .read<MyOrderBloc>()
-                                                  .myOrders[index]
-                                                  .listItem!
-                                                  .length, (i) {
-                                            return Column(
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.black12,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 10),
+                                      child: Column(
+                                        children: [
+                                          if (widget.isExpanded[index] == true)
+                                            Column(
+                                              children: List.generate(
+                                                  context
+                                                      .read<MyOrderBloc>()
+                                                      .myOrders[index]
+                                                      .listItem!
+                                                      .length, (i) {
+                                                return Column(
+                                                  children: [
+                                                    OrderItemCard(
+                                                      orderItem: new cartItem
+                                                          .CartItem(
+                                                          cartId: context
+                                                              .read<MyOrderBloc>()
+                                                              .myOrders[index]
+                                                              .listItem![i]
+                                                              .id!,
+                                                          productId: context
+                                                              .read<MyOrderBloc>()
+                                                              .myOrders[index]
+                                                              .listItem![i]
+                                                              .productId!,
+                                                          nameProduct: context
+                                                              .read<MyOrderBloc>()
+                                                              .myOrders[index]
+                                                              .listItem![i]
+                                                              .name!,
+                                                          amount: context
+                                                              .read<MyOrderBloc>()
+                                                              .myOrders[index]
+                                                              .listItem![i]
+                                                              .quantity!,
+                                                          optionProduct: new cartItem
+                                                              .OptionProduct(
+                                                              productOptionId: context
+                                                                  .read<
+                                                                  MyOrderBloc>()
+                                                                  .myOrders[index]
+                                                                  .listItem![i]
+                                                                  .productOptionId!,
+                                                              price: new cartItem
+                                                                  .Price(
+                                                                  id: 0,
+                                                                  value: context
+                                                                      .read<
+                                                                      MyOrderBloc>()
+                                                                      .myOrders[index]
+                                                                      .listItem![i]
+                                                                      .price!
+                                                                      .toDouble()),
+                                                              quantity: new cartItem
+                                                                  .Quantity(
+                                                                  id: 0,
+                                                                  value: context
+                                                                      .read<
+                                                                      MyOrderBloc>()
+                                                                      .myOrders[index]
+                                                                      .listItem![i]
+                                                                      .quantity!),
+                                                              color: new cartItem
+                                                                  .Color(
+                                                                  id: 0,
+                                                                  value: context
+                                                                      .read<
+                                                                      MyOrderBloc>()
+                                                                      .myOrders[index]
+                                                                      .listItem![i]
+                                                                      .color ??
+                                                                      ""),
+                                                              size: new cartItem
+                                                                  .Size(
+                                                                  id: 0,
+                                                                  value:
+                                                                  context
+                                                                      .read<
+                                                                      MyOrderBloc>()
+                                                                      .myOrders[index]
+                                                                      .listItem![i]
+                                                                      .size ??
+                                                                      ""),
+                                                              image: new cartItem
+                                                                  .Image(
+                                                                  id: 0,
+                                                                  value: context
+                                                                      .read<
+                                                                      MyOrderBloc>()
+                                                                      .myOrders[index]
+                                                                      .listItem![i]
+                                                                      .imageUrl!))),
+                                                      isOrderDetail: true,
+                                                      index: 0,
+                                                      userId: 1,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    if (context
+                                                        .read<MyOrderBloc>()
+                                                        .myOrders[index]
+                                                        .listItem!
+                                                        .length >
+                                                        1 &&
+                                                        widget.isExpanded[index] ==
+                                                            false)
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            border: Border(
+                                                                bottom: BorderSide(
+                                                                  color: Colors
+                                                                      .black12,
+                                                                  width: 1,
+                                                                ),
+                                                                top: BorderSide(
+                                                                  color: Colors
+                                                                      .black12,
+                                                                  width: 1,
+                                                                ))),
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 5),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              widget
+                                                                  .isExpanded[index] =
+                                                              true;
+                                                            });
+                                                          },
+                                                          child: Center(
+                                                            child: Text(
+                                                              "Xem thêm sản phẩm",
+                                                              style: TextStyle(
+                                                                color: Colors.black
+                                                                    .withOpacity(
+                                                                    0.5),
+                                                                fontSize: 12,
+                                                                letterSpacing: 0.5,
+                                                                fontWeight:
+                                                                FontWeight.w400,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                  ],
+                                                );
+                                              }),
+                                            )
+                                          else
+                                            Column(
                                               children: [
                                                 OrderItemCard(
-                                                  orderItem: new cartItem
-                                                      .CartItem(
+                                                  orderItem: new cartItem.CartItem(
                                                       cartId: context
                                                           .read<MyOrderBloc>()
                                                           .myOrders[index]
-                                                          .listItem![i]
+                                                          .listItem![0]
                                                           .id!,
                                                       productId: context
                                                           .read<MyOrderBloc>()
                                                           .myOrders[index]
-                                                          .listItem![i]
+                                                          .listItem![0]
                                                           .productId!,
                                                       nameProduct: context
                                                           .read<MyOrderBloc>()
                                                           .myOrders[index]
-                                                          .listItem![i]
+                                                          .listItem![0]
                                                           .name!,
                                                       amount: context
                                                           .read<MyOrderBloc>()
                                                           .myOrders[index]
-                                                          .listItem![i]
+                                                          .listItem![0]
                                                           .quantity!,
                                                       optionProduct: new cartItem
                                                           .OptionProduct(
                                                           productOptionId: context
-                                                              .read<
-                                                              MyOrderBloc>()
+                                                              .read<MyOrderBloc>()
                                                               .myOrders[index]
-                                                              .listItem![i]
+                                                              .listItem![0]
                                                               .productOptionId!,
-                                                          price: new cartItem
-                                                              .Price(
+                                                          price: new cartItem.Price(
                                                               id: 0,
                                                               value: context
                                                                   .read<
                                                                   MyOrderBloc>()
                                                                   .myOrders[index]
-                                                                  .listItem![i]
+                                                                  .listItem![0]
                                                                   .price!
                                                                   .toDouble()),
                                                           quantity: new cartItem
@@ -307,38 +482,33 @@ class _MyOrder_TabPageState extends State<MyOrder_TabPage> {
                                                                   .read<
                                                                   MyOrderBloc>()
                                                                   .myOrders[index]
-                                                                  .listItem![i]
+                                                                  .listItem![0]
                                                                   .quantity!),
-                                                          color: new cartItem
-                                                              .Color(
+                                                          color: new cartItem.Color(
                                                               id: 0,
                                                               value: context
                                                                   .read<
                                                                   MyOrderBloc>()
                                                                   .myOrders[index]
-                                                                  .listItem![i]
+                                                                  .listItem![0]
                                                                   .color ??
                                                                   ""),
-                                                          size: new cartItem
-                                                              .Size(
-                                                              id: 0,
-                                                              value:
-                                                              context
-                                                                  .read<
-                                                                  MyOrderBloc>()
-                                                                  .myOrders[index]
-                                                                  .listItem![i]
-                                                                  .size ??
-                                                                  ""),
-                                                          image: new cartItem
-                                                              .Image(
+                                                          size: new cartItem.Size(
                                                               id: 0,
                                                               value: context
                                                                   .read<
                                                                   MyOrderBloc>()
                                                                   .myOrders[index]
-                                                                  .listItem![i]
-                                                                  .imageUrl!))),
+                                                                  .listItem![0]
+                                                                  .size ??
+                                                                  ""),
+                                                          image:
+                                                          new cartItem.Image(
+                                                              id: 0, value: context
+                                                              .read<MyOrderBloc>()
+                                                              .myOrders[index]
+                                                              .listItem![0]
+                                                              .imageUrl!))),
                                                   isOrderDetail: true,
                                                   index: 0,
                                                   userId: 1,
@@ -358,23 +528,20 @@ class _MyOrder_TabPageState extends State<MyOrder_TabPage> {
                                                     decoration: BoxDecoration(
                                                         border: Border(
                                                             bottom: BorderSide(
-                                                              color: Colors
-                                                                  .black12,
+                                                              color: Colors.black12,
                                                               width: 1,
                                                             ),
                                                             top: BorderSide(
-                                                              color: Colors
-                                                                  .black12,
+                                                              color: Colors.black12,
                                                               width: 1,
                                                             ))),
-                                                    padding: EdgeInsets
-                                                        .symmetric(
+                                                    padding:
+                                                    EdgeInsets.symmetric(
                                                         vertical: 5),
                                                     child: InkWell(
                                                       onTap: () {
                                                         setState(() {
-                                                          widget
-                                                              .isExpanded[index] =
+                                                          widget.isExpanded[index] =
                                                           true;
                                                         });
                                                       },
@@ -383,222 +550,90 @@ class _MyOrder_TabPageState extends State<MyOrder_TabPage> {
                                                           "Xem thêm sản phẩm",
                                                           style: TextStyle(
                                                             color: Colors.black
-                                                                .withOpacity(
-                                                                0.5),
+                                                                .withOpacity(0.5),
                                                             fontSize: 12,
                                                             letterSpacing: 0.5,
-                                                            fontWeight:
-                                                            FontWeight.w400,
+                                                            fontWeight: FontWeight
+                                                                .w400,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
                                               ],
-                                            );
-                                          }),
-                                        )
-                                      else
-                                        Column(
-                                          children: [
-                                            OrderItemCard(
-                                              orderItem: new cartItem.CartItem(
-                                                  cartId: context
-                                                      .read<MyOrderBloc>()
-                                                      .myOrders[index]
-                                                      .listItem![0]
-                                                      .id!,
-                                                  productId: context
-                                                      .read<MyOrderBloc>()
-                                                      .myOrders[index]
-                                                      .listItem![0]
-                                                      .productId!,
-                                                  nameProduct: context
-                                                      .read<MyOrderBloc>()
-                                                      .myOrders[index]
-                                                      .listItem![0]
-                                                      .name!,
-                                                  amount: context
-                                                      .read<MyOrderBloc>()
-                                                      .myOrders[index]
-                                                      .listItem![0]
-                                                      .quantity!,
-                                                  optionProduct: new cartItem
-                                                      .OptionProduct(
-                                                      productOptionId: context
-                                                          .read<MyOrderBloc>()
-                                                          .myOrders[index]
-                                                          .listItem![0]
-                                                          .productOptionId!,
-                                                      price: new cartItem.Price(
-                                                          id: 0,
-                                                          value: context
-                                                              .read<
-                                                              MyOrderBloc>()
-                                                              .myOrders[index]
-                                                              .listItem![0]
-                                                              .price!
-                                                              .toDouble()),
-                                                      quantity: new cartItem
-                                                          .Quantity(
-                                                          id: 0,
-                                                          value: context
-                                                              .read<
-                                                              MyOrderBloc>()
-                                                              .myOrders[index]
-                                                              .listItem![0]
-                                                              .quantity!),
-                                                      color: new cartItem.Color(
-                                                          id: 0,
-                                                          value: context
-                                                              .read<
-                                                              MyOrderBloc>()
-                                                              .myOrders[index]
-                                                              .listItem![0]
-                                                              .color ??
-                                                              ""),
-                                                      size: new cartItem.Size(
-                                                          id: 0,
-                                                          value: context
-                                                              .read<
-                                                              MyOrderBloc>()
-                                                              .myOrders[index]
-                                                              .listItem![0]
-                                                              .size ??
-                                                              ""),
-                                                      image:
-                                                      new cartItem.Image(
-                                                          id: 0, value: context
-                                                          .read<MyOrderBloc>()
-                                                          .myOrders[index]
-                                                          .listItem![0]
-                                                          .imageUrl!))),
-                                              isOrderDetail: true,
-                                              index: 0,
-                                              userId: 1,
                                             ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            if (context
-                                                .read<MyOrderBloc>()
-                                                .myOrders[index]
-                                                .listItem!
-                                                .length >
-                                                1 &&
-                                                widget.isExpanded[index] ==
-                                                    false)
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    border: Border(
-                                                        bottom: BorderSide(
-                                                          color: Colors.black12,
-                                                          width: 1,
-                                                        ),
-                                                        top: BorderSide(
-                                                          color: Colors.black12,
-                                                          width: 1,
-                                                        ))),
-                                                padding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 5),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      widget.isExpanded[index] =
-                                                      true;
-                                                    });
-                                                  },
-                                                  child: Center(
-                                                    child: Text(
-                                                      "Xem thêm sản phẩm",
+                                          Container(
+                                            padding: EdgeInsets.only(top: 5),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                    Text(
+                                                      "Số Lượng: ",
                                                       style: TextStyle(
-                                                        color: Colors.black
-                                                            .withOpacity(0.5),
-                                                        fontSize: 12,
-                                                        letterSpacing: 0.5,
-                                                        fontWeight: FontWeight
-                                                            .w400,
-                                                      ),
+                                                          fontSize: 12,
+                                                          color: Color(0xff9B9B9B)),
                                                     ),
-                                                  ),
+                                                    Text(
+                                                      context
+                                                          .read<MyOrderBloc>()
+                                                          .myOrders[index]
+                                                          .listItem!
+                                                          .length
+                                                          .toString() +
+                                                          " sản phẩm",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Color(0xff222222),
+                                                          fontWeight: FontWeight
+                                                              .w400),
+                                                    )
+                                                  ],
                                                 ),
-                                              ),
-                                          ],
-                                        ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 5),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Row(
-                                              children: <Widget>[
-                                                Text(
-                                                  "Số Lượng: ",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Color(0xff9B9B9B)),
-                                                ),
-                                                Text(
-                                                  context
-                                                      .read<MyOrderBloc>()
-                                                      .myOrders[index]
-                                                      .listItem!
-                                                      .length
-                                                      .toString() +
-                                                      " sản phẩm",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Color(0xff222222),
-                                                      fontWeight: FontWeight
-                                                          .w400),
+                                                Row(
+                                                  children: <Widget>[
+                                                    Text(
+                                                      "Tổng tiền: ",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Color(0xff9B9B9B)),
+                                                    ),
+                                                    Text(
+                                                      NumberFormat.simpleCurrency(
+                                                          locale: "vi")
+                                                          .format(context
+                                                          .read<MyOrderBloc>()
+                                                          .myOrders[index]
+                                                          .grandPrice)
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Color(0xffF34646),
+                                                          fontWeight: FontWeight
+                                                              .w600),
+                                                    )
+                                                  ],
                                                 )
                                               ],
                                             ),
-                                            Row(
-                                              children: <Widget>[
-                                                Text(
-                                                  "Tổng tiền: ",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Color(0xff9B9B9B)),
-                                                ),
-                                                Text(
-                                                  NumberFormat.simpleCurrency(
-                                                      locale: "vi")
-                                                      .format(context
-                                                      .read<MyOrderBloc>()
-                                                      .myOrders[index]
-                                                      .grandPrice)
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Color(0xffF34646),
-                                                      fontWeight: FontWeight
-                                                          .w600),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      })),
-                ],
-              )),
-        );
-      }
-      return Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.redAccent,
-          ));
-    });
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          })),
+                    ],
+                  )),
+            );
+          }
+
+        }),
+      ),
+    );
   }
 }

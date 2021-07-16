@@ -46,22 +46,6 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
             .toList());
       }
 
-//      final response = await http.post(
-//          Uri.http(
-//            "$server:8080",
-//            "/user/${event.userId}/review-product",
-//          ),
-//          body: {
-//            "orderItem": event.orderItem,
-//            "comment": event.comment,
-//            "star": event.star.toString(),
-//            "incognito": event.incognito.toString(),
-//            "listImage": listImage
-//          },
-//          headers: {
-//            'Content-Type': 'multipart/form-data; charset=UTF-8',
-//          });
-
       var request = http.MultipartRequest(
           'POST',
           Uri.parse(

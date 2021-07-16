@@ -230,6 +230,7 @@ class _CartScreenState extends State<CartScreen> {
                                         children: <Widget>[
                                           OrderItemCard(
                                             userId: widget.person_id,
+
                                             orderItem:
                                                 context.read<CartBloc>().list_data[index],
                                             index: index,
@@ -548,7 +549,7 @@ class _CartScreenState extends State<CartScreen> {
                                       child: BlocProvider(
                                           create: (_) => AddressBloc(LoadAddress())
                                             ..add(InitialAddressEvent(userId: widget.person_id.toString())),
-                                          child:  BlocProvider.value(value: context.read<AccountBloc>(),child:BlocProvider.value(value: context.read<ProductBloc>(),child: PaymentScreen(userId: widget.person_id.toString(),listItems: list_chosen,))))),
+                                          child:  BlocProvider.value(value: context.read<ProductBloc>(),child: BlocProvider.value(value: context.read<AccountBloc>(),child: PaymentScreen(userId: widget.person_id.toString(),listItems: list_chosen,))))),
                                 ));
                           },
                         ),

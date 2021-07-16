@@ -142,390 +142,329 @@ class _SearchScreenState extends State<SearchScreen> {
           },
         ),
       ),
-      body: BlocBuilder<SearchBloc, SearchState>(
-        builder: (context, state) {
-          if (state is InitialSearchState || state is LoadSearch)
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.redAccent,
-              ),
-            );
-          if (state is RecommendSearchState || state is RecommendSearchState2)
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 15,
-                        ),
-                        child: Text(
-                          "Gợi ý tìm kiếm",
-                          style: TextStyle(
-                            fontSize: 18,
-                            letterSpacing: 0.5,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ]),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount:
-                          context.read<SearchBloc>().listRecommendSearch.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                context.read<SearchBloc>().add(SearchTextEvent(
-                                    text: context
-                                        .read<SearchBloc>()
-                                        .listRecommendSearch[index],
-                                    userId: widget.userId.toString()));
-                                controller.text = context
-                                    .read<SearchBloc>()
-                                    .listRecommendSearch[index];
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 10,
-                                  horizontal: 15,
-                                ),
-                                child: Text(
-                                  context
-                                      .read<SearchBloc>()
-                                      .listRecommendSearch[index],
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    letterSpacing: 0.5,
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, state) {
+              if (state is InitialSearchState || state is LoadSearch)
+                return Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
+              if (state is RecommendSearchState || state is RecommendSearchState2)
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 15,
+                            ),
+                            child: Text(
+                              "Gợi ý tìm kiếm",
+                              style: TextStyle(
+                                fontSize: 18,
+                                letterSpacing: 0.5,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Divider(
-                              thickness: 1,
-                              color: Colors.black.withOpacity(0.2),
-                            ),
-                          ],
-                        );
-                      }),
-                )
-              ],
-            );
-          if (state is ShowResultState)
-            return Container(
-              decoration: BoxDecoration(color: Colors.white),
-              child: Stack(
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                  color: Color(0xffE7E7E7),
-                                  width: 5,
-                                ),
-                                bottom: BorderSide(
-                                  color: Color(0xffE7E7E7),
-                                  width: 5,
-                                ))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
+                          ),
+                        ]),
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount:
+                              context.read<SearchBloc>().listRecommendSearch.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  Icons.filter_list,
-                                  size: 30,
-                                  color: Color(0xff222222),
-                                ),
-                                Text(
-                                  "Lọc",
-                                  style: TextStyle(
-                                    color: Color(0xff222222),
-                                    fontSize: 14,
-                                    letterSpacing: 0.5,
-                                    fontWeight: FontWeight.w500,
+                                InkWell(
+                                  onTap: () {
+                                    context.read<SearchBloc>().add(SearchTextEvent(
+                                        text: context
+                                            .read<SearchBloc>()
+                                            .listRecommendSearch[index],
+                                        userId: widget.userId.toString()));
+                                    controller.text = context
+                                        .read<SearchBloc>()
+                                        .listRecommendSearch[index];
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 10,
+                                      horizontal: 15,
+                                    ),
+                                    child: Text(
+                                      context
+                                          .read<SearchBloc>()
+                                          .listRecommendSearch[index],
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        letterSpacing: 0.5,
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                 ),
+                                Divider(
+                                  thickness: 1,
+                                  color: Colors.black.withOpacity(0.2),
+                                ),
                               ],
-                            ),
-                            Row(
+                            );
+                          }),
+                    )
+                  ],
+                );
+              if (state is ShowResultState)
+                return Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    top: BorderSide(
+                                      color: Color(0xffE7E7E7),
+                                      width: 5,
+                                    ),
+                                    bottom: BorderSide(
+                                      color: Color(0xffE7E7E7),
+                                      width: 5,
+                                    ))),
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(
-                                  Icons.refresh_rounded,
-                                  color: Color(0xff222222),
-                                  size: 30,
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.filter_list,
+                                      size: 30,
+                                      color: Color(0xff222222),
+                                    ),
+                                    Text(
+                                      "Lọc",
+                                      style: TextStyle(
+                                        color: Color(0xff222222),
+                                        fontSize: 14,
+                                        letterSpacing: 0.5,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "Phổ biến",
-                                  style: TextStyle(
-                                    color: Color(0xff222222),
-                                    fontSize: 14,
-                                    letterSpacing: 0.5,
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.refresh_rounded,
+                                      color: Color(0xff222222),
+                                      size: 30,
+                                    ),
+                                    Text(
+                                      "Phổ biến",
+                                      style: TextStyle(
+                                        color: Color(0xff222222),
+                                        fontSize: 14,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
 //                  SizedBox(
 //                    height: 10,
 //                  ),
-                      (context
-                          .read<SearchBloc>()
-                          .listSearch
-                          .length ==
-                          0)?
-                      Container(
-                        padding: EdgeInsets.all(30),
-                        child: Center(
-                            child: Text(
-                              "Không tìm thấy sản phẩm nào phù hợp.",
-                              style: TextStyle(
-                                color: Colors.redAccent,
-                                fontSize: 16,
-                                letterSpacing: 0.5,
-                              ),
-                              maxLines: null,
-                            )),
-                      )
-                          :Expanded(
-                            child:
-                              Container(
+                          (context
+                              .read<SearchBloc>()
+                              .listSearch
+                              .length ==
+                              0)?
+                          Container(
+                            padding: EdgeInsets.all(30),
+                            child: Center(
+                                child: Text(
+                                  "Không tìm thấy sản phẩm nào phù hợp.",
+                                  style: TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 16,
+                                    letterSpacing: 0.5,
+                                  ),
+                                  maxLines: null,
+                                )),
+                          )
+                              :Expanded(
+                                child:
+                                  Container(
 //                            padding: EdgeInsets.symmetric(
 //                                horizontal: 5, vertical: 5),
-                                color: Color(0xffE7E7E7),
+                                    color: Color(0xffE7E7E7),
 //                                    height: MediaQuery.of(context).size.height - 130,
-                                child: CustomScrollView(
-                                    shrinkWrap: true,
-                                    primary: false,
-                                    controller: _scrollController,
-                                    scrollDirection: Axis.vertical,
-                                    slivers: <Widget>[
-                                      SliverGrid(
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio:
-                                              (MediaQuery.of(context)
-                                                              .size
-                                                              .width /
-                                                          2 -
-                                                      22 / 5) /
+                                    child: CustomScrollView(
+                                        shrinkWrap: true,
+                                        primary: false,
+                                        controller: _scrollController,
+                                        scrollDirection: Axis.vertical,
+                                        slivers: <Widget>[
+                                          SliverGrid(
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              childAspectRatio:
                                                   (MediaQuery.of(context)
-                                                              .size
-                                                              .height /
-                                                          3 -
-                                                      2),
-                                          mainAxisSpacing: 5,
-                                          crossAxisSpacing: 5,
-                                          //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
-                                        ),
-                                        delegate: SliverChildBuilderDelegate(
-                                          (BuildContext context, int index) {
-                                            return GestureDetector(
-                                                child: ProductCard(
-                                                  onTapSimilar: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (_) =>
-                                                                BlocProvider
-                                                                    .value(
-                                                                  value: context
-                                                                      .read<
-                                                                          CartBloc>(),
-                                                                  child:
-                                                                      BlocProvider(
-                                                                    create: (_) => SimilarProductBloc(
-                                                                        InitialSimilarProductState())
-                                                                      ..add(InitiateSimilarProductEvent(
-                                                                          productId:
-                                                                              context.read<SearchBloc>().listSearch[index].id.toString())),
-                                                                    child: SimilarProductScreen(
-                                                                        interactingProduct: context.read<SearchBloc>().listSearch[
-                                                                            index],
-                                                                        userId:
-                                                                            widget.userId),
-                                                                  ),
-                                                                )));
-                                                  },
-                                                  onTapFavorite: () {},
-                                                  height:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .height /
-                                                          3,
-                                                  width:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width /
-                                                          2,
-                                                  product: context
-                                                      .read<SearchBloc>()
-                                                      .listSearch[index],
-                                                  index: index,
-                                                ),
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              MultiBlocProvider(
-                                                                  providers: [
-                                                                    BlocProvider(
-                                                                        create: (_) => ProductDetailBloc(
-                                                                            InitialProductDetail())
-                                                                          ..add(ProductDetailLoadEvent(
-                                                                            id: context.read<SearchBloc>().listSearch[index].id,
-                                                                            person_id: widget.userId.toString(),
-                                                                          ))),
+                                                                  .size
+                                                                  .width /
+                                                              2 -
+                                                          22 / 5) /
+                                                      (MediaQuery.of(context)
+                                                                  .size
+                                                                  .height /
+                                                              3 -
+                                                          2),
+                                              mainAxisSpacing: 5,
+                                              crossAxisSpacing: 5,
+                                              //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
+                                            ),
+                                            delegate: SliverChildBuilderDelegate(
+                                              (BuildContext context, int index) {
+                                                return GestureDetector(
+                                                    child: ProductCard(
+                                                      onTapSimilar: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (_) =>
                                                                     BlocProvider
                                                                         .value(
                                                                       value: context
-                                                                          .read<CartBloc>(),
-                                                                    ),
-                                                                  ],
-                                                                  child:
-                                                                      ProductDetail(
-                                                                    userId: widget
-                                                                        .userId,
-                                                                    percentStar: context
-                                                                        .read<
-                                                                            SearchBloc>()
-                                                                        .listSearch[
-                                                                            index]
-                                                                        .percentStar,
-                                                                    countRating: context
-                                                                        .read<
-                                                                            SearchBloc>()
-                                                                        .listSearch[
-                                                                            index]
-                                                                        .countRating,
-                                                                    price: context
-                                                                        .read<
-                                                                            SearchBloc>()
-                                                                        .listSearch[
-                                                                            index]
-                                                                        .price,
-                                                                    productId: context
-                                                                        .read<
-                                                                            SearchBloc>()
-                                                                        .listSearch[
-                                                                            index]
-                                                                        .id,
-                                                                  ))));
-                                                });
-                                          },
-                                          childCount: context
-                                              .read<SearchBloc>()
-                                              .listSearch
-                                              .length,
-                                        ),
-                                      ),
-                                    ]),
-                              ),
+                                                                          .read<
+                                                                              CartBloc>(),
+                                                                      child:
+                                                                          BlocProvider(
+                                                                        create: (_) => SimilarProductBloc(
+                                                                            InitialSimilarProductState())
+                                                                          ..add(InitiateSimilarProductEvent(
+                                                                              productId:
+                                                                                  context.read<SearchBloc>().listSearch[index].id.toString())),
+                                                                        child: SimilarProductScreen(
+                                                                            interactingProduct: context.read<SearchBloc>().listSearch[
+                                                                                index],
+                                                                            userId:
+                                                                                widget.userId),
+                                                                      ),
+                                                                    )));
+                                                      },
+                                                      onTapFavorite: () {},
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height /
+                                                              3,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2,
+                                                      product: context
+                                                          .read<SearchBloc>()
+                                                          .listSearch[index],
+                                                      index: index,
+                                                    ),
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (_) =>
+                                                                  MultiBlocProvider(
+                                                                      providers: [
+                                                                        BlocProvider(
+                                                                            create: (_) => ProductDetailBloc(
+                                                                                InitialProductDetail())
+                                                                              ..add(ProductDetailLoadEvent(
+                                                                                id: context.read<SearchBloc>().listSearch[index].id,
+                                                                                person_id: widget.userId.toString(),
+                                                                              ))),
+                                                                        BlocProvider
+                                                                            .value(
+                                                                          value: context
+                                                                              .read<CartBloc>(),
+                                                                        ),
+                                                                      ],
+                                                                      child:
+                                                                          ProductDetail(
+                                                                        userId: widget
+                                                                            .userId,
+                                                                        percentStar: context
+                                                                            .read<
+                                                                                SearchBloc>()
+                                                                            .listSearch[
+                                                                                index]
+                                                                            .percentStar,
+                                                                        countRating: context
+                                                                            .read<
+                                                                                SearchBloc>()
+                                                                            .listSearch[
+                                                                                index]
+                                                                            .countRating,
+                                                                        price: context
+                                                                            .read<
+                                                                                SearchBloc>()
+                                                                            .listSearch[
+                                                                                index]
+                                                                            .price,
+                                                                        productId: context
+                                                                            .read<
+                                                                                SearchBloc>()
+                                                                            .listSearch[
+                                                                                index]
+                                                                            .id,
+                                                                      ))));
+                                                    });
+                                              },
+                                              childCount: context
+                                                  .read<SearchBloc>()
+                                                  .listSearch
+                                                  .length,
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
 
 
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  if (state is LoadMoreSearch)
-                    Positioned(
-                      bottom: 10,
-                      left: MediaQuery.of(context).size.width / 2 -
-                          15,
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.red,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            );
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 15,
-                ),
-                child: Text(
-                  "Tìm kiếm phổ biến",
-                  style: TextStyle(
-                    fontSize: 18,
-                    letterSpacing: 0.5,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Wrap(
-                  direction: Axis.horizontal,
-                  runSpacing: 5,
-                  spacing: 5,
-                  children: List<Widget>.generate(
-                      context.read<SearchBloc>().listHotSearch.length, (index) {
-                    return InkWell(
-                      onTap: () {
-                        context.read<SearchBloc>().add(SearchTextEvent(
-                            text:
-                                context.read<SearchBloc>().listHotSearch[index],
-                            userId: widget.userId.toString()));
-                        controller.text =
-                            context.read<SearchBloc>().listHotSearch[index];
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color(0xffE5E5E5).withAlpha(200),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Text(
-                          context.read<SearchBloc>().listHotSearch[index],
-                          style: TextStyle(
-                            fontSize: 16,
-                            letterSpacing: 0.5,
-                            color: Colors.black.withOpacity(0.8),
+                      if (state is LoadMoreSearch)
+                        Positioned(
+                          bottom: 10,
+                          left: MediaQuery.of(context).size.width / 2 -
+                              15,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.red,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Divider(
-                height: 10,
-                color: Color(0xffE5E5E5).withAlpha(200),
-                thickness: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ],
+                  ),
+                );
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(
@@ -533,7 +472,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       horizontal: 15,
                     ),
                     child: Text(
-                      "Lịch sử tìm kiếm",
+                      "Tìm kiếm phổ biến",
                       style: TextStyle(
                         fontSize: 18,
                         letterSpacing: 0.5,
@@ -542,81 +481,147 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          context.read<SearchBloc>().add(
-                              RemoveHistorySearchEvent(
-                                  userId: widget.userId.toString()));
-                        },
-                        child: Icon(
-                          Icons.delete,
-                          size: 30,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              Divider(
-                height: 0,
-                color: Colors.black.withOpacity(0.2),
-                thickness: 1,
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        context.read<SearchBloc>().add(SearchTextEvent(
-                            text: context
-                                .read<SearchBloc>()
-                                .listHistorySearch[index],
-                            userId: widget.userId.toString()));
-                        controller.text =
-                            context.read<SearchBloc>().listHistorySearch[index];
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      runSpacing: 5,
+                      spacing: 5,
+                      children: List<Widget>.generate(
+                          context.read<SearchBloc>().listHotSearch.length, (index) {
+                        return InkWell(
+                          onTap: () {
+                            context.read<SearchBloc>().add(SearchTextEvent(
+                                text:
+                                    context.read<SearchBloc>().listHotSearch[index],
+                                userId: widget.userId.toString()));
+                            controller.text =
+                                context.read<SearchBloc>().listHotSearch[index];
+                          },
+                          child: Container(
                             padding: EdgeInsets.symmetric(
-                              vertical: 10,
                               horizontal: 15,
+                              vertical: 10,
                             ),
+                            decoration: BoxDecoration(
+                                color: Color(0xffE5E5E5).withAlpha(200),
+                                borderRadius: BorderRadius.circular(5)),
                             child: Text(
-                              context
-                                  .read<SearchBloc>()
-                                  .listHistorySearch[index],
+                              context.read<SearchBloc>().listHotSearch[index],
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 letterSpacing: 0.5,
-                                color: Colors.black54,
-                                fontWeight: FontWeight.w500,
+                                color: Colors.black.withOpacity(0.8),
                               ),
                             ),
                           ),
-                          Divider(
-                            thickness: 1,
-                            color: Colors.black.withOpacity(0.2),
+                        );
+                      }),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Divider(
+                    height: 10,
+                    color: Color(0xffE5E5E5).withAlpha(200),
+                    thickness: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 15,
+                        ),
+                        child: Text(
+                          "Lịch sử tìm kiếm",
+                          style: TextStyle(
+                            fontSize: 18,
+                            letterSpacing: 0.5,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              context.read<SearchBloc>().add(
+                                  RemoveHistorySearchEvent(
+                                      userId: widget.userId.toString()));
+                            },
+                            child: Icon(
+                              Icons.delete,
+                              size: 30,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
                           ),
                         ],
-                      ),
-                    );
-                  },
-                  itemCount:
-                      context.read<SearchBloc>().listHistorySearch.length,
-                  scrollDirection: Axis.vertical,
-                ),
-              ),
-            ],
-          );
-        },
+                      )
+                    ],
+                  ),
+                  Divider(
+                    height: 0,
+                    color: Colors.black.withOpacity(0.2),
+                    thickness: 1,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            context.read<SearchBloc>().add(SearchTextEvent(
+                                text: context
+                                    .read<SearchBloc>()
+                                    .listHistorySearch[index],
+                                userId: widget.userId.toString()));
+                            controller.text =
+                                context.read<SearchBloc>().listHistorySearch[index];
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 15,
+                                ),
+                                child: Text(
+                                  context
+                                      .read<SearchBloc>()
+                                      .listHistorySearch[index],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    letterSpacing: 0.5,
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              Divider(
+                                thickness: 1,
+                                color: Colors.black.withOpacity(0.2),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      itemCount:
+                          context.read<SearchBloc>().listHistorySearch.length,
+                      scrollDirection: Axis.vertical,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
       ),
       backgroundColor: Colors.white,
     );

@@ -60,7 +60,7 @@ class MyOrderBloc extends Bloc<MyOrderEvent, MyOrderState> {
           },
         );
         myOrders.removeAt(event.index);
-        yield InitialMyOrderState();
+        yield UpdateMyOrderState();
       }
   }
 }

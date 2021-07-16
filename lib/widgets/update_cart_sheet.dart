@@ -144,195 +144,47 @@ class _UpdateCartSheetState extends State<UpdateCartSheet> {
             color: Colors.black26,
           ),
           Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(
-                    context.read<CartBloc>().productOption
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(
+                      context.read<CartBloc>().productOption
+                          .attributes
+                          .where((att) => att.code != "image")
+                          .length, (index) {
+                    if (context.read<CartBloc>().productOption
                         .attributes
-                        .where((att) => att.code != "image")
-                        .length, (index) {
-                  if (context.read<CartBloc>().productOption
-                      .attributes
-                      .where((att) => att.code != "image").toList()[index]
-                      .code ==
-                      "color")
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Màu:",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            letterSpacing: 0.5,
-                            fontWeight: FontWeight.w500,
+                        .where((att) => att.code != "image").toList()[index]
+                        .code ==
+                        "color")
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Màu:",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: 120,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: context.read<CartBloc>().productOption
-                                      .attributes
-                                      .where((att) => att.code != "image").toList()[index]
-                                  /*.firstWhere((element) => element.code == "color")*/
-                                      .options
-                                      .length,
-                                  itemBuilder: (context, i) {
-                                    return InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          listIndexSelected[index] = i;
-                                        });
-                                        int quantity;
-                                        quantity= context.read<CartBloc>().productOption.optionProducts.firstWhere((e) {
-                                          for(int i=0;i<listIndexSelected.length;i++)
-                                          {
-                                            if(e.option.where((a) => a.id == context.read<CartBloc>().productOption
-                                                .attributes
-                                                .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
-                                              return false;
-                                          }
-                                          return true;
-                                        }).quantity.value;
-                                        int available=0;
-                                        for( var data in context.read<CartBloc>().list_data)
-                                        {
-                                          if(data.optionProduct.productOptionId == context.read<CartBloc>().productOption.optionProducts.firstWhere((e) {
-                                            for(int i=0;i<listIndexSelected.length;i++)
-                                            {
-                                              if(e.option.where((a) => a.id == context.read<CartBloc>().productOption
-                                                  .attributes
-                                                  .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
-                                                return false;
-                                            }
-                                            return true;
-                                          }).productOptionId)
-                                            available = data.amount;
-                                        }
-                                        if(count+1 + available> quantity)
-                                        {
-                                          setState(() {
-                                            isEnabled=false;
-                                            count = quantity;
-                                          });
-                                        }
-
-
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(right: 5),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: i ==
-                                                    listIndexSelected[index]
-                                                    ? Color(0xffFA4747)
-                                                    : Colors.black
-                                                    .withOpacity(0.1),
-                                                width: 1,
-                                              ),
-                                            ),
-                                            child: CachedNetworkImage(
-                                              imageUrl: context.read<CartBloc>().productOption
-                                                  .optionProducts
-                                                  .firstWhere((element) {
-                                                for (var u
-                                                in element.option) {
-                                                  if (u.id ==
-                                                      context.read<CartBloc>().productOption
-                                                          .attributes
-                                                          .where((att) => att.code != "image").toList()[index]
-                                                      /* .firstWhere((a) => a.code == "color")*/
-                                                          .options[i]
-                                                          .id) return true;
-                                                }
-                                                return false;
-                                              })
-                                                  .option
-                                                  .firstWhere((e) =>
-                                              e.value.length > 3 &&
-                                                  e.value.substring(0, 2) ==
-                                                      "ht")
-                                                  .value,
-                                              height: 100,
-                                              width: 80,
-                                              fit: BoxFit.fill,
-                                              placeholder: (context, url) =>
-                                                  Center(
-                                                      child:
-                                                      CircularProgressIndicator()),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                  Icon(Icons.error),
-                                            ),
-                                          ),
-                                          Text(
-                                            context.read<CartBloc>().productOption
-                                                .attributes
-                                                .firstWhere((element) =>
-                                            element.code == "color")
-                                                .options[i]
-                                                .value,
-                                            style: TextStyle(
-                                              color:
-                                              i == listIndexSelected[index]
-                                                  ? Color(0xffFA4747)
-                                                  : Colors.black,
-                                              fontSize: 12,
-                                              letterSpacing: 0.5,
-                                            ),
-                                          ),
-
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        SizedBox(height: 10,),
-                      ],
-                    );
-                  else
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          context.read<CartBloc>().productOption
-                              .attributes
-                              .where((att) => att.code != "image").toList()[index].code,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            letterSpacing: 0.5,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: 40,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
+                          Container(
+                            height: 120,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: context.read<CartBloc>().productOption
                                         .attributes
                                         .where((att) => att.code != "image").toList()[index]
+                                    /*.firstWhere((element) => element.code == "color")*/
                                         .options
                                         .length,
                                     itemBuilder: (context, i) {
@@ -367,16 +219,6 @@ class _UpdateCartSheetState extends State<UpdateCartSheet> {
                                             }).productOptionId)
                                               available = data.amount;
                                           }
-                                          context.read<CartBloc>().price= context.read<CartBloc>().productOption.optionProducts.firstWhere((e) {
-                                            for(int i=0;i<listIndexSelected.length;i++)
-                                            {
-                                              if(e.option.where((a) => a.id == context.read<CartBloc>().productOption
-                                                  .attributes
-                                                  .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
-                                                return false;
-                                            }
-                                            return true;
-                                          }).price;
                                           if(count+1 + available> quantity)
                                           {
                                             setState(() {
@@ -384,50 +226,210 @@ class _UpdateCartSheetState extends State<UpdateCartSheet> {
                                               count = quantity;
                                             });
                                           }
+
+
                                         },
-                                        child: Container(
-                                          margin: EdgeInsets.only(right: 5),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(right: 5),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
                                                   color: i ==
-                                                      listIndexSelected[
-                                                      index]
+                                                      listIndexSelected[index]
                                                       ? Color(0xffFA4747)
-                                                      : Color(0xffC4C4C4)
-                                                      .withOpacity(0.5)),
-                                              color:
-                                              i == listIndexSelected[index]
-                                                  ? Colors.white
-                                                  : Color(0xffC4C4C4)
-                                                  .withOpacity(0.5)),
-                                          height: 30,
-                                          width: 70,
-                                          child: Center(
-                                            child: Text(
+                                                      : Colors.black
+                                                      .withOpacity(0.1),
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: CachedNetworkImage(
+                                                imageUrl: context.read<CartBloc>().productOption
+                                                    .optionProducts
+                                                    .firstWhere((element) {
+                                                  for (var u
+                                                  in element.option) {
+                                                    if (u.id ==
+                                                        context.read<CartBloc>().productOption
+                                                            .attributes
+                                                            .where((att) => att.code != "image").toList()[index]
+                                                        /* .firstWhere((a) => a.code == "color")*/
+                                                            .options[i]
+                                                            .id) return true;
+                                                  }
+                                                  return false;
+                                                })
+                                                    .option
+                                                    .firstWhere((e) =>
+                                                e.value.length > 3 &&
+                                                    e.value.substring(0, 2) ==
+                                                        "ht")
+                                                    .value,
+                                                height: 100,
+                                                width: 80,
+                                                fit: BoxFit.fill,
+                                                placeholder: (context, url) =>
+                                                    Center(
+                                                        child:
+                                                        CircularProgressIndicator()),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                    Icon(Icons.error),
+                                              ),
+                                            ),
+                                            Text(
                                               context.read<CartBloc>().productOption
                                                   .attributes
-                                                  .where((att) => att.code != "image").toList()[index]
+                                                  .firstWhere((element) =>
+                                              element.code == "color")
                                                   .options[i]
                                                   .value,
                                               style: TextStyle(
-                                                color: i ==
-                                                    listIndexSelected[index]
+                                                color:
+                                                i == listIndexSelected[index]
                                                     ? Color(0xffFA4747)
                                                     : Colors.black,
+                                                fontSize: 12,
+                                                letterSpacing: 0.5,
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                        ],
+                      );
+                    else
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.read<CartBloc>().productOption
+                                .attributes
+                                .where((att) => att.code != "image").toList()[index].code,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            height: 40,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: context.read<CartBloc>().productOption
+                                          .attributes
+                                          .where((att) => att.code != "image").toList()[index]
+                                          .options
+                                          .length,
+                                      itemBuilder: (context, i) {
+                                        return InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              listIndexSelected[index] = i;
+                                            });
+                                            int quantity;
+                                            quantity= context.read<CartBloc>().productOption.optionProducts.firstWhere((e) {
+                                              for(int i=0;i<listIndexSelected.length;i++)
+                                              {
+                                                if(e.option.where((a) => a.id == context.read<CartBloc>().productOption
+                                                    .attributes
+                                                    .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
+                                                  return false;
+                                              }
+                                              return true;
+                                            }).quantity.value;
+                                            int available=0;
+                                            for( var data in context.read<CartBloc>().list_data)
+                                            {
+                                              if(data.optionProduct.productOptionId == context.read<CartBloc>().productOption.optionProducts.firstWhere((e) {
+                                                for(int i=0;i<listIndexSelected.length;i++)
+                                                {
+                                                  if(e.option.where((a) => a.id == context.read<CartBloc>().productOption
+                                                      .attributes
+                                                      .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
+                                                    return false;
+                                                }
+                                                return true;
+                                              }).productOptionId)
+                                                available = data.amount;
+                                            }
+                                            context.read<CartBloc>().price= context.read<CartBloc>().productOption.optionProducts.firstWhere((e) {
+                                              for(int i=0;i<listIndexSelected.length;i++)
+                                              {
+                                                if(e.option.where((a) => a.id == context.read<CartBloc>().productOption
+                                                    .attributes
+                                                    .where((att) => att.code != "image").toList()[i].options[listIndexSelected[i]].id).isEmpty)
+                                                  return false;
+                                              }
+                                              return true;
+                                            }).price;
+                                            if(count+1 + available> quantity)
+                                            {
+                                              setState(() {
+                                                isEnabled=false;
+                                                count = quantity;
+                                              });
+                                            }
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(right: 5),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: i ==
+                                                        listIndexSelected[
+                                                        index]
+                                                        ? Color(0xffFA4747)
+                                                        : Color(0xffC4C4C4)
+                                                        .withOpacity(0.5)),
+                                                color:
+                                                i == listIndexSelected[index]
+                                                    ? Colors.white
+                                                    : Color(0xffC4C4C4)
+                                                    .withOpacity(0.5)),
+                                            height: 30,
+                                            width: 70,
+                                            child: Center(
+                                              child: Text(
+                                                context.read<CartBloc>().productOption
+                                                    .attributes
+                                                    .where((att) => att.code != "image").toList()[index]
+                                                    .options[i]
+                                                    .value,
+                                                style: TextStyle(
+                                                  color: i ==
+                                                      listIndexSelected[index]
+                                                      ? Color(0xffFA4747)
+                                                      : Colors.black,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
+                                        );
+                                      }),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 10,),
-                      ],
-                    );
-                }),
+                          SizedBox(height: 10,),
+                        ],
+                      );
+                  }),
+                ),
               ),
             ),
           ),

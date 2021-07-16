@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     tab = [
-      if(context.read<AccountBloc>().userId!=0)  MultiBlocProvider(
+     MultiBlocProvider(
         providers: [
 
 
@@ -57,8 +57,8 @@ class _MainScreenState extends State<MainScreen> {
 //          ),
         ],
         child: HomeScreen(),
-      )
-      else HomeScreen(),
+      ),
+
 
       BlocProvider(
           create: (_) => CategoryBloc( LoadingCategory())..add(InitiateEvent(catId: 16)),
@@ -74,11 +74,11 @@ class _MainScreenState extends State<MainScreen> {
                 .id!,),
           )),
       BlocProvider.value(value: context.read<AccountBloc>(),child: MessageScreen()),
-      PostExplorer(),
+//      PostExplorer(),
 
       MultiBlocProvider(
         providers: [
-         if(context.read<AccountBloc>().userId!=0) BlocProvider(
+           BlocProvider(
             create: (BuildContext context) =>
                 CartBloc(InitialCart(data: [], discount: 0, totalPrice: 0))
                   ..add(GetCartEvent(
@@ -106,8 +106,8 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc,AccountState>(
 
-      builder: (context,state) =>DefaultTabController(
-        length: 5,
+      builder: (context,state) => DefaultTabController(
+        length: 4,
         child: Scaffold(
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
@@ -132,11 +132,11 @@ class _MainScreenState extends State<MainScreen> {
                 title: Text("Tin nhắn"),
                 backgroundColor: Color(0xffF05A5A),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.explore),
-                title: Text("Bài viết"),
-                backgroundColor: Color(0xffF05A5A),
-              ),
+//              BottomNavigationBarItem(
+//                icon: Icon(Icons.explore),
+//                title: Text("Bài viết"),
+//                backgroundColor: Color(0xffF05A5A),
+//              ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle),
                 title: Text("Tôi"),

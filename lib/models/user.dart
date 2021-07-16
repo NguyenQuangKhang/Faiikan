@@ -5,11 +5,10 @@ class User {
   String? _birthday;
   String? _phoneNumber;
   String? _sex;
-  String? _address;
   bool? _active;
   String? _timeCreated;
   String? _timeUpdated;
-  ImageAvatar? _imageAvatar;
+  String? _imageUrl;
 
   int? get id => _id;
   String? get name => _name;
@@ -17,36 +16,32 @@ class User {
   String? get birthday => _birthday;
   String? get phoneNumber => _phoneNumber;
   String? get sex => _sex;
-  String? get address => _address;
   bool? get active => _active;
   String? get timeCreated => _timeCreated;
   String? get timeUpdated => _timeUpdated;
-  ImageAvatar? get imageAvatar => _imageAvatar;
-  set id(int? id){this.id=id;}
+  String? get imageUrl => _imageUrl;
 
   User({
-      int? id,
-      String? name,
-      String? email,
-      String? birthday,
-      String? phoneNumber,
-      String? sex,
-      String? address,
-      bool? active,
-      String? timeCreated,
-      String? timeUpdated,
-      ImageAvatar? imageAvatar}){
+      int? id, 
+      String? name, 
+      String? email, 
+      String? birthday, 
+      String? phoneNumber, 
+      String? sex, 
+      bool? active, 
+      String? timeCreated, 
+      String? timeUpdated, 
+      String? imageUrl}){
     _id = id;
     _name = name;
     _email = email;
     _birthday = birthday;
     _phoneNumber = phoneNumber;
     _sex = sex;
-    _address = address;
     _active = active;
     _timeCreated = timeCreated;
     _timeUpdated = timeUpdated;
-    _imageAvatar = imageAvatar;
+    _imageUrl = imageUrl;
 }
 
   User.fromJson(dynamic json) {
@@ -56,11 +51,10 @@ class User {
     _birthday = json["birthday"];
     _phoneNumber = json["phoneNumber"];
     _sex = json["sex"];
-    _address = json["address"];
     _active = json["active"];
     _timeCreated = json["timeCreated"];
     _timeUpdated = json["timeUpdated"];
-    _imageAvatar = json["imageAvatar"] != null ? ImageAvatar.fromJson(json["imageAvatar"]) : null;
+    _imageUrl = json["image_url"];
   }
 
   Map<String, dynamic> toJson() {
@@ -71,35 +65,10 @@ class User {
     map["birthday"] = _birthday;
     map["phoneNumber"] = _phoneNumber;
     map["sex"] = _sex;
-    map["address"] = _address;
     map["active"] = _active;
     map["timeCreated"] = _timeCreated;
     map["timeUpdated"] = _timeUpdated;
-    if (_imageAvatar != null) {
-      map["imageAvatar"] = _imageAvatar!.toJson();
-    }
-    return map;
-  }
-
-}
-
-class ImageAvatar {
-  String? _link;
-
-  String? get link => _link;
-
-  ImageAvatar({
-      String? link}){
-    _link = link;
-}
-
-  ImageAvatar.fromJson(dynamic json) {
-    _link = json["link"];
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map["link"] = _link;
+    map["image_url"] = _imageUrl;
     return map;
   }
 

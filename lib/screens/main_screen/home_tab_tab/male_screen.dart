@@ -6,6 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
+import 'package:faiikan/blocs/category_bloc/category_state.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_bloc.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_event.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_state.dart';
@@ -121,7 +122,7 @@ class _MaleScreenState extends State<MaleScreen> {
 //
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent - 10) {
-        context.read<ProductBloc>().add(ProductGetMoreDataEvent(SortBy: 0));
+        context.read<ProductBloc>().add(ProductGetMoreDataByCategoryCodeEvent(filter: "", catId: 16));
       }
     });
   }
@@ -528,118 +529,200 @@ class _MaleScreenState extends State<MaleScreen> {
                 color: Colors.white),
             Row(
               children: <Widget>[
-                Container(
-                    height: 100,
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount:
-                        context.read<CategoryBloc>().list_cat_1.length,
-                        itemBuilder: (context, index) {
-                          Cate.Category category =
-                          context.read<CategoryBloc>().list_cat_1[index];
-                          return Padding(
-                            padding: EdgeInsets.only(right: 0),
-                            child: GestureDetector(
-                                child: Container(
-                                  width: 70,
-                                  height: 100,
-                                  margin: index != 0
-                                      ? EdgeInsets.only(
-                                      top: 5, bottom: 5, left: 10)
-                                      : EdgeInsets.only(top: 5, bottom: 5),
-                                  decoration: BoxDecoration(),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color:
-                                              Colors.grey.withOpacity(0.3)),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                              Colors.blue.withOpacity(0.3),
-                                              spreadRadius: 1,
-                                              blurRadius: 4,
-                                              offset: Offset(0,
-                                                  0), // changes position of shadow
+                BlocBuilder<CategoryBloc,CategoryState>(
+                  builder: (context,state) {
+                    if(state is LoadingCategory)
+                      return Container(
+                          height: 100,
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.white,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                              context.read<CategoryBloc>().list_cat_1.length,
+                              itemBuilder: (context, index) {
+                                Cate.Category category =
+                                context.read<CategoryBloc>().list_cat_1[index];
+                                return Padding(
+                                  padding: EdgeInsets.only(right: 0),
+                                  child: GestureDetector(
+                                      child: Container(
+                                        width: 70,
+                                        height: 100,
+                                        margin: index != 0
+                                            ? EdgeInsets.only(
+                                            top: 5, bottom: 5, left: 10)
+                                            : EdgeInsets.only(top: 5, bottom: 5),
+                                        decoration: BoxDecoration(),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Shimmer.fromColors(
+                                              baseColor: Colors.grey,
+                                              highlightColor: Colors.grey
+                                                  .withOpacity(0.5),
+                                              child: Container(
+                                                height: 50,
+                                                width: 50,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      color:
+                                                      Colors.grey.withOpacity(0.3)),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color:
+                                                      Colors.blue.withOpacity(0.3),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 4,
+                                                      offset: Offset(0,
+                                                          0), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Center(
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                      BorderRadius.circular(25),
+                                                    )),
+                                              ),
+                                            ),
+                                            Shimmer.fromColors(
+                                              baseColor: Colors.grey,
+                                              highlightColor: Colors.grey
+                                                  .withOpacity(0.5),
+                                              child: Container(
+                                                height: 40,
+                                                child: Center(
+                                                  child: Text(
+                                                    "Loading....",
+                                                    style: TextStyle(
+                                                        fontSize: 13,
+                                                        color: Colors.black),
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ],
                                         ),
-                                        child: Center(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(25),
-                                              child: CachedNetworkImage(
-                                                imageUrl: category.icon != ""
-                                                    ? category.icon
-                                                    : "https://i.pinimg.com/236x/30/87/8d/30878dc76c22265aa23b6c0328886113.jpg",
-                                                placeholder: (context, url) =>
-                                                    CircularProgressIndicator(),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                    Icon(Icons.error),
-                                                fit: BoxFit.fill,
-                                                width: 25,
-                                                height: 25,
-                                                colorBlendMode: BlendMode.colorBurn,
-                                              ),
-                                            )),
                                       ),
-                                      Container(
-                                        height: 40,
-                                        child: Center(
-                                          child: Text(
-                                            category.name,
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                            maxLines: 2,
-                                            textAlign: TextAlign.center,
+                                     ),
+                                );
+                              }));
+                  return Container(
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.white,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount:
+                          context.read<CategoryBloc>().list_cat_1.length,
+                          itemBuilder: (context, index) {
+                            Cate.Category category =
+                            context.read<CategoryBloc>().list_cat_1[index];
+                            return Padding(
+                              padding: EdgeInsets.only(right: 0),
+                              child: GestureDetector(
+                                  child: Container(
+                                    width: 70,
+                                    height: 100,
+                                    margin: index != 0
+                                        ? EdgeInsets.only(
+                                        top: 5, bottom: 5, left: 10)
+                                        : EdgeInsets.only(top: 5, bottom: 5),
+                                    decoration: BoxDecoration(),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 50,
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color:
+                                                Colors.grey.withOpacity(0.3)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color:
+                                                Colors.blue.withOpacity(0.3),
+                                                spreadRadius: 1,
+                                                blurRadius: 4,
+                                                offset: Offset(0,
+                                                    0), // changes position of shadow
+                                              ),
+                                            ],
+                                          ),
+                                          child: Center(
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(25),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: category.icon != ""
+                                                      ? category.icon
+                                                      : "https://i.pinimg.com/236x/30/87/8d/30878dc76c22265aa23b6c0328886113.jpg",
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                      Icon(Icons.error),
+                                                  fit: BoxFit.fill,
+                                                  width: 25,
+                                                  height: 25,
+                                                  colorBlendMode: BlendMode.colorBurn,
+                                                ),
+                                              )),
+                                        ),
+                                        Container(
+                                          height: 40,
+                                          child: Center(
+                                            child: Text(
+                                              category.name,
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black),
+                                              maxLines: 2,
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) =>
-                                            BlocProvider<ProductBloc>(
-                                              create: (_) {
-                                                return ProductBloc(
-                                                  InitialProductState(
-                                                    data: [],
-                                                    error: "",
-                                                    sortBy: 0,
-                                                  ),
-                                                )..add(ProductByCategoryCodeEvent(
-                                                    categoryId:
-                                                    category.id.toString(),
-                                                    filter: "popular"));
-                                              },
-                                              child: BlocProvider.value(
-                                                  value: context.read<CartBloc>(),
-                                                  child: ProductWithSubCat_Screen(
-                                                      userId: context
-                                                          .read<AccountBloc>()
-                                                          .user!
-                                                          .id!,
-                                                      title: category.name,
-                                                      category: category)),
-                                            ),
-                                      ));
-                                }),
-                          );
-                        })),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              BlocProvider<ProductBloc>(
+                                                create: (_) {
+                                                  return ProductBloc(
+                                                    InitialProductState(
+                                                      data: [],
+                                                      error: "",
+                                                      sortBy: 0,
+                                                    ),
+                                                  )..add(ProductByCategoryCodeEvent(
+                                                      categoryId:
+                                                      category.id.toString(),
+                                                      filter: "popular"));
+                                                },
+                                                child: BlocProvider.value(
+                                                    value: context.read<CartBloc>(),
+                                                    child: ProductWithSubCat_Screen(
+                                                        userId: context
+                                                            .read<AccountBloc>()
+                                                            .user!
+                                                            .id!,
+                                                        title: category.name,
+                                                        category: category)),
+                                              ),
+                                        ));
+                                  }),
+                            );
+                          }));}),
               ],
             ),
             SizedBox(
@@ -1038,154 +1121,190 @@ class _MaleScreenState extends State<MaleScreen> {
 //                  ),
                   BlocBuilder<ProductBloc, ProductsState>(
                     builder: (context, state) {
-                      return Stack(
-                        children: <Widget>[
-                          Container(
+                      if(state is Loading)
+                        return Container(
 //                            padding: EdgeInsets.symmetric(
 //                                horizontal: 5, vertical: 5),
-                            color: Color(0xffE7E7E7),
-                            height: MediaQuery.of(context).size.height - 300,
-                            child: CustomScrollView(
-                                shrinkWrap: true,
-                                primary: false,
-                                physics: flag == true
-                                    ? NeverScrollableScrollPhysics()
-                                    : ClampingScrollPhysics(),
-                                controller: _scrollController,
-                                scrollDirection: Axis.vertical,
-                                slivers: <Widget>[
-                                  SliverGrid(
-                                    gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: (MediaQuery.of(context)
-                                          .size
-                                          .width /
-                                          2 -
-                                          22 / 5) /
-                                          (MediaQuery.of(context).size.height /
-                                              3 -
-                                              2),
-                                      mainAxisSpacing: 5,
-                                      crossAxisSpacing: 5,
-                                      //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
-                                    ),
-                                    delegate: SliverChildBuilderDelegate(
-                                          (BuildContext context, int index) {
-                                        return GestureDetector(
-                                            child: ProductCard(
-                                              onTapSimilar: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder:
-                                                            (_) => BlocProvider
-                                                            .value(
-                                                          value: context
-                                                              .read<
-                                                              CartBloc>(),
-                                                          child:
-                                                          BlocProvider(
-                                                            create: (_) => SimilarProductBloc(
-                                                                InitialSimilarProductState())
-                                                              ..add(InitiateSimilarProductEvent(
-                                                                  productId: productBloc
-                                                                      .listdataByCategory[index]
-                                                                      .id
-                                                                      .toString())),
-                                                            child: SimilarProductScreen(
-                                                                interactingProduct:
-                                                                productBloc.listdataByCategory[
-                                                                index],
-                                                                userId: context
-                                                                    .read<AccountBloc>()
-                                                                    .user!
-                                                                    .id!),
-                                                          ),
-                                                        )));
-                                              },
-                                              onTapFavorite: () {},
-                                              height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                                  3,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                                  2,
-                                              product:
-                                              productBloc.listdataByCategory[index],
-                                              index: index,
-                                            ),
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) =>
-                                                          MultiBlocProvider(
-                                                              providers: [
-                                                                BlocProvider(
-                                                                    create: (_) =>
-                                                                    ProductDetailBloc(
-                                                                        InitialProductDetail())
-                                                                      ..add(
-                                                                          ProductDetailLoadEvent(
-                                                                            id: productBloc.listdataByCategory[index].id,
-                                                                            person_id:
-                                                                            context.read<AccountBloc>().user!.id.toString(),
-                                                                          ))),
-                                                                BlocProvider
-                                                                    .value(
-                                                                  value: context
-                                                                      .read<
-                                                                      CartBloc>(),
-                                                                ),
-                                                              ],
-                                                              child:
-                                                              ProductDetail(
-                                                                userId: context
-                                                                    .read<
-                                                                    AccountBloc>()
-                                                                    .user!
-                                                                    .id!,
-                                                                percentStar: productBloc
-                                                                    .listdataByCategory[
-                                                                index]
-                                                                    .percentStar,
-                                                                countRating: productBloc
-                                                                    .listdataByCategory[
-                                                                index]
-                                                                    .countRating,
-                                                                price: productBloc
-                                                                    .listdataByCategory[
-                                                                index]
-                                                                    .price,
-                                                                productId:
-                                                                productBloc
-                                                                    .listdataByCategory[
-                                                                index]
-                                                                    .id,
-                                                              ))));
-                                            });
-                                      },
-                                      childCount: productBloc.listdataByCategory.length,
-                                    ),
+                          color: Color(0xffE7E7E7),
+                          height: MediaQuery.of(context).size.height - 300,
+                          child: CustomScrollView(
+                              shrinkWrap: true,
+                              primary: false,
+                              physics: flag == true
+                                  ? NeverScrollableScrollPhysics()
+                                  : ClampingScrollPhysics(),
+                              controller: _scrollController,
+                              scrollDirection: Axis.vertical,
+                              slivers: <Widget>[
+                                SliverGrid(
+                                  gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: (MediaQuery.of(context)
+                                        .size
+                                        .width / 2 )
+                                        /
+                                        (MediaQuery.of(context).size.height /
+                                            3 ),
+                                    mainAxisSpacing: 5,
+                                    crossAxisSpacing: 5,
+                                    //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
                                   ),
-                                ]),
-                          ),
-                          if (state is Loading)
-                            Positioned(
-                              bottom: 10,
-                              left: MediaQuery.of(context).size.width / 2 - 15,
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.red,
+                                  delegate: SliverChildBuilderDelegate(
+                                        (BuildContext context, int index) {
+                                      return Shimmer.fromColors(
+                                        baseColor: Colors.grey,
+                                        highlightColor: Colors.white,
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height /
+                                              3,
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width /
+                                              2,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    },
+                                    childCount: 10,
+                                  ),
+                                ),
+                              ]),
+                        );
+                      return Container(
+//                            padding: EdgeInsets.symmetric(
+//                                horizontal: 5, vertical: 5),
+                        color: Color(0xffE7E7E7),
+                        height: MediaQuery.of(context).size.height - 300,
+                        child: CustomScrollView(
+                            shrinkWrap: true,
+                            primary: false,
+                            physics: flag == true
+                                ? NeverScrollableScrollPhysics()
+                                : ClampingScrollPhysics(),
+                            controller: _scrollController,
+                            scrollDirection: Axis.vertical,
+                            slivers: <Widget>[
+                              SliverGrid(
+                                gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: (MediaQuery.of(context)
+                                      .size
+                                      .width /
+                                      2 -
+                                      22 / 5) /
+                                      (MediaQuery.of(context).size.height /
+                                          3 -
+                                          2),
+                                  mainAxisSpacing: 5,
+                                  crossAxisSpacing: 5,
+                                  //childAspectRatio: AppSizes.tile_width / AppSizes.tile_height,
+                                ),
+                                delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                        child: ProductCard(
+                                          onTapSimilar: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder:
+                                                        (_) => BlocProvider
+                                                        .value(
+                                                      value: context
+                                                          .read<
+                                                          CartBloc>(),
+                                                      child:
+                                                      BlocProvider(
+                                                        create: (_) => SimilarProductBloc(
+                                                            InitialSimilarProductState())
+                                                          ..add(InitiateSimilarProductEvent(
+                                                              productId: productBloc
+                                                                  .listdataByCategory[index]
+                                                                  .id
+                                                                  .toString())),
+                                                        child: SimilarProductScreen(
+                                                            interactingProduct:
+                                                            productBloc.listdataByCategory[
+                                                            index],
+                                                            userId: context
+                                                                .read<AccountBloc>()
+                                                                .user!
+                                                                .id!),
+                                                      ),
+                                                    )));
+                                          },
+                                          onTapFavorite: () {},
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height /
+                                              3,
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width /
+                                              2,
+                                          product:
+                                          productBloc.listdataByCategory[index],
+                                          index: index,
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      MultiBlocProvider(
+                                                          providers: [
+                                                            BlocProvider(
+                                                                create: (_) =>
+                                                                ProductDetailBloc(
+                                                                    InitialProductDetail())
+                                                                  ..add(
+                                                                      ProductDetailLoadEvent(
+                                                                        id: productBloc.listdataByCategory[index].id,
+                                                                        person_id:
+                                                                        context.read<AccountBloc>().user!.id.toString(),
+                                                                      ))),
+                                                            BlocProvider
+                                                                .value(
+                                                              value: context
+                                                                  .read<
+                                                                  CartBloc>(),
+                                                            ),
+                                                          ],
+                                                          child:
+                                                          ProductDetail(
+                                                            userId: context
+                                                                .read<
+                                                                AccountBloc>()
+                                                                .user!
+                                                                .id!,
+                                                            percentStar: productBloc
+                                                                .listdataByCategory[
+                                                            index]
+                                                                .percentStar,
+                                                            countRating: productBloc
+                                                                .listdataByCategory[
+                                                            index]
+                                                                .countRating,
+                                                            price: productBloc
+                                                                .listdataByCategory[
+                                                            index]
+                                                                .price,
+                                                            productId:
+                                                            productBloc
+                                                                .listdataByCategory[
+                                                            index]
+                                                                .id,
+                                                          ))));
+                                        });
+                                  },
+                                  childCount: productBloc.listdataByCategory.length,
                                 ),
                               ),
-                            ),
-                        ],
+                            ]),
                       );
                     },
                   ),

@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:faiikan/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:faiikan/screens/main_screen/chat_screen/Controllers/fb_storage.dart';
 import 'package:faiikan/utils/server_name.dart';
 import 'package:meta/meta.dart';
@@ -15,7 +16,7 @@ import 'AccountState.dart';
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
    User? user;
   bool isLogined=false;
-  int userId=0;
+  int? userId=0;
   AccountBloc(AccountState initialState) : super(initialState);
 
   @override
@@ -28,17 +29,17 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
     if(event is InitialAccount)
       {
+        yield AccountLoading();
         SharedPreferences prefs = await SharedPreferences.getInstance();
+        print("userId: local ");
+        print(prefs.get("userId"));
+        if(prefs.get("userId")!=null) {
 
-        print("userId: local "+prefs.getInt("userId").toString());
-        if(prefs.getInt("userId") !=null) {
-
-          user = User(id: prefs.getInt("userId"),
+          user = User(id: int.parse(prefs.get("userId") as String),
               active: true,
-              address: "",
               birthday: "",
               email: prefs.getString("email",),
-              imageAvatar: ImageAvatar(link: prefs.getString("avarta")),
+              imageUrl: prefs.getString("avarta"),
               name: prefs.getString("name"),
               phoneNumber: "",
               sex: "",
@@ -46,6 +47,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
               timeUpdated: "");
           userId=user!.id!;
         }
+        yield AccountInitial();
       }
     if(event is LogOutEvent)
       {
@@ -77,11 +79,11 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           isLogined=true;
           FBStorage.instanace.saveUserImageToFirebaseStorage("",
               user!.id.toString(),user!.name,"",
-             await urlToFile(user!.imageAvatar?.link ?? ""));
+             await urlToFile(user!.imageUrl ?? ""));
           SharedPreferences prefs = await SharedPreferences.getInstance();
-         await  prefs.setInt("userId", userId);
+         await  prefs.setString("userId", userId!.toString());
          await  prefs.setString("email", user!.email ?? "");
-          await prefs.setString("avarta", user!.imageAvatar!.link!);
+          await prefs.setString("avarta", user!.imageUrl!);
          await  prefs.setString("name", user!.name!);
 
           yield AccountOk();

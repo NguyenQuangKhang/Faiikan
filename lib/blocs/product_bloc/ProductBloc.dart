@@ -52,20 +52,26 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
         yield ProductsGridViewState(
             data: listdata, sortBy: event.SortBy, error: '');
 
-      if (event is ProductGetMoreDataEvent) {
-        // get Products from data.length-1 then add into dat
-        yield Loading(sortBy: state.sortBy, error: "", data: listdata);
+    }
+    if (event is ProductGetMoreDataEvent) {
+      // get Products from data.length-1 then add into dat
+      yield Loading(sortBy: state.sortBy, error: "", data: listdata);
 
-        final response = await http.get(
-            Uri.parse("http://$server:8080/api/v1/recommend/top-rating/${event.userId}?p=${currentPage.toString()}"));
+      final response = await http.get(
+          Uri.parse("http://$server:8080/api/v1/recommend/top-rating/${event.userId}?p=${currentPage.toString()}"));
 
-        listdata.addAll(json
-            .decode(response.body)
-            .cast<Map<String, dynamic>>()
-            .map<Product>((json) => Product.fromJson(json))
-            .toList());
-        currentPage++;
-      }
+      listdata.addAll(json
+          .decode(response.body)
+          .cast<Map<String, dynamic>>()
+          .map<Product>((json) => Product.fromJson(json))
+          .toList());
+      currentPage++;
+      if (state is ProductsGridViewState)
+        yield ProductsAddmoreState(
+            data: listdata, sortBy: event.SortBy, error: '');
+      else
+        yield ProductsGridViewState(
+            data: listdata, sortBy: event.SortBy, error: '');
     }
 
     if (event is ProductByCategoryCodeEvent) {
@@ -119,6 +125,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
 
     if(event is SeenProductEvent)
       {
+        Loading(
+            sortBy: state.sortBy,
+            error: state.error,
+//          filterRules: state.filterRules,
+            data: state.data);
         final response = await http.get(
             Uri.parse("http://$server:8080/api/v1/${event.userId}/get-seen-products"));
 

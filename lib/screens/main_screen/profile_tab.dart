@@ -106,7 +106,7 @@ class ProfileScreen extends StatelessWidget {
                                       image: DecorationImage(
                                         fit: BoxFit.fill,
                                         image: NetworkImage(
-                                            context.read<AccountBloc>().user==null?   "https://st4.depositphotos.com/4329009/19956/v/600/depositphotos_199564354-stock-illustration-creative-vector-illustration-default-avatar.jpg"  :context.read<AccountBloc>().user!.imageAvatar!.link!),
+                                            context.read<AccountBloc>().user==null?   "https://st4.depositphotos.com/4329009/19956/v/600/depositphotos_199564354-stock-illustration-creative-vector-illustration-default-avatar.jpg"  :context.read<AccountBloc>().user!.imageUrl!),
                                       ),
                                       boxShadow: [
                                         BoxShadow(
@@ -336,10 +336,19 @@ class ProfileScreen extends StatelessWidget {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (_) => MyOrderScreen(
-                                                        userId: userId.toString(),
-                                                        initialTab: 0,
-                                                      )));
+                                                  builder: (_) => BlocProvider.value(
+                                                    value: context.read<CartBloc>(),
+                                                    child: BlocProvider.value(
+                                                      value: context.read<ProductBloc>(),
+                                                      child: BlocProvider.value(
+                                                        value: context.read<AccountBloc>(),
+                                                        child: MyOrderScreen(
+                                                              userId: userId.toString(),
+                                                              initialTab: 0,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  )));
                                         else
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
@@ -394,11 +403,19 @@ class ProfileScreen extends StatelessWidget {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (_) =>
-                                                          MyOrderScreen(
-                                                            userId:
-                                                                userId.toString(),
-                                                            initialTab: 0,
-                                                          )));
+                                                BlocProvider.value(
+                                                    value: context.read<CartBloc>(),
+                                                    child: BlocProvider.value(
+                                                      value: context.read<ProductBloc>(),
+                                                            child: BlocProvider.value(
+                                                              value: context.read<AccountBloc>(),
+                                                              child: MyOrderScreen(
+                                                                userId:
+                                                                    userId.toString(),
+                                                                initialTab: 0,
+                                                              ),
+                                                            ),
+                                                          ))));
                                           },
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -446,11 +463,19 @@ class ProfileScreen extends StatelessWidget {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (_) =>
-                                                          MyOrderScreen(
-                                                            userId:
-                                                                userId.toString(),
-                                                            initialTab: 1,
-                                                          )));
+                                                BlocProvider.value(
+                                                    value: context.read<CartBloc>(),
+                                                    child: BlocProvider.value(
+                                                      value: context.read<ProductBloc>(),
+                                                            child: BlocProvider.value(
+                                                              value: context.read<AccountBloc>(),
+                                                              child: MyOrderScreen(
+                                                                userId:
+                                                                    userId.toString(),
+                                                                initialTab: 1,
+                                                              ),
+                                                            ),
+                                                          ))));
                                           },
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -498,11 +523,19 @@ class ProfileScreen extends StatelessWidget {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (_) =>
-                                                          MyOrderScreen(
-                                                            userId:
-                                                                userId.toString(),
-                                                            initialTab: 2,
-                                                          )));
+                                                BlocProvider.value(
+                                                    value: context.read<CartBloc>(),
+                                                    child: BlocProvider.value(
+                                                      value: context.read<ProductBloc>(),
+                                                            child: BlocProvider.value(
+                                                              value: context.read<AccountBloc>(),
+                                                              child: MyOrderScreen(
+                                                                userId:
+                                                                    userId.toString(),
+                                                                initialTab: 2,
+                                                              ),
+                                                            ),
+                                                          ))));
                                           },
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -545,11 +578,19 @@ class ProfileScreen extends StatelessWidget {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (_) => MyOrderScreen(
-                                                          userId:
-                                                              userId.toString(),
-                                                          initialTab: 3,
-                                                        )));
+                                                    builder: (_) => BlocProvider.value(
+                                                value: context.read<CartBloc>(),
+                                                child: BlocProvider.value(
+                                                  value: context.read<ProductBloc>(),
+                                                      child: BlocProvider.value(
+                                                        value: context.read<AccountBloc>(),
+                                                        child: MyOrderScreen(
+                                                              userId:
+                                                                  userId.toString(),
+                                                              initialTab: 3,
+                                                            ),
+                                                      ),
+                                                    ))));
                                           },
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -601,14 +642,14 @@ class ProfileScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => context.read<AccountBloc>().userId == 0
+                          builder: (_) => /*context.read<AccountBloc>().userId == 0
                               ? BlocProvider.value(
                                   value: context.read<AccountBloc>(),
                                   child: RegisterAndLoginScreen(
                                     initialIndex: 1,
                                   ),
                                 )
-                              : BlocProvider(
+                              : */BlocProvider(
                                   create: (_) {
                                     return ProductBloc(
                                       InitialProductState(
@@ -735,11 +776,11 @@ class ProfileScreen extends StatelessWidget {
                             providers: [
                               BlocProvider.value(
                                   value: context.read<AccountBloc>()),
-                              if (context.read<AccountBloc>().userId != 0)
+
                                 BlocProvider.value(
                                   value: context.read<CartBloc>(),
                                 ),
-                              if (context.read<AccountBloc>().userId != 0)
+
                                 BlocProvider(
                                   create: (BuildContext context) =>
                                       FavoriteBloc(InitialFavorite(data: []))
@@ -1151,6 +1192,7 @@ class ProfileScreen extends StatelessWidget {
                                                                           .id
                                                                           .toString(),
                                                                     ))),
+                                                          BlocProvider.value(value: context.read<AccountBloc>()),
                                                           BlocProvider.value(
                                                             value: context
                                                                 .read<CartBloc>(),

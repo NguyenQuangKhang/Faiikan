@@ -33,10 +33,16 @@ class HomeScreen extends StatelessWidget {
         appBar: CustomAppBar(
           onTapCart: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return context.read<AccountBloc>().userId==0?BlocProvider.value(value: context.read<AccountBloc>(),child: RegisterAndLoginScreen(initialIndex: 1,),):BlocProvider.value(
+              return /*context.read<AccountBloc>().userId==0?BlocProvider.value(value: context.read<AccountBloc>(),child: RegisterAndLoginScreen(initialIndex: 1,),):*/BlocProvider.value(
                 value: context.read<CartBloc>(),
-                child: CartScreen(
-                  person_id: context.read<AccountBloc>().user!.id!,
+                child: BlocProvider.value(value: context.read<AccountBloc>(),
+                  child: BlocProvider(create: (_) =>ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))
+                    ..add(ProductLoadEvent(
+                        SortBy: 0, userId: context.read<AccountBloc>().userId==0?0:context.read<AccountBloc>().user!.id!)),
+                    child: CartScreen(
+                      person_id: context.read<AccountBloc>().user!.id!,
+                    ),
+                  ),
                 ),
               );
             }));

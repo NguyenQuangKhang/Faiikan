@@ -13,5 +13,7 @@ class LoadMyOrder extends MyOrderState {}
 
 class InitialMyOrderState extends MyOrderState {}
 
+class UpdateMyOrderState extends MyOrderState {}
+
 
 

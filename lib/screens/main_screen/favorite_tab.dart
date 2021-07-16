@@ -242,6 +242,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                   value:
                                                       context.read<CartBloc>(),
                                                 ),
+                                                BlocProvider.value(value: context.read<AccountBloc>()),
                                               ],
                                               child: ProductDetail(
                                                 userId: context

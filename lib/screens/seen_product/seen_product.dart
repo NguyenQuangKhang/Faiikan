@@ -100,7 +100,7 @@ class SeenProductScreen extends StatelessWidget {
           //                  ),
           BlocBuilder<ProductBloc, ProductsState>(
             builder: (context, state) {
-              if(state is InitialProductState)
+              if(state is Loading)
                 return Center(child: CircularProgressIndicator(backgroundColor: Colors.redAccent,),);
               return Stack(
                 children: <Widget>[

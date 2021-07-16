@@ -10,6 +10,7 @@ import 'package:faiikan/models/cart_item.dart' as cart;
 import 'package:faiikan/models/input_order_item.dart';
 import 'package:faiikan/models/order_item.dart';
 import 'package:faiikan/screens/address_screen/select_address.dart';
+import 'package:faiikan/screens/payment_screen/payment_method.dart';
 import 'package:faiikan/screens/successful_order/successful_order.dart';
 import 'package:faiikan/styles/custom_icon_icons.dart';
 import 'package:faiikan/widgets/card/order_item_card.dart';
@@ -20,7 +21,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PaymentScreen extends StatefulWidget {
   final String userId;
   final List<cart.CartItem> listItems;
-
 
   const PaymentScreen({Key? key, required this.userId, required this.listItems})
       : super(key: key);
@@ -33,7 +33,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   bool haveAddress = false;
 
   String Voucher = "Chọn hoặc nhập voucher";
-
+  String paymentMethod= "Chọn phương thức \nthanh toán";
   @override
   void initState() {
     // TODO: implement initState
@@ -72,22 +72,32 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ),
         backgroundColor: Colors.white,
         body: BlocListener(
-          listener: (context,state) {
-            if(state is CreateOrderSuccessfulState)
-              {
-                context.read<CartBloc>().add(DeleteListCartItemEvent(id: widget.listItems.map((e) => e.cartId.toString()).toList()));
-                Navigator.push(context, MaterialPageRoute(builder: (_)=> BlocProvider.value(value: context.read<ProductBloc>(),child: BlocProvider.value(value: context.read<AccountBloc>(),child: BlocProvider.value(value:context.read<CartBloc>(),child: SuccessfulOrder())))));
-              }
-            if(state is DeleteListItemSuccessfulState)
-              {
-                context.read<CartBloc>().add(GetCartEvent(person_id: widget.userId,));
-              }
+          listener: (context, state) {
+            if (state is CreateOrderSuccessfulState) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                          value: context.read<ProductBloc>(),
+                          child: BlocProvider.value(
+                              value: context.read<AccountBloc>(),
+                              child: BlocProvider.value(
+                                  value: context.read<CartBloc>(),
+                                  child: SuccessfulOrder())))));
+            }
+            if (state is DeleteListItemSuccessfulState) {
+
+            }
           },
           bloc: context.read<CartBloc>(),
           child: BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
-              if(state is CartLoadingState)
-                Center(child: CircularProgressIndicator(backgroundColor:Colors.redAccent ,),);
+              if (state is CartLoadingState)
+                Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
               return Stack(
                 children: [
                   Column(
@@ -121,7 +131,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                               AddressBloc>(),
                                                           child:
                                                               SelectAddressScreen(
-                                                            userId: widget.userId,
+                                                            userId:
+                                                                widget.userId,
                                                           )))).then((value) {});
                                         },
                                         child: Row(
@@ -151,15 +162,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                             WrapCrossAlignment
                                                                 .start,
                                                         spacing: 10,
-                                                        direction: Axis.vertical,
+                                                        direction:
+                                                            Axis.vertical,
                                                         children: [
                                                           Text(
                                                             "Địa chỉ nhận hàng",
                                                             style: TextStyle(
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                               fontSize: 16,
                                                               fontWeight:
-                                                                  FontWeight.w600,
+                                                                  FontWeight
+                                                                      .w600,
                                                             ),
                                                           ),
                                                           Text(
@@ -175,12 +189,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                                     .currentAddress!
                                                                     .numberPhone,
                                                             style: TextStyle(
-                                                              color: Colors.black
+                                                              color: Colors
+                                                                  .black
                                                                   .withOpacity(
                                                                       0.8),
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight.w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                             ),
                                                           ),
                                                           Text(
@@ -190,33 +206,39 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                                 .currentAddress!
                                                                 .specificAddress,
                                                             style: TextStyle(
-                                                              color: Colors.black
+                                                              color: Colors
+                                                                  .black
                                                                   .withOpacity(
                                                                       0.8),
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight.w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                             ),
                                                           ),
                                                           Text(
-                                                              context
-                                                                  .read<
-                                                                  AddressBloc>()
-                                                                  .currentAddress!
-                                                                  .ward
-                                                                  .prefix +" " +  context
+                                                            context
+                                                                    .read<
+                                                                        AddressBloc>()
+                                                                    .currentAddress!
+                                                                    .ward
+                                                                    .prefix +
+                                                                " " +
+                                                                context
                                                                     .read<
                                                                         AddressBloc>()
                                                                     .currentAddress!
                                                                     .ward
                                                                     .name +
                                                                 " - " +
-                                                                  context
-                                                                      .read<
-                                                                      AddressBloc>()
-                                                                      .currentAddress!
-                                                                      .district
-                                                                      .prefix +" " + context
+                                                                context
+                                                                    .read<
+                                                                        AddressBloc>()
+                                                                    .currentAddress!
+                                                                    .district
+                                                                    .prefix +
+                                                                " " +
+                                                                context
                                                                     .read<
                                                                         AddressBloc>()
                                                                     .currentAddress!
@@ -230,12 +252,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                                     .province
                                                                     .name,
                                                             style: TextStyle(
-                                                              color: Colors.black
+                                                              color: Colors
+                                                                  .black
                                                                   .withOpacity(
                                                                       0.8),
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight.w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                             ),
                                                           ),
                                                         ],
@@ -312,7 +336,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                             ),
                                             child: OrderItemCard(
                                               userId: 0,
-                                              orderItem: widget.listItems[index],
+                                              orderItem:
+                                                  widget.listItems[index],
                                               index: index,
                                               isOrderDetail: true,
                                             ),
@@ -375,9 +400,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           height: 5,
                                         ),
                                         Text(
-                                          "Nhận hàng vào " + DateFormat('dd-MM-yyyy').format(DateTime.now().add(Duration(days: 5))),
+                                          "Nhận hàng vào " +
+                                              DateFormat('dd-MM-yyyy').format(
+                                                  DateTime.now()
+                                                      .add(Duration(days: 5))),
                                           style: TextStyle(
-                                            color: Colors.black.withOpacity(0.6),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: 0.5,
@@ -456,8 +485,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               ),
                                               Icon(
                                                 Icons.arrow_forward_ios_sharp,
-                                                color:
-                                                    Colors.black.withOpacity(0.6),
+                                                color: Colors.black
+                                                    .withOpacity(0.6),
                                                 size: 15,
                                               ),
                                             ],
@@ -479,50 +508,59 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 color: Color(0xffEDEDED),
                                 height: 5,
                               ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 15,
-                                  vertical: 10,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Phương thức thanh toán",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
+                              InkWell(
+                                onTap: ()async {
+                                  await Navigator.push(context,MaterialPageRoute(builder: (_)=>PaymentMethod())).then((value) {
+                                    setState(() {
+                                      paymentMethod=value;
+                                    });
+                                  });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                    vertical: 10,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Phương thức thanh toán",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Chọn phương thức \nthanh toán",
-                                          maxLines: null,
-                                          style: TextStyle(
-                                            color: Color(0xffEA1313)
-                                                .withOpacity(0.6),
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w400,
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            paymentMethod,
+                                            maxLines: null,
+                                            style: TextStyle(
+                                              color: Color(0xffEA1313)
+                                                  .withOpacity(0.6),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                            textAlign: TextAlign.right,
                                           ),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Icon(
-                                          Icons.arrow_forward_ios_sharp,
-                                          color: Colors.black.withOpacity(0.6),
-                                          size: 15,
-                                        ),
-                                      ],
-                                    )
-                                  ],
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Icon(
+                                            Icons.arrow_forward_ios_sharp,
+                                            color: Colors.black.withOpacity(0.6),
+                                            size: 15,
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                               Container(
@@ -540,7 +578,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         Text(
                                           "Tổng tiền hàng",
                                           style: TextStyle(
-                                            color: Colors.black.withOpacity(0.6),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: 0.5,
@@ -552,7 +591,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               .format(20000)
                                               .toString(),
                                           style: TextStyle(
-                                            color: Colors.black.withOpacity(0.6),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: 0.5,
@@ -570,7 +610,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         Text(
                                           "Tổng tiền phí vận chuyển",
                                           style: TextStyle(
-                                            color: Colors.black.withOpacity(0.6),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: 0.5,
@@ -583,7 +624,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                   totalPrice(widget.listItems))
                                               .toString(),
                                           style: TextStyle(
-                                            color: Colors.black.withOpacity(0.6),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: 0.5,
@@ -601,7 +643,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         Text(
                                           "Tiền khuyến mãi",
                                           style: TextStyle(
-                                            color: Colors.black.withOpacity(0.6),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: 0.5,
@@ -614,7 +657,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                   .format(20000)
                                                   .toString(),
                                           style: TextStyle(
-                                            color: Colors.black.withOpacity(0.6),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: 0.5,
@@ -630,7 +674,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       color: Colors.black.withOpacity(0.2),
                                     ),
                                     Container(
-                                      padding: EdgeInsets.symmetric(vertical: 10),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -647,8 +692,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           Text(
                                             NumberFormat.simpleCurrency(
                                                     locale: "vi")
-                                                .format(
-                                                    totalPrice(widget.listItems))
+                                                .format(totalPrice(
+                                                    widget.listItems))
                                                 .toString(),
                                             style: TextStyle(
                                               color: Colors.black,
@@ -741,7 +786,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                             .toString(),
                                         content: "",
                                         discount: 10000,
-                                        grandTotal: totalPrice(widget.listItems),
+                                        grandTotal:
+                                            totalPrice(widget.listItems),
                                         listItem: widget.listItems
                                             .map((e) => new InputOrderItem(
                                                 productId: e.productId,
@@ -749,7 +795,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                     .productOptionId,
                                                 imageUrl:
                                                     e.optionProduct.image.value,
-                                                price: e.optionProduct.price.value
+                                                price: e
+                                                    .optionProduct.price.value
                                                     .toInt(),
                                                 quantity: e.amount))
                                             .toList(),
@@ -757,7 +804,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         shipping: 1,
                                         shippingFee: 10000,
                                         status: 1,
-                                        subTotal: totalPrice(widget.listItems)));
+                                        subTotal:
+                                            totalPrice(widget.listItems)));
                                 },
                               ),
                             ),

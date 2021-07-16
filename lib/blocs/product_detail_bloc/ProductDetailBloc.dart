@@ -15,7 +15,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   late String optionProductId;
   List<Product> listProductAlsoLike = [];
   List<Product> listSimilarProduct = [];
-  List<String> options =[];
+  List<String> options = [];
   late int amount;
   int currentPage = 1;
   int currentSimilar = 1;
@@ -25,8 +25,11 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   @override
   Stream<ProductDetailState> mapEventToState(event) async* {
     if (event is ProductDetailLoadEvent) {
-
-
+      print(
+        Uri.http("$server:8080", "/api/v1/product/${event.id.toString()}", {
+          "user": event.person_id,
+        }),
+      );
       final response = await http.get(
           Uri.http("$server:8080", "/api/v1/product/${event.id.toString()}", {
             "user": event.person_id,
@@ -36,7 +39,8 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
           });
 
       productDetail = ProductDetailed.fromJson(json.decode(response.body));
-      this.add(LoadRecommendAndAlsoLikeProductEvent(person_id: event.person_id, productId: event.id.toString()));
+      this.add(LoadRecommendAndAlsoLikeProductEvent(
+          person_id: event.person_id, productId: event.id.toString()));
 
       yield ProductDetailShowState(data: productDetail);
     }
@@ -45,7 +49,6 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
       currentSimilar = 1;
       currentPage = 1;
 
-
       final response = await http.get(
           Uri.http("$server:8080", "/api/v1/product/${event.id.toString()}", {
             "user": event.person_id,
@@ -55,7 +58,8 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
           });
 
       productDetail = ProductDetailed.fromJson(json.decode(response.body));
-    this.add(LoadRecommendAndAlsoLikeProductEvent(person_id: event.person_id, productId: event.id.toString()));
+      this.add(LoadRecommendAndAlsoLikeProductEvent(
+          person_id: event.person_id, productId: event.id.toString()));
       yield ProductDetailShowState(data: productDetail);
     }
     if (event is AddtocartEvent) {
@@ -71,15 +75,16 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         },
       );
-     yield AddtoCartSuccess();
+      yield AddtoCartSuccess();
       yield ProductDetailShowState(data: productDetail);
     }
 
     if (event is FavoriteTapEvent) {
-      http.post(Uri.parse(
-          "http://$server:8080/api/v1/${event.person_id}/${event.product_id}/update-favorite")).then((value) async {
-            this.add(ChangeToFavoriteTapSuccessEvent());
-
+      http
+          .post(Uri.parse(
+              "http://$server:8080/api/v1/${event.person_id}/${event.product_id}/update-favorite"))
+          .then((value) async {
+        this.add(ChangeToFavoriteTapSuccessEvent());
       });
       yield ProductDetailShowState(data: productDetail);
     }
@@ -102,45 +107,43 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
 
       yield ProductDetailShowState(data: productDetail);
     }
-if(event is LoadRecommendAndAlsoLikeProductEvent)
-  {
-    yield LoadingRecommendAndAlsoLikeProduct();
-    print(Uri.parse(
-      "http://$server:8080/api/v1/user/${event.person_id}/products-also-like?p=${currentPage.toString()}",
-    ));
-    final response1 = await http.get(
-        Uri.parse(
-          "http://$server:8080/api/v1/user/${event.person_id}/products-also-like?p=${currentPage.toString()}",
-        ),
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-        });
-    listProductAlsoLike = json
-        .decode(response1.body)
-        .cast<Map<String, dynamic>>()
-        .map<Product>((json) => Product.fromJson(json))
-        .toList();
+    if (event is LoadRecommendAndAlsoLikeProductEvent) {
+      yield LoadingRecommendAndAlsoLikeProduct();
+      print(Uri.parse(
+        "http://$server:8080/api/v1/user/${event.person_id}/products-also-like?p=${currentPage.toString()}",
+      ));
+      final response1 = await http.get(
+          Uri.parse(
+            "http://$server:8080/api/v1/user/${event.person_id}/products-also-like?p=${currentPage.toString()}",
+          ),
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+          });
+      listProductAlsoLike = json
+          .decode(response1.body)
+          .cast<Map<String, dynamic>>()
+          .map<Product>((json) => Product.fromJson(json))
+          .toList();
 
-    currentPage++;
-    final response2 = await http.get(
-        Uri.parse(
-          "http://$server:8080/api/v1/product/${productDetail.id.toString()}/products-similarity?p=${currentPage.toString()}",
-        ),
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-        });
-    listSimilarProduct = json
-        .decode(response2.body)
-        .cast<Map<String, dynamic>>()
-        .map<Product>((json) => Product.fromJson(json))
-        .toList();
-    currentSimilar++;
-    yield ProductDetailShowState(data: productDetail);
-  }
-   if(event is ChangeToFavoriteTapSuccessEvent)
-     {
-       print("Asdasdasda");
-       yield FavoriteTapSuccess();
-     }
+      currentPage++;
+      final response2 = await http.get(
+          Uri.parse(
+            "http://$server:8080/api/v1/product/${productDetail.id.toString()}/products-similarity?p=${currentPage.toString()}",
+          ),
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+          });
+      listSimilarProduct = json
+          .decode(response2.body)
+          .cast<Map<String, dynamic>>()
+          .map<Product>((json) => Product.fromJson(json))
+          .toList();
+      currentSimilar++;
+      yield ProductDetailShowState(data: productDetail);
+    }
+    if (event is ChangeToFavoriteTapSuccessEvent) {
+      print("Asdasdasda");
+      yield FavoriteTapSuccess();
+    }
   }
 }

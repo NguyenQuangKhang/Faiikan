@@ -55,11 +55,11 @@ class OrderItemCard extends StatelessWidget {
               fit: BoxFit.fill,
             ),
             width: MediaQuery.of(context).size.width / 3 - 25,
-            height: MediaQuery.of(context).size.height / 7 + 10,
+            height: MediaQuery.of(context).size.height / 7 + 20,
           ),
           Container(
             width: MediaQuery.of(context).size.width * 2 / 3 - 40,
-            height: MediaQuery.of(context).size.height / 7 + 10,
+            height: MediaQuery.of(context).size.height / 7 + 20,
             padding: EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
