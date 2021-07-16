@@ -77,9 +77,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           userId=user!.id!;
           print(" userid: " + user!.id.toString());
           isLogined=true;
-          FBStorage.instanace.saveUserImageToFirebaseStorage("",
-              user!.id.toString(),user!.name,"",
-             await urlToFile(user!.imageUrl ?? ""));
+//          FBStorage.instanace.saveUserImageToFirebaseStorage("",
+//              user!.id.toString(),user!.name,"",
+//             await urlToFile(user!.imageUrl ?? ""));
           SharedPreferences prefs = await SharedPreferences.getInstance();
          await  prefs.setString("userId", userId!.toString());
          await  prefs.setString("email", user!.email ?? "");
