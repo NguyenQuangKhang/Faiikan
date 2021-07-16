@@ -118,7 +118,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
             yield AccountOk();
           else yield AccountFailure(error: json.decode(response.body)['message'] );
         }catch(error) {
-          yield  AccountFailure(error: error.toString());
+          yield  AccountFailure(error: "Sai tài khoản hoặc mật khẩu");
         }
       }
   }

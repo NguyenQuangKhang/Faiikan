@@ -201,8 +201,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               hasLike: true,
                               liked: productBloc.listdata[index].isLiked,
                               onTapFavorite: () {
-                            if(context
-                                .read<AccountBloc>().userId!=0)    productBloc.add(FavoriteTap(
+                          productBloc.add(FavoriteTap(
                                     person_id: context
                                         .read<AccountBloc>()
                                         .user!.id!
@@ -371,6 +370,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                   BlocProvider.value(
                                                     value: context
                                                         .read<CartBloc>(),
+                                                  ),
+                                                      BlocProvider.value(
+                                                        value: context
+                                                            .read<AccountBloc>(),
                                                   ),
                                                 ],
                                                 child: ProductDetail(

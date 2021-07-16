@@ -47,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.height / 6);
+    print(userId);
     return Container(
       color: Color(0xffE7E7E7),
       height: MediaQuery.of(context).size.height,
@@ -650,16 +650,14 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 )
                               : */BlocProvider(
-                                  create: (_) {
-                                    return ProductBloc(
+                                  create: (_) => ProductBloc(
                                       InitialProductState(
                                         data: [],
                                         error: "",
                                         sortBy: 0,
                                       ),
                                     )..add(SeenProductEvent(
-                                        userId: userId.toString()));
-                                  },
+                                        userId: userId.toString())),
                                   child: BlocProvider.value(
                                       value: context.read<CartBloc>(),
                                       child: SeenProductScreen(

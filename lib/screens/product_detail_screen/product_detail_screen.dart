@@ -2112,6 +2112,9 @@ class _ProductDetailState extends State<ProductDetail>
                                                                                   BlocProvider.value(
                                                                                     value: context.read<CartBloc>(),
                                                                                   ),
+                                                                                  BlocProvider.value(
+                                                                                    value: context.read<AccountBloc>(),
+                                                                                  ),
                                                                                 ],
                                                                                 child:
                                                                                     ProductDetail(

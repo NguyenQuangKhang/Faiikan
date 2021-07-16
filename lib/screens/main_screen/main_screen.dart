@@ -94,7 +94,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
         child: ProfileScreen(
-          userId: context.read<AccountBloc>().userId==0?0:context.read<AccountBloc>().user!.id!,
+          userId: context.read<AccountBloc>().user!.id!,
         ),
       )
     ];
