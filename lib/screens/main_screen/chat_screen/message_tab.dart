@@ -37,7 +37,7 @@ class _MessageScreenState extends State<MessageScreen> with LocalNotificationVie
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return context.read<AccountBloc>().userId==0?BlocProvider.value(value: context.read<AccountBloc>(),child: RegisterAndLoginScreen(initialIndex: 1,),):Scaffold(backgroundColor: Colors.blue.withOpacity(0.2),
-      appBar: AppBar(centerTitle: true,leading: Container(),backgroundColor: Colors.white,title: Center(child: Text("Chat List",style: TextStyle(color: Colors.black),),),),
+      appBar: AppBar(centerTitle: true,leading: Container(),backgroundColor: Colors.white,title: Center(child: Text("Chat",style: TextStyle(color: Colors.black),),),),
       body:  StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')

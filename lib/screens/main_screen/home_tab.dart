@@ -5,6 +5,9 @@ import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
+import 'package:faiikan/blocs/flash_sale_bloc/flash_sale_bloc.dart';
+import 'package:faiikan/blocs/flash_sale_bloc/flash_sale_event.dart';
+import 'package:faiikan/blocs/flash_sale_bloc/flash_sale_state.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_bloc.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_event.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_state.dart';
@@ -122,6 +125,7 @@ class HomeScreen extends StatelessWidget {
                   ..add(ProductLoadEvent(
                       SortBy: 0, userId: context.read<AccountBloc>().userId==0?0:context.read<AccountBloc>().user!.id!)),
               ),
+              BlocProvider(create: (_) => FlashSaleBloc(InitialFlashSaleState())..add(InitiateFlashSaleEvent()),),
               BlocProvider(
                 create: (_) => HotSearchBloc(LoadHotSearch())
                   ..add(InitiateHotSearchEvent()),

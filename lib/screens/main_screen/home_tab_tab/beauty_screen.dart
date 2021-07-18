@@ -1273,6 +1273,12 @@ class _BeautyScreenState extends State<BeautyScreen> {
                                                                   .read<
                                                                   CartBloc>(),
                                                             ),
+                                                            BlocProvider
+                                                                .value(
+                                                              value: context
+                                                                  .read<
+                                                                  AccountBloc>(),
+                                                            ),
                                                           ],
                                                           child:
                                                           ProductDetail(

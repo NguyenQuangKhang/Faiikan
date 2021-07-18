@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailEvent.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailState.dart';
@@ -339,6 +340,10 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
                                                           BlocProvider.value(
                                                             value: context.read<
                                                                 CartBloc>(),
+                                                          ),
+                                                          BlocProvider.value(
+                                                            value: context.read<
+                                                                AccountBloc>(),
                                                           ),
                                                         ],
                                                         child: ProductDetail(

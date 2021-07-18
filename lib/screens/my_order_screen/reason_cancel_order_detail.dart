@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ReasonCancelOrderDetail extends StatelessWidget {
@@ -5,12 +6,14 @@ class ReasonCancelOrderDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
           "Chi tiết hủy đơn hàng",
           style: TextStyle(
             fontSize: 16,
             letterSpacing: 0.5,
             fontWeight: FontWeight.w500,
+            color: Colors.black
           ),
         ),
         leading: BackButton(
@@ -20,8 +23,9 @@ class ReasonCancelOrderDetail extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor: Color(0xffC4C4C4).withOpacity(0.5),
+      backgroundColor: Color(0xffffffff),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.all(10),

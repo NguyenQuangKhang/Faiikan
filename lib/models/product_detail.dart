@@ -12,6 +12,7 @@ class ProductDetailed {
   late int _orderCount;
   late bool _freeShip;
   late Category _category;
+  FlashSaleProduct? _flashSaleProduct;
   late Brand? _brand;
   late String _material;
   late String _purpose;
@@ -38,7 +39,7 @@ class ProductDetailed {
   String get shortDescription => _shortDescription;
 
   String get highlight => _highlight;
-
+  FlashSaleProduct? get flashSaleProduct =>_flashSaleProduct;
   String get typeId => _typeId;
 
   bool get active => _active;
@@ -89,6 +90,7 @@ class ProductDetailed {
       required bool freeShip,
       required Category category,
       required String categories,
+        required FlashSaleProduct? flashSaleProduct,
       required Brand? brand,
       required String material,
       required String purpose,
@@ -111,6 +113,7 @@ class ProductDetailed {
     _active = active;
     _visibility = visibility;
     _promotion = promotion;
+    _flashSaleProduct=flashSaleProduct;
     _orderCount = orderCount;
     _freeShip = freeShip;
     _category = category;
@@ -141,6 +144,7 @@ class ProductDetailed {
     _promotion = json["promotion"];
     _orderCount = json["orderCount"];
     _freeShip = json["freeShip"];
+    json["flashSaleProduct"]==null?_flashSaleProduct=null :_flashSaleProduct =FlashSaleProduct.fromJson(json["flashSaleProduct"]);
     _category = (json["category"] != null
         ? Category.fromJson(json["category"])
         : null)!;
@@ -801,4 +805,91 @@ class ProductOption {
     }
     return map;
   }
+}
+class FlashSaleProduct {
+  int? _id;
+  int? _percentDiscount;
+  int? _quantity;
+  int? _saleAmount;
+  FlashSale? _flashSale;
+
+  int? get id => _id;
+  int? get percentDiscount => _percentDiscount;
+  int? get quantity => _quantity;
+  int? get saleAmount => _saleAmount;
+  FlashSale? get flashSale => _flashSale;
+
+  FlashSaleProduct({
+    int? id,
+    int? percentDiscount,
+    int? quantity,
+    int? saleAmount,
+    FlashSale? flashSale}){
+    _id = id;
+    _percentDiscount = percentDiscount;
+    _quantity = quantity;
+    _saleAmount = saleAmount;
+    _flashSale = flashSale;
+  }
+
+  FlashSaleProduct.fromJson(dynamic json) {
+    _id = json["id"];
+    _percentDiscount = json["percentDiscount"];
+    _quantity = json["quantity"];
+    _saleAmount = json["saleAmount"];
+    _flashSale = json["flashSale"] != null ? FlashSale.fromJson(json["flashSale"]) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    var map = <String, dynamic>{};
+    map["id"] = _id;
+    map["percentDiscount"] = _percentDiscount;
+    map["quantity"] = _quantity;
+    map["saleAmount"] = _saleAmount;
+    if (_flashSale != null) {
+      map["flashSale"] = _flashSale?.toJson();
+    }
+    return map;
+  }
+
+}
+
+class FlashSale {
+  int? _id;
+  String? _startTime;
+  String? _endTime;
+  String? _dateProgram;
+
+  int? get id => _id;
+  String? get startTime => _startTime;
+  String? get endTime => _endTime;
+  String? get dateProgram => _dateProgram;
+
+  FlashSale({
+    int? id,
+    String? startTime,
+    String? endTime,
+    String? dateProgram}){
+    _id = id;
+    _startTime = startTime;
+    _endTime = endTime;
+    _dateProgram = dateProgram;
+  }
+
+  FlashSale.fromJson(dynamic json) {
+    _id = json["id"];
+    _startTime = json["startTime"];
+    _endTime = json["endTime"];
+    _dateProgram = json["dateProgram"];
+  }
+
+  Map<String, dynamic> toJson() {
+    var map = <String, dynamic>{};
+    map["id"] = _id;
+    map["startTime"] = _startTime;
+    map["endTime"] = _endTime;
+    map["dateProgram"] = _dateProgram;
+    return map;
+  }
+
 }

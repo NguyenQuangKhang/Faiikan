@@ -94,7 +94,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
         child: ProfileScreen(
-          userId: context.read<AccountBloc>().user!.id!,
+          userId: context.read<AccountBloc>().user==null ? 0: context.read<AccountBloc>().user!.id!,
         ),
       )
     ];
@@ -106,7 +106,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc,AccountState>(
 
-      builder: (context,state) => DefaultTabController(
+      builder: (context,state) => state is AccountLoading ?Center(child: CircularProgressIndicator(backgroundColor: Colors.redAccent,),):DefaultTabController(
         length: 4,
         child: Scaffold(
           bottomNavigationBar: BottomNavigationBar(

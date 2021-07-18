@@ -8,6 +8,9 @@ import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
+import 'package:faiikan/blocs/flash_sale_bloc/flash_sale_bloc.dart';
+import 'package:faiikan/blocs/flash_sale_bloc/flash_sale_event.dart';
+import 'package:faiikan/blocs/flash_sale_bloc/flash_sale_state.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_bloc.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_event.dart';
 import 'package:faiikan/blocs/hot_search_bloc/hot_search_state.dart';
@@ -25,6 +28,7 @@ import 'package:faiikan/blocs/similar_product_bloc/similar_product_event.dart';
 import 'package:faiikan/blocs/similar_product_bloc/similar_product_state.dart';
 import 'package:faiikan/models/category.dart';
 import 'package:faiikan/models/product_detail.dart';
+import 'package:faiikan/screens/flash_sale/flash_sale_screen.dart';
 import 'package:faiikan/screens/product_detail_screen/product_detail_screen.dart';
 import 'package:faiikan/screens/product_screen/ProductWithCatLv3_Screen.dart';
 import 'package:faiikan/screens/search_screen/search_screen.dart';
@@ -34,6 +38,7 @@ import 'package:faiikan/models/category.dart' as Cate;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
@@ -225,114 +230,142 @@ class _ForYouScreenState extends State<ForYouScreen> {
                   color: Colors.black.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: BlocListener(
+                  bloc: context.read<FlashSaleBloc>(),
+                  listener: (context,state) {
+                    if(state is SucessfulGetPeriodState)
+                      {
+                         print("success");
+                        for(int i=0;i< context.read<FlashSaleBloc>().period.length;i++)
+                          {
+                                       print(context.read<FlashSaleBloc>().period[i].status);
+                            if(context.read<FlashSaleBloc>().period[i].id==context.read<FlashSaleBloc>().idPeriod)
+                              {
+                                DateTime endTime=DateFormat('HH:mm:ss').parse(context.read<FlashSaleBloc>().period[i].endTime!);
+                                setState(() {
+                                  time= endTime.hour*3600+endTime.minute*60+endTime.second-(DateTime.now().hour*3600+DateTime.now().minute*60 +DateTime.now().second);
+                                });
+                              }
+                          }
+                      }
+                  },
+                  child: BlocBuilder<FlashSaleBloc,FlashSaleState>(
+                    builder: (context,state){
+                      if(state is LoadingFlashSale || state is InitialFlashSaleState)
+                        return Center(child: CircularProgressIndicator(backgroundColor: Colors.redAccent,),);
+                      return Column(
                         children: [
-                          Row(
-                            children: [
-                              Image.asset("assets/images/flashsale.png"),
-                              Text(
-                                "FLASH SALE",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Color(0xffF34646),
-                                    letterSpacing: 0.5,
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FontStyle.italic),
+                          InkWell(
+                            onTap:(){
+                              Navigator.push(context, MaterialPageRoute(builder: (_)=>BlocProvider.value(value:context.read<ProductBloc>(),child: BlocProvider.value(value: context.read<AccountBloc>(),child: BlocProvider.value(value: context.read<CartBloc>(),child: BlocProvider.value(value: context.read<FlashSaleBloc>()..add(LoadProductOfPeriod(id: -1)),child: FlashSaleScreen()))))));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 10,
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Row(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    ":",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 10),
+                                  Row(
+                                    children: [
+                                      Image.asset("assets/images/flashsale.png"),
+                                      Text(
+                                        "FLASH SALE",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: Color(0xffF34646),
+                                            letterSpacing: 0.5,
+                                            fontWeight: FontWeight.w600,
+                                            fontStyle: FontStyle.italic),
+                                      ),
+                                    ],
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 2, horizontal: 3),
-                                    decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.circular(1)),
-                                    child: Text(
-                                      (time ~/ 3600).toString(),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 10),
-                                    ),
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            ":",
+                                            style: TextStyle(
+                                                color: Colors.white, fontSize: 10),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 2, horizontal: 3),
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius: BorderRadius.circular(1)),
+                                            child: Text(
+                                              (time ~/ 3600).toString(),
+                                              style: TextStyle(
+                                                  color: Colors.white, fontSize: 10),
+                                            ),
+                                          ),
+                                          Text(
+                                            ":",
+                                            style: TextStyle(
+                                                color: Colors.white, fontSize: 10),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 2, horizontal: 3),
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius: BorderRadius.circular(1)),
+                                            child: Text(
+                                              (time % 3600 ~/ 60) >= 10
+                                                  ? (time % 3600 ~/ 60).toString()
+                                                  : "0" +
+                                                  (time % 3600 ~/ 60).toString(),
+                                              style: TextStyle(
+                                                  color: Colors.white, fontSize: 10),
+                                            ),
+                                          ),
+                                          Text(
+                                            ":",
+                                            style: TextStyle(
+                                                color: Colors.white, fontSize: 10),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 2, horizontal: 3),
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius: BorderRadius.circular(1)),
+                                            child: Text(
+                                              (time % 60) >= 10
+                                                  ? (time % 60).toString()
+                                                  : "0" + (time % 60).toString(),
+                                              style: TextStyle(
+                                                  color: Colors.white, fontSize: 10),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Icon(
+                                            Icons.arrow_forward_ios_sharp,
+                                            color: Color(0xffF8BD00),
+                                            size: 15,
+                                          )
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    ":",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 10),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 2, horizontal: 3),
-                                    decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.circular(1)),
-                                    child: Text(
-                                      (time % 3600 ~/ 60) >= 10
-                                          ? (time % 3600 ~/ 60).toString()
-                                          : "0" +
-                                              (time % 3600 ~/ 60).toString(),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 10),
-                                    ),
-                                  ),
-                                  Text(
-                                    ":",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 10),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 2, horizontal: 3),
-                                    decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.circular(1)),
-                                    child: Text(
-                                      (time % 60) >= 10
-                                          ? (time % 60).toString()
-                                          : "0" + (time % 60).toString(),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 10),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios_sharp,
-                                    color: Color(0xffF8BD00),
-                                    size: 15,
-                                  )
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height / 4 - 40,
-                      child: ListView.builder(
-                          padding: EdgeInsets.only(left: 10),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
+                          Container(
+                            height: MediaQuery.of(context).size.height / 4 - 40,
+                            child: ListView.builder(
+                                padding: EdgeInsets.only(left: 10),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: context.read<FlashSaleBloc>().data.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () {
 //                                Navigator.of(context).push(PageRouteBuilder(
 //                                    transitionDuration:
 //                                        Duration(milliseconds: 2000),
@@ -350,118 +383,121 @@ class _ForYouScreenState extends State<ForYouScreen> {
 //                                        ),
 //                                      );
 //    }));
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                  right: 20,
-                                ),
-                                width: MediaQuery.of(context).size.width / 4,
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Stack(
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                        right: 20,
+                                      ),
+                                      width: MediaQuery.of(context).size.width / 4,
+                                      child: Column(
                                         children: [
-                                          Container(
-                                            margin: EdgeInsets.only(top: 2),
-                                            child: CachedNetworkImage(
-                                              imageUrl: imagesFlashSale[index],
-                                              fit: BoxFit.fill,
-                                              placeholder: (context, url) => Center(
-                                                  child: Center(
-                                                      child:
-                                                          CircularProgressIndicator())),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.purple
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 1,
-                                                  blurRadius: 2,
-                                                  offset: Offset(0,
-                                                      0), // changes position of shadow
+                                          Expanded(
+                                            flex: 2,
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(top: 2),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: context.read<FlashSaleBloc>().data[index].productItem!.imgUrl!,
+                                                    fit: BoxFit.fill,
+                                                    placeholder: (context, url) => Center(
+                                                        child: Center(
+                                                            child:
+                                                            CircularProgressIndicator())),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                        Icon(Icons.error),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.purple
+                                                            .withOpacity(0.5),
+                                                        spreadRadius: 1,
+                                                        blurRadius: 2,
+                                                        offset: Offset(0,
+                                                            0), // changes position of shadow
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  child: Container(
+                                                    height: 30,
+                                                    width: 30,
+                                                    decoration: BoxDecoration(
+                                                        color: Color(0xffF05A5A),
+                                                        borderRadius:
+                                                        BorderRadius.only(
+                                                            bottomRight:
+                                                            Radius.circular(
+                                                                20),
+                                                            topLeft:
+                                                            Radius.circular(
+                                                                5))),
+                                                    child: Center(
+                                                      child: Text(
+                                                        context.read<FlashSaleBloc>().data[index].percentDiscount.toString() +
+                                                            "%",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12,fontWeight: FontWeight.w600),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          Positioned(
-                                            child: Container(
-                                              height: 20,
-                                              width: 30,
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xffF05A5A),
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  20),
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  5))),
-                                              child: Center(
-                                                child: Text(
-                                                  promotionFlashSale[index]
-                                                          .toString() +
-                                                      "%",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 8),
-                                                ),
-                                              ),
-                                            ),
+                                          SizedBox(
+                                            height: 5,
                                           ),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  Text( NumberFormat
+                                                  .simpleCurrency(
+                                              locale: "vi")
+                                                  .format(context.read<FlashSaleBloc>().data[index].productItem!.price!.priceMax)
+                                                  .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w500,
+                                                      letterSpacing: 0.5,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  LinearPercentIndicator(
+                                                    center: Text(
+                                                      context.read<FlashSaleBloc>().data[index].saleAmount.toString() +
+                                                          " đã bán",
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Colors.white),
+                                                    ),
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 2, horizontal: 5),
+                                                    percent: 0.6,
+                                                    lineHeight: 18,
+                                                    backgroundColor:
+                                                    Color(0xffF9AEAE),
+                                                    progressColor: Color(0xffFF6161),
+                                                  )
+                                                ],
+                                              ))
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Expanded(
-                                        flex: 1,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                              priceFlashSale[index].toString() +
-                                                  ".000đ",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                letterSpacing: 0.5,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            LinearPercentIndicator(
-                                              center: Text(
-                                                soldAmountFlashSale[index]
-                                                        .toString() +
-                                                    " đã bán",
-                                                style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: Colors.white),
-                                              ),
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 2, horizontal: 5),
-                                              percent: 0.6,
-                                              lineHeight: 18,
-                                              backgroundColor:
-                                                  Color(0xffF9AEAE),
-                                              progressColor: Color(0xffFF6161),
-                                            )
-                                          ],
-                                        ))
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                    ),
-                  ],
+                                  );
+                                }),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -1164,11 +1200,6 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                                                 ? "0"
                                                                                 : context.read<AccountBloc>().user!.id.toString(),
                                                                           ))),
-                                                                if (context
-                                                                        .read<
-                                                                            AccountBloc>()
-                                                                        .userId !=
-                                                                    0)
                                                                   BlocProvider
                                                                       .value(
                                                                     value: context

@@ -311,23 +311,27 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                             builder: (_) => BlocProvider.value(
                                                   value:
                                                       context.read<CartBloc>(),
-                                                  child: BlocProvider(
-                                                    create: (_) => SimilarProductBloc(
-                                                        InitialSimilarProductState())
-                                                      ..add(InitiateSimilarProductEvent(
-                                                          productId: productBloc
-                                                              .listRecommendTopRating[
-                                                                  index]
-                                                              .id
-                                                              .toString())),
-                                                    child: SimilarProductScreen(
-                                                        interactingProduct:
-                                                            productBloc
-                                                                    .listRecommendTopRating[
-                                                                index],
-                                                        userId: context
-                                                            .read<AccountBloc>()
-                                                            .user!.id!),
+                                                  child: BlocProvider.value(
+                                                    value: context
+                                                        .read<AccountBloc>(),
+                                                    child: BlocProvider(
+                                                      create: (_) => SimilarProductBloc(
+                                                          InitialSimilarProductState())
+                                                        ..add(InitiateSimilarProductEvent(
+                                                            productId: productBloc
+                                                                .listRecommendTopRating[
+                                                                    index]
+                                                                .id
+                                                                .toString())),
+                                                      child: SimilarProductScreen(
+                                                          interactingProduct:
+                                                              productBloc
+                                                                      .listRecommendTopRating[
+                                                                  index],
+                                                          userId: context
+                                                              .read<AccountBloc>()
+                                                              .user!.id!),
+                                                    ),
                                                   ),
                                                 )));
                                   },

@@ -1273,6 +1273,12 @@ class _MaleScreenState extends State<MaleScreen> {
                                                                   .read<
                                                                   CartBloc>(),
                                                             ),
+                                                            BlocProvider
+                                                                .value(
+                                                              value: context
+                                                                  .read<
+                                                                  AccountBloc>(),
+                                                            ),
                                                           ],
                                                           child:
                                                           ProductDetail(

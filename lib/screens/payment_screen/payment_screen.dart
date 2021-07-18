@@ -588,7 +588,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         Text(
                                           NumberFormat.simpleCurrency(
                                                   locale: "vi")
-                                              .format(20000)
+                                              .format(totalPrice(widget.listItems))
                                               .toString(),
                                           style: TextStyle(
                                             color:
@@ -621,7 +621,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           NumberFormat.simpleCurrency(
                                                   locale: "vi")
                                               .format(
-                                                  totalPrice(widget.listItems))
+                                                  20000)
                                               .toString(),
                                           style: TextStyle(
                                             color:

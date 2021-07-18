@@ -507,51 +507,110 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                 ],
               ),
             ),
-            InkWell(
-              onTap: () {
-                if (txtName.text.isNotEmpty && txtNumberPhone.text.isNotEmpty)
-                  if (context.read<AddressBloc>().selectedWard == null)
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          "Vui lòng chọn Phường/Xã."),
-                    ));
-                  else context.read<AddressBloc>().add(UpdateAddressEvent(
-                      addressId: widget.address.id.toString(),
-                      name: txtName.text,
-                      specificAddress: txtSpecificAddress.text,
-                      numberPhone: txtNumberPhone.text,
-                      defaultIs: valueCheckBox,
-                      ward: context
-                          .read<AddressBloc>()
-                          .wards[context
-                          .read<AddressBloc>()
-                          .selectedWard!].id.toString()));
-              },
-              child: Container(
-                height: 70,
-                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                decoration: BoxDecoration(
-                    color: Color(0xffF34646),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          offset: Offset(0, 0),
-                          spreadRadius: 1,
-                          blurRadius: 2)
-                    ]),
-                child: Center(
-                  child: Text(
-                    "Lưu",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
+            Row(
+              children: [
+                SizedBox(width: 10,),
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: () {
+                      if (txtName.text.isNotEmpty && txtNumberPhone.text.isNotEmpty)
+                        if (context.read<AddressBloc>().selectedWard == null)
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "Vui lòng chọn Phường/Xã."),
+                          ));
+                        else context.read<AddressBloc>().add(UpdateAddressEvent(
+                            addressId: widget.address.id.toString(),
+                            name: txtName.text,
+                            specificAddress: txtSpecificAddress.text,
+                            numberPhone: txtNumberPhone.text,
+                            defaultIs: valueCheckBox,
+                            ward: context
+                                .read<AddressBloc>()
+                                .wards[context
+                                .read<AddressBloc>()
+                                .selectedWard!].id.toString()));
+                    },
+                    child: Container(
+                      height: 70,
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: Color(0xffF34646),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0, 0),
+                                spreadRadius: 1,
+                                blurRadius: 2)
+                          ]),
+                      child: Center(
+                        child: Text(
+                          "Xóa",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+                SizedBox(width: 10,),
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: () {
+                      if (txtName.text.isNotEmpty && txtNumberPhone.text.isNotEmpty)
+                        if (context.read<AddressBloc>().selectedWard == null)
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "Vui lòng chọn Phường/Xã."),
+                          ));
+                        else context.read<AddressBloc>().add(UpdateAddressEvent(
+                            addressId: widget.address.id.toString(),
+                            name: txtName.text,
+                            specificAddress: txtSpecificAddress.text,
+                            numberPhone: txtNumberPhone.text,
+                            defaultIs: valueCheckBox,
+                            ward: context
+                                .read<AddressBloc>()
+                                .wards[context
+                                .read<AddressBloc>()
+                                .selectedWard!].id.toString()));
+                    },
+                    child: Container(
+                      height: 70,
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: Color(0xffF34646),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0, 0),
+                                spreadRadius: 1,
+                                blurRadius: 2)
+                          ]),
+                      child: Center(
+                        child: Text(
+                          "Lưu",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10,),
+              ],
             ),
           ],
         ),

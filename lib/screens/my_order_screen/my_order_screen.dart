@@ -21,7 +21,7 @@ List<String> list_status = [
   "Đang xử lý",
   "Đang giao",
   "Đã giao",
-  "Đã hủy",
+  "Đã hủy",
 ];
 
 class MyOrderScreen extends StatefulWidget {
@@ -198,7 +198,7 @@ class _MyOrder_TabPageState extends State<MyOrder_TabPage> {
                                                         .read<MyOrderBloc>()
                                                         .myOrders[index]
                                                         .id!
-                                                        .toString())),
+                                                        .toString(),),),
                                               child: BlocProvider.value(
                                                 value: context.read<MyOrderBloc>(),
                                                 child:  BlocProvider.value(

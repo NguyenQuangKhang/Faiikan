@@ -14,6 +14,9 @@ import 'package:faiikan/blocs/favorite_bloc/FavortieState.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_event.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_state.dart';
+import 'package:faiikan/blocs/my_rating_bloc/my_rating_bloc.dart';
+import 'package:faiikan/blocs/my_rating_bloc/my_rating_event.dart';
+import 'package:faiikan/blocs/my_rating_bloc/my_rating_state.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 
 import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
@@ -41,13 +44,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final int userId;
+   int userId;
 
-  const ProfileScreen({required this.userId});
+   ProfileScreen({required this.userId});
 
   @override
   Widget build(BuildContext context) {
-    print(userId);
+userId=context.read<AccountBloc>().userId!;
     return Container(
       color: Color(0xffE7E7E7),
       height: MediaQuery.of(context).size.height,
@@ -727,7 +730,7 @@ class ProfileScreen extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => MyReviewScreen()));
+                          MaterialPageRoute(builder: (_) => BlocProvider(create: (_)=> MyRatingBloc(InitialMyRatingState())..add(InitiateMyRatingEvent(person_id: userId.toString(), star: 0)),child: MyReviewScreen(userId: userId.toString(),))));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1228,23 +1231,27 @@ class ProfileScreen extends StatelessWidget {
                                                       BlocProvider.value(
                                                         value: context
                                                             .read<CartBloc>(),
-                                                        child: BlocProvider(
-                                                          create: (_) => SimilarProductBloc(
-                                                              InitialSimilarProductState())
-                                                            ..add(InitiateSimilarProductEvent(
-                                                                productId: context
+                                                        child: BlocProvider.value(
+                                                          value: context
+                                                              .read<AccountBloc>(),
+                                                          child: BlocProvider(
+                                                            create: (_) => SimilarProductBloc(
+                                                                InitialSimilarProductState())
+                                                              ..add(InitiateSimilarProductEvent(
+                                                                  productId: context
+                                                                      .read<
+                                                                          ProductBloc>()
+                                                                      .listdata[
+                                                                          index]
+                                                                      .id
+                                                                      .toString())),
+                                                            child: SimilarProductScreen(
+                                                                interactingProduct: context
                                                                     .read<
                                                                         ProductBloc>()
-                                                                    .listdata[
-                                                                        index]
-                                                                    .id
-                                                                    .toString())),
-                                                          child: SimilarProductScreen(
-                                                              interactingProduct: context
-                                                                  .read<
-                                                                      ProductBloc>()
-                                                                  .listdata[index],
-                                                              userId: userId),
+                                                                    .listdata[index],
+                                                                userId: userId),
+                                                          ),
                                                         ),
                                                       )));
                                         },

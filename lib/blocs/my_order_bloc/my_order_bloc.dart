@@ -14,7 +14,7 @@ Map<String,int> mapStatus = {
   "Đang xử lý" : 2,
   "Đang giao" : 3,
   "Đã giao" : 4,
-  "Đã Hủy": 5,
+  "Đã hủy": 5,
 };
 
 class MyOrderBloc extends Bloc<MyOrderEvent, MyOrderState> {
