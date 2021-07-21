@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -39,4 +41,28 @@ class LoginButtonPressed extends AccountEvent {
   @override
   String toString() =>
       'LoginButtonPressed { username: $username, password: $password }';
+}
+class UpdateProfileInfo extends AccountEvent {
+  final String id;
+  final String name;
+  final String phone;
+  final String sex;
+  final File? avarta;
+  final String? birthday;
+  final String email;
+
+  const UpdateProfileInfo({
+    required this.id,
+    required this.name,
+    required this.sex,
+    required this.avarta,
+    required this.phone,
+    required this.birthday,
+    required this.email,
+  });
+
+  @override
+  List<Object> get props => [];
+
+
 }

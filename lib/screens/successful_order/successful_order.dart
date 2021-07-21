@@ -122,9 +122,18 @@ class _SuccessfulOrderState extends State<SuccessfulOrder> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => MyOrderScreen(
-                                      userId: context.read<AccountBloc>().userId.toString(),
-                                      initialTab: 0,
+                                    builder: (_) => BlocProvider.value(
+                                      value: context.read<ProductBloc>(),
+                                      child: BlocProvider.value(
+                                        value: context.read<CartBloc>(),
+                                        child: BlocProvider.value(
+                                          value: context.read<AccountBloc>(),
+                                          child: MyOrderScreen(
+                                            userId: context.read<AccountBloc>().userId.toString(),
+                                            initialTab: 0,
+                                          ),
+                                        ),
+                                      ),
                                     )));
                           },
                           child: Container(

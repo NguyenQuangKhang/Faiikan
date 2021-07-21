@@ -30,6 +30,7 @@ import 'package:faiikan/screens/payment_screen/payment_screen.dart';
 import 'package:faiikan/screens/review_screen/review_screen.dart';
 import 'package:faiikan/screens/similar_product_screen/similar_product_screen.dart';
 import 'package:faiikan/styles/custom_icon_icons.dart';
+import 'package:faiikan/utils/server_name.dart';
 import 'package:faiikan/widgets/attribute_sheet.dart';
 import 'package:faiikan/widgets/card/product_card.dart';
 import 'package:faiikan/widgets/product_property_detail.dart';
@@ -90,6 +91,11 @@ class _ProductDetailState extends State<ProductDetail>
   ScrollController _scrollController2 = ScrollController();
   bool flag = true;
 
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
   @override
   void initState() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -2842,7 +2848,7 @@ class _ProductDetailState extends State<ProductDetail>
         listener: (context,state){
           if(state is LoadSuccessProductDetail )
           {
-            DateTime endTime = DateFormat('HH:mm:ss').parse(context.read<ProductDetailBloc>().productDetail.flashSaleProduct!.flashSale!.endTime!);
+           if(context.read<ProductDetailBloc>().productDetail.flashSaleProduct !=null) {DateTime endTime = DateFormat('HH:mm:ss').parse(context.read<ProductDetailBloc>().productDetail.flashSaleProduct!.flashSale!.endTime!);
             setState(() {
               time = endTime.hour * 3600 + endTime.minute * 60 +
                   endTime.second - (DateTime
@@ -2853,7 +2859,7 @@ class _ProductDetailState extends State<ProductDetail>
                   .now()
                   .second);
             });
-          }
+          }}
         },
         child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
           builder: (context, state) {
@@ -4455,7 +4461,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                                         .ratings
                                                                         .listrating[
                                                                     index]
-                                                                        .imageAvatar,
+                                                                        .imageAvatar.replaceAll("localhost", server),
                                                                   )),
                                                               boxShadow: [
                                                                 BoxShadow(
@@ -4560,7 +4566,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                                   .ratings
                                                                   .listrating[
                                                               index]
-                                                                  .imageRating[i];
+                                                                  .imageRating[i].replaceAll("localhost", server);
                                                               return Container(
                                                                   decoration:
                                                                   BoxDecoration(
@@ -5049,11 +5055,17 @@ class _ProductDetailState extends State<ProductDetail>
                                                                                             .id
                                                                                             .toString())),
                                                                               child:
-                                                                              SimilarProductScreen(
-                                                                                  interactingProduct: productDetailBloc
-                                                                                      .listProductAlsoLike[index],
-                                                                                  userId: widget
-                                                                                      .userId),
+                                                                              BlocProvider.value(
+                                                                                value: context.read<ProductBloc>(),
+                                                                                child: BlocProvider.value(
+                                                                                  value: context.read<AccountBloc>(),
+                                                                                  child: SimilarProductScreen(
+                                                                                      interactingProduct: productDetailBloc
+                                                                                          .listProductAlsoLike[index],
+                                                                                      userId: widget
+                                                                                          .userId),
+                                                                                ),
+                                                                              ),
                                                                             ),
                                                                           )));
                                                             },
@@ -5105,6 +5117,12 @@ class _ProductDetailState extends State<ProductDetail>
                                                                                 value: context
                                                                                     .read<
                                                                                     CartBloc>(),
+                                                                              ),
+                                                                              BlocProvider
+                                                                                  .value(
+                                                                                value: context
+                                                                                    .read<
+                                                                                    AccountBloc>(),
                                                                               ),
                                                                             ],
                                                                             child:

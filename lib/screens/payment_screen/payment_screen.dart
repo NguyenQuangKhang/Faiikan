@@ -74,6 +74,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
         body: BlocListener(
           listener: (context, state) {
             if (state is CreateOrderSuccessfulState) {
+              context.read<CartBloc>().add(DeleteListCartItemEvent(id: widget.listItems.map((e) => e.cartId.toString()).toList() ));
+
+            }
+            if (state is DeleteListItemSuccessfulState) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -84,9 +88,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               child: BlocProvider.value(
                                   value: context.read<CartBloc>(),
                                   child: SuccessfulOrder())))));
-            }
-            if (state is DeleteListItemSuccessfulState) {
-
             }
           },
           bloc: context.read<CartBloc>(),

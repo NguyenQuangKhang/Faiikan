@@ -1,4 +1,5 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductState.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
@@ -172,6 +173,14 @@ class SeenProductScreen extends StatelessWidget {
                                           MaterialPageRoute(
                                               builder: (_) => MultiBlocProvider(
                                                       providers: [
+                                                        BlocProvider.value(
+                                                            value: context
+                                                                .read<
+                                                                AccountBloc>()),
+                                                        BlocProvider.value(
+                                                            value: context
+                                                                .read<
+                                                                ProductBloc>()),
                                                         BlocProvider(
                                                             create: (_) =>
                                                                 ProductDetailBloc(

@@ -43,7 +43,6 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
           person_id: event.person_id, productId: event.id.toString()));
 
       yield LoadSuccessProductDetail();
-      print(productDetail.flashSaleProduct!.id!);
       yield ProductDetailShowState(data: productDetail);
     }
     if (event is ProductDetailResetEvent) {

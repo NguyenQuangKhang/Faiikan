@@ -10,6 +10,7 @@ import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:http_parser/http_parser.dart';
 import 'AccountEvent.dart';
 import 'AccountState.dart';
 
@@ -61,6 +62,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     if (event is LoginButtonPressed) {
       yield AccountLoading();
       try {
+
         final response = await http.post(
           Uri.parse("http://$server:8080/api/v1/account/login"),
           headers: <String, String>{
@@ -77,9 +79,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           userId=user!.id!;
           print(" userid: " + user!.id.toString());
           isLogined=true;
-          FBStorage.instanace.saveUserImageToFirebaseStorage("",
-              user!.id.toString(),user!.name,"",
-             await urlToFile(user!.imageUrl ?? ""));
+//          FBStorage.instanace.saveUserImageToFirebaseStorage("",
+//              user!.id.toString(),user!.name,"",
+//             await urlToFile(user!.imageUrl ?? ""));
           SharedPreferences prefs = await SharedPreferences.getInstance();
          await  prefs.setString("userId", userId!.toString());
          await  prefs.setString("email", user!.email ?? "");
@@ -115,11 +117,54 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           print(response.body);
           print(response.reasonPhrase);
           if(response.statusCode == 200)
-            yield AccountOk();
+            yield RegisterOk();
           else yield AccountFailure(error: json.decode(response.body)['message'] );
         }catch(error) {
-          yield  AccountFailure(error: "Sai tài khoản hoặc mật khẩu");
+          yield  AccountFailure(error: "Lỗi trùng email");
         }
+      }
+
+    if(event is UpdateProfileInfo)
+      {
+        AccountLoading();
+//        try {
+         http.MultipartFile? avarta;
+          if (event.avarta != null) {
+
+             avarta =http.MultipartFile.fromBytes(
+                "listItem",
+                event.avarta!.readAsBytesSync(), filename: '${DateTime.now().second}.jpg',contentType:MediaType("image", "jpg")
+            );
+          }
+
+          var request = http.MultipartRequest(
+              'PUT',
+              Uri.parse(
+                "http://$server:8080/api/v1/user/update",
+              ));
+
+
+          request.fields['id'] = event.id;
+          request.fields['name'] = event.name;
+        if(event.birthday!=null)  request.fields['birthday'] = event.birthday!;
+          request.fields['email'] = event.email;
+           request.fields['sex'] = event.sex;
+          request.fields['phoneNumber'] = event.phone;
+
+
+          request.headers['Content-Type'] = 'multipart/form-data';
+
+          if(avarta!=null)
+            request.files.add(avarta);
+          var res = await request.send();
+          print(await res.stream.bytesToString());
+         user = User.fromJson(json.decode(await res.stream.bytesToString()));
+         print(user!.imageUrl);
+
+          yield AccountInitial();
+//        }catch(error) {
+//          yield  AccountFailure(error: "Lỗi ");
+//        }
       }
   }
 }

@@ -53,9 +53,9 @@ class _MessageScreenState extends State<MessageScreen> with LocalNotificationVie
 
                       if (userData['userId'] == context.read<AccountBloc>().user!.id.toString()) {
                         return Container();
-                      } else if(context.read<AccountBloc>().user!.id.toString() !='24071999')
+                      } else if(context.read<AccountBloc>().user!.id.toString() !='106012')
                         {
-                          if(userData['userId']!='24071999')
+                          if(userData['userId']!='106012')
                             return Container();
                           else return StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
@@ -63,7 +63,7 @@ class _MessageScreenState extends State<MessageScreen> with LocalNotificationVie
                                   .doc(context.read<AccountBloc>().user!.id!.toString())
                                   .collection('chatlist')
                                   .where('chatWith',
-                                  isEqualTo: "24071999")
+                                  isEqualTo: "106012")
                                   .snapshots(),
                               builder: (context, chatListSnapshot) {
                                 return Container(

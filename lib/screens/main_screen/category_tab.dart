@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_bloc.dart';
 import 'package:faiikan/blocs/category_bloc/category_event.dart';
 import 'package:faiikan/blocs/category_bloc/category_state.dart';
@@ -121,7 +122,7 @@ class _CategoryScreenState extends State<CategoryScreen>
 //                      BlocProvider.value(value: context.read<CategoryBloc>()..add(InitiateEvent(catId: 16)),child: CategoryTabView(userId: widget.userId)),
 //                        BlocProvider.value(value: context.read<CategoryBloc>()..add(InitiateEvent(catId: 17)),child: CategoryTabView(userId: widget.userId)),
 //                        BlocProvider.value(value: context.read<CategoryBloc>()..add(InitiateEvent(catId: 324)),child: CategoryTabView(userId: widget.userId)),
-                      CategoryTabView(userId: widget.userId),
+                      BlocProvider.value(value:context.read<AccountBloc>(),child: CategoryTabView(userId: widget.userId)),
                       CategoryTabView(userId: widget.userId),
                       CategoryTabView(userId: widget.userId),
                     ]),
@@ -206,7 +207,7 @@ class _CategoryTabViewState extends State<CategoryTabView> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => BlocProvider<ProductBloc>(
+                                  builder: (_) => BlocProvider(
                                     create: (_) {
                                       return ProductBloc(
                                         InitialProductState(
@@ -223,15 +224,18 @@ class _CategoryTabViewState extends State<CategoryTabView> {
                                           filter: "popular"));
                                     },
                                     child: BlocProvider.value(
-                                        value: context.read<CartBloc>(),
-                                        child: ProductWithSubCat_Screen(
-                                            userId: widget.userId,
-                                            title: _categoryBloc
-                                                .list_cat_1[
-                                                    _categoryBloc.indexSelected]
-                                                .name,
-                                            category: _categoryBloc.list_cat_1[
-                                                _categoryBloc.indexSelected])),
+                                      value: context.read<AccountBloc>(),
+                                      child: BlocProvider.value(
+                                          value: context.read<CartBloc>(),
+                                          child: ProductWithSubCat_Screen(
+                                              userId: widget.userId,
+                                              title: _categoryBloc
+                                                  .list_cat_1[
+                                                      _categoryBloc.indexSelected]
+                                                  .name,
+                                              category: _categoryBloc.list_cat_1[
+                                                  _categoryBloc.indexSelected])),
+                                    ),
                                   ),
                                 ));
                           },
@@ -296,7 +300,7 @@ class _CategoryTabViewState extends State<CategoryTabView> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (_) =>
-                                              BlocProvider<ProductBloc>(
+                                              BlocProvider(
                                             create: (_) {
                                               return ProductBloc(
                                                 InitialProductState(
@@ -315,46 +319,49 @@ class _CategoryTabViewState extends State<CategoryTabView> {
                                             },
                                             child: BlocProvider.value(
                                                 value: context.read<CartBloc>(),
-                                                child: ProductWithSubCat_Screen(
-                                                    userId: widget.userId,
-                                                    title: _categoryBloc
-                                                        .list_cat_1[
-                                                            _categoryBloc
-                                                                .indexSelected]
-                                                        .subCategory[index]
-                                                        .name,
-                                                    category: new Category(
-                                                      id: _categoryBloc
-                                                          .list_cat_1[
-                                                              _categoryBloc
-                                                                  .indexSelected]
-                                                          .subCategory[index]
-                                                          .id,
-                                                      name: _categoryBloc
+                                                child: BlocProvider.value(
+                                                  value: context.read<AccountBloc>(),
+                                                  child: ProductWithSubCat_Screen(
+                                                      userId: widget.userId,
+                                                      title: _categoryBloc
                                                           .list_cat_1[
                                                               _categoryBloc
                                                                   .indexSelected]
                                                           .subCategory[index]
                                                           .name,
-                                                      icon: _categoryBloc
-                                                          .list_cat_1[
-                                                              _categoryBloc
-                                                                  .indexSelected]
-                                                          .subCategory[index]
-                                                          .icon,
-                                                      level: _categoryBloc
-                                                          .list_cat_1[
-                                                              _categoryBloc
-                                                                  .indexSelected]
-                                                          .subCategory[index]
-                                                          .level,
-                                                      subCat: _categoryBloc
-                                                          .list_cat_1[
-                                                              _categoryBloc
-                                                                  .indexSelected]
-                                                          .subCategory[index]
-                                                          .subCategory,
-                                                    ))),
+                                                      category: new Category(
+                                                        id: _categoryBloc
+                                                            .list_cat_1[
+                                                                _categoryBloc
+                                                                    .indexSelected]
+                                                            .subCategory[index]
+                                                            .id,
+                                                        name: _categoryBloc
+                                                            .list_cat_1[
+                                                                _categoryBloc
+                                                                    .indexSelected]
+                                                            .subCategory[index]
+                                                            .name,
+                                                        icon: _categoryBloc
+                                                            .list_cat_1[
+                                                                _categoryBloc
+                                                                    .indexSelected]
+                                                            .subCategory[index]
+                                                            .icon,
+                                                        level: _categoryBloc
+                                                            .list_cat_1[
+                                                                _categoryBloc
+                                                                    .indexSelected]
+                                                            .subCategory[index]
+                                                            .level,
+                                                        subCat: _categoryBloc
+                                                            .list_cat_1[
+                                                                _categoryBloc
+                                                                    .indexSelected]
+                                                            .subCategory[index]
+                                                            .subCategory,
+                                                      )),
+                                                )),
                                           ),
                                         ));
                                   },

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartEvent.dart';
 import 'package:faiikan/blocs/CartBloc/CartState.dart';
@@ -17,11 +19,14 @@ import 'package:faiikan/screens/my_order_screen/my_order_screen.dart';
 import 'package:faiikan/screens/payment_screen/payment_screen.dart';
 import 'package:faiikan/screens/register_login_screen/register_and_login_screen.dart';
 import 'package:faiikan/screens/review_screen/review_screen.dart';
+import 'package:faiikan/screens/sex_select_screen.dart';
+import 'package:faiikan/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'blocs/address_bloc/address_bloc.dart';
 import 'blocs/address_bloc/address_event.dart';
@@ -56,11 +61,13 @@ class _MyAppState extends State<MyApp> with LocalNotificationView {
     NotificationController.instance.takeFCMTokenWhenAppLaunch();
     NotificationController.instance.initLocalNotification();
     NotificationController.instance.updateTokenToServer();
+
     if (mounted) {
       checkLocalNotification(localNotificationAnimation, "");
     }
     super.initState();
   }
+
   void localNotificationAnimation(List<dynamic> data) {
     if (mounted) {
       setState(() {
@@ -71,6 +78,7 @@ class _MyAppState extends State<MyApp> with LocalNotificationView {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -87,29 +95,7 @@ class _MyAppState extends State<MyApp> with LocalNotificationView {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home:
-          /*BlocProvider(
-        create: (_) => AddressBloc(InitialAddressState())
-          ..add(GetProvinceEvent()),
-        child: MyAddressScreen(),
-      ),*/
-          BlocProvider(
-        create: (BuildContext context) => AccountBloc(AccountInitial())..add(InitialAccount()),
-        child: MainScreen(),
-      ),
-      /*MainScreen()*/
-      /*BlocProvider(
-        create: (BuildContext context) => MyOrderBloc(InitialMyOrderState())..add(InitiateEvent(person_id: "person_id")),
-        child: MyOrderScreen(),
-      ),*/
-      /*BlocProvider(
-        create: (BuildContext context) =>
-            CartBloc(Initial(data: [], discount: 0, totalPrice: 0))
-              ..add(GetCartEvent(person_id: "person_id")),
-        child: CartScreen(
-          person_id: "1",
-        ),
-      ),*/
+      home: SplashScreen(),
     );
   }
 }

@@ -50,11 +50,8 @@ class _MainScreenState extends State<MainScreen> {
                       context.read<AccountBloc>().userId==0?"0":context.read<AccountBloc>().user!.id!.toString())),
           ),
 
-//          BlocProvider<ProductDetailBloc>(
-//            create: (BuildContext context) {
-//              return ProductDetailBloc(InitialProductDetail());
-//            },
-//          ),
+
+           BlocProvider.value(value: context.read<AccountBloc>())
         ],
         child: HomeScreen(),
       ),
@@ -68,10 +65,13 @@ class _MainScreenState extends State<MainScreen> {
               ..add(GetCartEvent(
                   person_id:
                   context.read<AccountBloc>().userId==0?"0":context.read<AccountBloc>().user!.id!.toString())),
-            child: CategoryScreen(userId: context.read<AccountBloc>().userId==0?0:context
-                .read<AccountBloc>()
-                .user!
-                .id!,),
+            child: BlocProvider.value(
+              value: context.read<AccountBloc>(),
+              child: CategoryScreen(userId: context.read<AccountBloc>().userId==0?0:context
+                  .read<AccountBloc>()
+                  .user!
+                  .id!,),
+            ),
           )),
       BlocProvider.value(value: context.read<AccountBloc>(),child: MessageScreen()),
 //      PostExplorer(),

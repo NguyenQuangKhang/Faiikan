@@ -366,23 +366,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
-//                                Navigator.of(context).push(PageRouteBuilder(
-//                                    transitionDuration:
-//                                        Duration(milliseconds: 2000),
-//                                    pageBuilder: (context, animation, _) {
-//                                      return FadeTransition(
-//                                        opacity: animation,
-//                                        child: ProductDetail(
-//                                          percentStar: productBloc
-//                                              .listdata[index].percentStar,
-//                                          countRating: productBloc
-//                                              .listdata[index].countRating,
-//                                          price:
-//                                              productBloc.listdata[index].price,
-//                                          productId: 1,
-//                                        ),
-//                                      );
-//    }));
+
                                     },
                                     child: Container(
                                       margin: EdgeInsets.only(
@@ -480,7 +464,7 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                     ),
                                                     padding: EdgeInsets.symmetric(
                                                         vertical: 2, horizontal: 5),
-                                                    percent: 0.6,
+                                                    percent: context.read<FlashSaleBloc>().data[index].saleAmount!/context.read<FlashSaleBloc>().data[index].quantity!,
                                                     lineHeight: 18,
                                                     backgroundColor:
                                                     Color(0xffF9AEAE),
@@ -556,10 +540,16 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                     )),
                                   child: BlocProvider.value(
                                     value: context.read<CartBloc>(),
-                                    child: CategoryScreen(
-                                      isBack: true,
-                                      userId:
-                                          context.read<AccountBloc>().user!.id!,
+                                    child: BlocProvider.value(
+                                      value: context.read<ProductBloc>(),
+                                      child: BlocProvider.value(
+                                        value: context.read<AccountBloc>(),
+                                        child: CategoryScreen(
+                                          isBack: true,
+                                          userId:
+                                              context.read<AccountBloc>().user!.id!,
+                                        ),
+                                      ),
                                     ),
                                   ))));
                     },
@@ -673,13 +663,16 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                           },
                                           child: BlocProvider.value(
                                               value: context.read<CartBloc>(),
-                                              child: ProductWithSubCat_Screen(
-                                                  userId: context
-                                                      .read<AccountBloc>()
-                                                      .user!
-                                                      .id!,
-                                                  title: category.name,
-                                                  category: category)),
+                                              child: BlocProvider.value(
+                                                value: context.read<AccountBloc>(),
+                                                child: ProductWithSubCat_Screen(
+                                                    userId: context
+                                                        .read<AccountBloc>()
+                                                        .user!
+                                                        .id!,
+                                                    title: category.name,
+                                                    category: category),
+                                              )),
                                         ),
                                       ));
                                 }),
@@ -851,23 +844,24 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                             .user!
                                                             .id!
                                                             .toString())),
-                                              child: context
-                                                          .read<AccountBloc>()
-                                                          .userId ==
-                                                      0
-                                                  ? SearchScreen(
-                                                      userId: 0,
-                                                    )
-                                                  : BlocProvider.value(
-                                                      value: context
-                                                          .read<CartBloc>(),
-                                                      child: SearchScreen(
-                                                        userId: context
-                                                            .read<AccountBloc>()
-                                                            .user!
-                                                            .id!,
-                                                      ),
-                                                    ),
+                                              child:  BlocProvider.value(
+                                                value: context
+                                                    .read<AccountBloc>(),
+                                                child: BlocProvider.value(
+                                                  value: context
+                                                      .read<ProductBloc>(),
+                                                  child: BlocProvider.value(
+                                                          value: context
+                                                              .read<CartBloc>(),
+                                                          child: SearchScreen(
+                                                            userId: context
+                                                                .read<AccountBloc>()
+                                                                .user!
+                                                                .id!,
+                                                          ),
+                                                        ),
+                                                ),
+                                              ),
                                             )));
                               },
                               child: Container(
@@ -1150,14 +1144,20 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                                                               .listdata[index]
                                                                               .id
                                                                               .toString())),
-                                                                    child: SimilarProductScreen(
-                                                                        interactingProduct:
-                                                                            productBloc.listdata[
-                                                                                index],
-                                                                        userId: context
-                                                                            .read<AccountBloc>()
-                                                                            .user!
-                                                                            .id!),
+                                                                    child: BlocProvider.value(
+                                                                      value: context.read<ProductBloc>(),
+                                                                      child: BlocProvider.value(
+                                                                        value: context.read<AccountBloc>(),
+                                                                        child: SimilarProductScreen(
+                                                                            interactingProduct:
+                                                                                productBloc.listdata[
+                                                                                    index],
+                                                                            userId: context
+                                                                                .read<AccountBloc>()
+                                                                                .user!
+                                                                                .id!),
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                 )));
                                               },

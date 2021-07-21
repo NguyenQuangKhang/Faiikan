@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailEvent.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailState.dart';
@@ -214,6 +215,8 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
                                         BlocProvider.value(
                                           value: context.read<CartBloc>(),
                                         ),
+                                        BlocProvider.value(value: context.read<ProductBloc>()),
+                                        BlocProvider.value(value: context.read<AccountBloc>()),
                                       ],
                                       child: ProductDetail(
                                         userId: widget.userId,
@@ -346,28 +349,31 @@ class _SimilarProductScreenState extends State<SimilarProductScreen> {
                                                                 AccountBloc>(),
                                                           ),
                                                         ],
-                                                        child: ProductDetail(
-                                                          userId: widget.userId,
-                                                          percentStar: context
-                                                              .read<
-                                                                  SimilarProductBloc>()
-                                                              .data[index]
-                                                              .percentStar,
-                                                          countRating: context
-                                                              .read<
-                                                                  SimilarProductBloc>()
-                                                              .data[index]
-                                                              .countRating,
-                                                          price: context
-                                                              .read<
-                                                                  SimilarProductBloc>()
-                                                              .data[index]
-                                                              .price,
-                                                          productId: context
-                                                              .read<
-                                                                  SimilarProductBloc>()
-                                                              .data[index]
-                                                              .id,
+                                                        child: BlocProvider.value(
+                                                          value: context.read<ProductBloc>(),
+                                                          child: ProductDetail(
+                                                            userId: widget.userId,
+                                                            percentStar: context
+                                                                .read<
+                                                                    SimilarProductBloc>()
+                                                                .data[index]
+                                                                .percentStar,
+                                                            countRating: context
+                                                                .read<
+                                                                    SimilarProductBloc>()
+                                                                .data[index]
+                                                                .countRating,
+                                                            price: context
+                                                                .read<
+                                                                    SimilarProductBloc>()
+                                                                .data[index]
+                                                                .price,
+                                                            productId: context
+                                                                .read<
+                                                                    SimilarProductBloc>()
+                                                                .data[index]
+                                                                .id,
+                                                          ),
                                                         ))));
                                       });
                                 },

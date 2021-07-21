@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
 import 'package:faiikan/blocs/product_bloc/ProductState.dart';
@@ -106,28 +107,31 @@ class _Category2DropdownState extends State<Category2Dropdown> {
                                 },
                                 child: BlocProvider.value(
                                     value: context.read<CartBloc>(),
-                                    child: ProductWithSubCat_Screen(
-                                        userId: widget.userId,
-                                        title: widget.data
-                                            .subCategory[index]
-                                            .name,
-                                        category: new Category(
-                                          id: widget.data
-                                              .subCategory[index]
-                                              .id,
-                                          name: widget.data
+                                    child: BlocProvider.value(
+                                      value: context.read<AccountBloc>(),
+                                      child: ProductWithSubCat_Screen(
+                                          userId: widget.userId,
+                                          title: widget.data
                                               .subCategory[index]
                                               .name,
-                                          icon: widget.data
-                                              .subCategory[index]
-                                              .icon,
-                                          level: widget.data
-                                              .subCategory[index]
-                                              .level,
-                                          subCat:widget.data
-                                              .subCategory[index]
-                                              .subCategory,
-                                        ))),
+                                          category: new Category(
+                                            id: widget.data
+                                                .subCategory[index]
+                                                .id,
+                                            name: widget.data
+                                                .subCategory[index]
+                                                .name,
+                                            icon: widget.data
+                                                .subCategory[index]
+                                                .icon,
+                                            level: widget.data
+                                                .subCategory[index]
+                                                .level,
+                                            subCat:widget.data
+                                                .subCategory[index]
+                                                .subCategory,
+                                          )),
+                                    )),
                               ),
                         ));
                   },

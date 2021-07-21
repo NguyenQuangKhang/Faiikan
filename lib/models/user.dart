@@ -21,6 +21,7 @@ class User {
   String? get timeUpdated => _timeUpdated;
   String? get imageUrl => _imageUrl;
 
+
   User({
       int? id, 
       String? name, 

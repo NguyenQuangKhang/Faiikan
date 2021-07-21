@@ -20,3 +20,6 @@ class AddSuccessAddress extends AddressState {
 class UpdateSuccessAddress extends AddressState {
 
 }
+class DeleteSuccessAddress extends AddressState {
+
+}

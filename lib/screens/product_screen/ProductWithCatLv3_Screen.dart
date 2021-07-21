@@ -1,4 +1,5 @@
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
 import 'package:faiikan/blocs/product_bloc/ProductState.dart';
@@ -320,42 +321,45 @@ class _ProductWithSubCat_ScreenState extends State<ProductWithSubCat_Screen> {
                                                       value: context
                                                           .read<CartBloc>(),
                                                       child:
-                                                          ProductWithSubCat_Screen(
-                                                              userId:
-                                                                  widget.userId,
-                                                              title: widget
-                                                                  .category
-                                                                  .subCategory[
-                                                                      index]
-                                                                  .name,
-                                                              category:
-                                                                  new Category(
-                                                                id: widget
-                                                                    .category
-                                                                    .subCategory[
-                                                                        index]
-                                                                    .id,
-                                                                name: widget
+                                                          BlocProvider.value(
+                                                            value: context.read<AccountBloc>(),
+                                                            child: ProductWithSubCat_Screen(
+                                                                userId:
+                                                                    widget.userId,
+                                                                title: widget
                                                                     .category
                                                                     .subCategory[
                                                                         index]
                                                                     .name,
-                                                                icon: widget
-                                                                    .category
-                                                                    .subCategory[
-                                                                        index]
-                                                                    .icon,
-                                                                level: widget
-                                                                    .category
-                                                                    .subCategory[
-                                                                        index]
-                                                                    .level,
-                                                                subCat: widget
-                                                                    .category
-                                                                    .subCategory[
-                                                                        index]
-                                                                    .subCategory,
-                                                              )),
+                                                                category:
+                                                                    new Category(
+                                                                  id: widget
+                                                                      .category
+                                                                      .subCategory[
+                                                                          index]
+                                                                      .id,
+                                                                  name: widget
+                                                                      .category
+                                                                      .subCategory[
+                                                                          index]
+                                                                      .name,
+                                                                  icon: widget
+                                                                      .category
+                                                                      .subCategory[
+                                                                          index]
+                                                                      .icon,
+                                                                  level: widget
+                                                                      .category
+                                                                      .subCategory[
+                                                                          index]
+                                                                      .level,
+                                                                  subCat: widget
+                                                                      .category
+                                                                      .subCategory[
+                                                                          index]
+                                                                      .subCategory,
+                                                                )),
+                                                          ),
                                                     ),
                                                   )));
                                     });
@@ -521,23 +525,26 @@ class _ProductWithSubCat_ScreenState extends State<ProductWithSubCat_Screen> {
                                                     MaterialPageRoute(
                                                         builder:
                                                             (_) =>
-                                                                BlocProvider
-                                                                    .value(
-                                                                  value: context
-                                                                      .read<
-                                                                          CartBloc>(),
-                                                                  child:
-                                                                      BlocProvider(
-                                                                    create: (_) => SimilarProductBloc(
-                                                                        InitialSimilarProductState())
-                                                                      ..add(InitiateSimilarProductEvent(
-                                                                          productId:
-                                                                              productBloc.listdataByCategory[index].id.toString())),
-                                                                    child: SimilarProductScreen(
-                                                                        interactingProduct: productBloc.listdataByCategory[
-                                                                            index],
-                                                                        userId:
-                                                                            widget.userId),
+                                                                BlocProvider.value(
+                                                                  value: context.read<AccountBloc>(),
+                                                                  child: BlocProvider
+                                                                      .value(
+                                                                    value: context
+                                                                        .read<
+                                                                            CartBloc>(),
+                                                                    child:
+                                                                        BlocProvider(
+                                                                      create: (_) => SimilarProductBloc(
+                                                                          InitialSimilarProductState())
+                                                                        ..add(InitiateSimilarProductEvent(
+                                                                            productId:
+                                                                                productBloc.listdataByCategory[index].id.toString())),
+                                                                      child: SimilarProductScreen(
+                                                                          interactingProduct: productBloc.listdataByCategory[
+                                                                              index],
+                                                                          userId:
+                                                                              widget.userId),
+                                                                    ),
                                                                   ),
                                                                 )));
                                               },
@@ -561,6 +568,14 @@ class _ProductWithSubCat_ScreenState extends State<ProductWithSubCat_Screen> {
                                                       builder: (_) =>
                                                           MultiBlocProvider(
                                                               providers: [
+                                                                BlocProvider.value(
+                                                                    value: context
+                                                                        .read<
+                                                                        AccountBloc>()),
+                                                                BlocProvider.value(
+                                                                    value: context
+                                                                        .read<
+                                                                        ProductBloc>()),
                                                                 BlocProvider(
                                                                     create: (_) =>
                                                                         ProductDetailBloc(

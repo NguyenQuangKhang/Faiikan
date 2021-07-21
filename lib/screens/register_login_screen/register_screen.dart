@@ -23,7 +23,7 @@ class RegisterScreen extends StatelessWidget {
           child: BlocListener(
             bloc: context.read<AccountBloc>(),
             listener: (context, state) {
-              if (state is AccountOk) {
+              if (state is RegisterOk) {
                 showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
@@ -45,7 +45,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ));
               }
-              if (state is AccountFailure)
+              if (state is RegisterFailure)
                 showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
@@ -101,7 +101,7 @@ class RegisterScreen extends StatelessWidget {
                                     .hasMatch(value!))
                                   return null;
                                 else
-                                  return "Vui lòng nhập đúng định dạnh email.";
+                                  return "Vui lòng nhập đúng định dạng email.";
                               },
                             ),
                             SizedBox(

@@ -155,11 +155,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           }
                           else if (state is LoginSocialSuccess) {
-
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (_) =>
-                                    BlocProvider.value(value: context.read<AccountBloc>()..add(InitialAccount()),
-                                        child: MainScreen())));
+                            context.read<AccountBloc>().add(LoginButtonPressed(username: "quangkhang20899@gmail.com", password: "123456"));
+//
+//                            Navigator.push(context,
+//                                MaterialPageRoute(builder: (_) =>
+//                                    BlocProvider.value(value: context.read<AccountBloc>()..add(InitialAccount()),
+//                                        child: MainScreen())));
 
                           } else if (state is LoginSocialFailure) {
 

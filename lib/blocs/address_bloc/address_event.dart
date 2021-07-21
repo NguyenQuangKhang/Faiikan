@@ -104,3 +104,15 @@ class ChangeCurrentAddressEvent extends AddressEvent {
   @override
   String toString() => 'LoginButtonPressed {  }';
 }
+class DeleteAddressEvent extends AddressEvent {
+
+  final int addressId;
+
+  DeleteAddressEvent({required this.addressId});
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => 'LoginButtonPressed {  }';
+}

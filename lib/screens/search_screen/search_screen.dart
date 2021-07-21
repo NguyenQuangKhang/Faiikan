@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
+import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailBloc.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailEvent.dart';
 import 'package:faiikan/blocs/product_detail_bloc/ProductDetailState.dart';
@@ -56,7 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent - 10) {
+          _scrollController.position.maxScrollExtent) {
         context
             .read<SearchBloc>()
             .add(LoadMoreSearchEvent(text: controller.text));
@@ -223,7 +225,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     )
                   ],
                 );
-              if (state is ShowResultState)
+              if (state is ShowResultState || state is LoadMoreSearch)
                 return Container(
                   decoration: BoxDecoration(color: Colors.white),
                   child: Stack(
@@ -401,6 +403,16 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                             .value(
                                                                           value: context
                                                                               .read<CartBloc>(),
+                                                                        ),
+                                                                        BlocProvider
+                                                                            .value(
+                                                                          value: context
+                                                                              .read<AccountBloc>(),
+                                                                        ),
+                                                                        BlocProvider
+                                                                            .value(
+                                                                          value: context
+                                                                              .read<ProductBloc>(),
                                                                         ),
                                                                       ],
                                                                       child:

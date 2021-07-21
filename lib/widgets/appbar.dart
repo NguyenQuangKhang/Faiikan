@@ -2,6 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
 import 'package:faiikan/blocs/CartBloc/CartState.dart';
 import 'package:faiikan/blocs/account_bloc/AccountBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductBloc.dart';
+import 'package:faiikan/blocs/product_bloc/ProductEvent.dart';
+import 'package:faiikan/blocs/product_bloc/ProductState.dart';
 import 'package:faiikan/blocs/search_bloc/search_bloc.dart';
 import 'package:faiikan/blocs/search_bloc/search_event.dart';
 import 'package:faiikan/blocs/search_bloc/search_state.dart';
@@ -82,11 +85,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                                           .toString())),
                                             child: BlocProvider.value(
                                               value: context.read<CartBloc>(),
-                                              child: SearchScreen(userId:context
-                                                  .read<AccountBloc>()
-                                                  .user!
-                                                  .id!
-                                                   ,),
+                                              child: BlocProvider.value(
+                                                value: context.read<AccountBloc>(),
+                                                child: BlocProvider(
+                                                  create: (_) =>ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))
+                                                    ..add(ProductLoadEvent(
+                                                        SortBy: 0, userId: context.read<AccountBloc>().userId==0?0:context.read<AccountBloc>().user!.id!)),
+                                                  child: SearchScreen(userId:context
+                                                      .read<AccountBloc>()
+                                                      .user!
+                                                      .id!
+                                                       ,),
+                                                ),
+                                              ),
                                             ),
                                           )));
                             },

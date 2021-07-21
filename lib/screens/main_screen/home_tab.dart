@@ -135,10 +135,12 @@ class HomeScreen extends StatelessWidget {
                     CategoryBloc(LoadingCategory())
                       ..add(InitiateEvent(catId: 16)),
               ),
+              BlocProvider.value(value: context.read<AccountBloc>())
 
             ], child: ForYouScreen()),
 
             MultiBlocProvider(providers: [
+              BlocProvider.value(value: context.read<AccountBloc>()),
               BlocProvider(create: (BuildContext context) =>
               ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))..add(ProductByCategoryCodeEvent(filter: "popular",categoryId: "16")),),
               BlocProvider(
@@ -157,6 +159,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ], child: FemaleScreen()),
             MultiBlocProvider(providers: [
+              BlocProvider.value(value: context.read<AccountBloc>()),
               BlocProvider(create: (BuildContext context) =>
               ProductBloc(InitialProductState(data: [], error: "", sortBy: 0))..add(ProductByCategoryCodeEvent(filter: "popular",categoryId: "324")),),
               BlocProvider(

@@ -19,8 +19,9 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
   int? selectedProvice;
   int? selectedDistric;
   int? selectedWard;
-  bool isChangeParent=false;
+  bool isChangeParent = false;
   Address? currentAddress;
+
   AddressBloc(AddressState initialState) : super(initialState);
 
   @override
@@ -39,7 +40,10 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
           .cast<Map<String, dynamic>>()
           .map<Address>((json) => Address.fromJson(json))
           .toList();
-      currentAddress= myAddresses.where((element) => element.defaultIs==true).isEmpty? null : myAddresses.firstWhere((element) => element.defaultIs==true);
+      currentAddress =
+          myAddresses.where((element) => element.defaultIs == true).isEmpty
+              ? null
+              : myAddresses.firstWhere((element) => element.defaultIs == true);
       print(currentAddress);
       final response1 = await http
           .get(Uri.parse("http://$server:8080/api/v1/province/get-all"));
@@ -100,9 +104,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
         "numberPhone": event.numberPhone,
         "specificAddress": event.specificAddress,
         "defaultIs": event.defaultIs.toString(),
-        "ward": {
-          "id": event.ward
-        }
+        "ward": {"id": event.ward}
       }));
       final response = await http.put(
           Uri.http(
@@ -115,9 +117,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
             "numberPhone": event.numberPhone,
             "specificAddress": event.specificAddress,
             "defaultIs": event.defaultIs.toString(),
-            "ward": {
-              "id": event.ward
-            }
+            "ward": {"id": event.ward}
           }),
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
@@ -125,41 +125,56 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
       yield UpdateSuccessAddress();
       yield InitialAddressState();
     }
-    if(event is ChooseUnitAddressEvent)
-      {
-        yield LoadAddress();
-        switch(event.type){
-          case "province":
+    if (event is ChooseUnitAddressEvent) {
+      yield LoadAddress();
+      switch (event.type) {
+        case "province":
           selectedProvice = event.index;
-          selectedDistric=null;
-          selectedWard=null;
-          isChangeParent=true;
+          selectedDistric = null;
+          selectedWard = null;
+          isChangeParent = true;
           yield InitialAddressState();
-          this.add(GetDistrictEvent(provinceId: provinces[selectedProvice!].id.toString()));
+          this.add(GetDistrictEvent(
+              provinceId: provinces[selectedProvice!].id.toString()));
           break;
-          case "district":
-            selectedDistric = event.index;
-            print(selectedDistric);
-            selectedWard=null;
-            isChangeParent=true;
-            yield InitialAddressState();
-            this.add(GetWardEvent(districtId: districts[selectedDistric!].id.toString()));
-            break;
-          case "ward":
-            selectedWard =event.index;
-            yield InitialAddressState();
-            break;
-          default:
-            break;
-        }
-
-
+        case "district":
+          selectedDistric = event.index;
+          print(selectedDistric);
+          selectedWard = null;
+          isChangeParent = true;
+          yield InitialAddressState();
+          this.add(GetWardEvent(
+              districtId: districts[selectedDistric!].id.toString()));
+          break;
+        case "ward":
+          selectedWard = event.index;
+          yield InitialAddressState();
+          break;
+        default:
+          break;
       }
-    if(event is ChangeCurrentAddressEvent)
-      {
+    }
+    if (event is ChangeCurrentAddressEvent) {
+      yield LoadAddress();
+      currentAddress = myAddresses[event.index];
+      yield InitialAddressState();
+    }
+    if (event is DeleteAddressEvent) {
+      try {
         yield LoadAddress();
-        currentAddress= myAddresses[event.index];
+        final response = await http.delete(
+            Uri.http(
+              "$server:8080",
+              "/api/v1/address/${event.addressId}/delete",
+            ),
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+            });
+        yield DeleteSuccessAddress();
         yield InitialAddressState();
+      } catch (e) {
+
       }
+    }
   }
 }

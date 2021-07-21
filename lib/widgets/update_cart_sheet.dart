@@ -586,8 +586,8 @@ class _UpdateCartSheetState extends State<UpdateCartSheet> {
                               return false;
                           }
                           return true;
-                        }).option.where((e) => e.value.substring(0, 2) !=
-                            "ht").map((a) => a.value).toList();
+                        }).option.where((s) => s.value.contains("http")
+                            ).map((a) => a.value).toList();
 
                       context.read<CartBloc>().amount=count;
                       Navigator.of(context).pop("Update");

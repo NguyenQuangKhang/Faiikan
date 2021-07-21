@@ -25,15 +25,11 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
   late TextEditingController txtNumberPhone;
 
   late TextEditingController txtSpecificAddress;
-  int? provinceValue;
-  int? districtValue;
-  int? wardValue;
+
 
   @override
   void initState() {
-    context.read<AddressBloc>().selectedProvice = null;
-    context.read<AddressBloc>().selectedWard = null;
-    context.read<AddressBloc>().selectedDistric = null;
+    context.read<AddressBloc>().selectedWard=null;
     context.read<AddressBloc>().isChangeParent=false;
     context.read<AddressBloc>().districts = [];
     context.read<AddressBloc>().wards = [];
@@ -46,10 +42,8 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
     txtNumberPhone = TextEditingController(text: widget.address.numberPhone);
     txtSpecificAddress =
         TextEditingController(text: widget.address.specificAddress);
-    valueCheckBox = widget.address.defaultIs;
-    provinceValue = widget.address.province.id;
-    districtValue = widget.address.district.id;
-    wardValue = widget.address.ward.id;
+
+
     super.initState();
   }
 
@@ -66,8 +60,23 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
         }
         if(state is InitialAddressState)
           setState(() {
-
+            for(int i=0;i<context.read<AddressBloc>().wards.length;i++)
+              {
+                if(context.read<AddressBloc>().wards[i].id == widget.address.ward.id)
+                  context.read<AddressBloc>().selectedWard=i;
+              }
           });
+        if(state is DeleteSuccessAddress)
+          {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  "Xóa địa chỉ thành công."),
+            ));
+            context
+                .read<AddressBloc>()
+                .add(InitialAddressEvent(userId: widget.userId));
+            Navigator.of(context).pop();
+          }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -514,23 +523,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                   flex: 1,
                   child: InkWell(
                     onTap: () {
-                      if (txtName.text.isNotEmpty && txtNumberPhone.text.isNotEmpty)
-                        if (context.read<AddressBloc>().selectedWard == null)
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                "Vui lòng chọn Phường/Xã."),
-                          ));
-                        else context.read<AddressBloc>().add(UpdateAddressEvent(
-                            addressId: widget.address.id.toString(),
-                            name: txtName.text,
-                            specificAddress: txtSpecificAddress.text,
-                            numberPhone: txtNumberPhone.text,
-                            defaultIs: valueCheckBox,
-                            ward: context
-                                .read<AddressBloc>()
-                                .wards[context
-                                .read<AddressBloc>()
-                                .selectedWard!].id.toString()));
+                      context.read<AddressBloc>().add(DeleteAddressEvent(addressId:widget.address.id ));
                     },
                     child: Container(
                       height: 70,

@@ -24,5 +24,18 @@ class AccountFailure extends AccountState {
   String toString() => 'LoginFailure { error: $error }';
 }
 
+class RegisterFailure extends AccountState {
+  final String error;
+
+  const RegisterFailure({required this.error});
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  String toString() => 'LoginFailure { error: $error }';
+}
+
 
 class AccountOk extends AccountState {}
+class RegisterOk extends AccountState {}
