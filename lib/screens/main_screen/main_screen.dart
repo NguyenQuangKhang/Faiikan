@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
 
            BlocProvider.value(value: context.read<AccountBloc>())
         ],
-        child: HomeScreen(),
+        child: HomeScreen(prefs: context.read<AccountBloc>().prefs,),
       ),
 
 

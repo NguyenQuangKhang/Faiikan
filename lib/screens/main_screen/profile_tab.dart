@@ -9,6 +9,7 @@ import 'package:faiikan/blocs/address_bloc/address_bloc.dart';
 import 'package:faiikan/blocs/address_bloc/address_event.dart';
 import 'package:faiikan/blocs/address_bloc/address_state.dart';
 import 'package:faiikan/blocs/favorite_bloc/FavoriteBloc.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:faiikan/blocs/favorite_bloc/FavoriteEvent.dart';
 import 'package:faiikan/blocs/favorite_bloc/FavortieState.dart';
 import 'package:faiikan/blocs/my_order_bloc/my_order_bloc.dart';
@@ -1128,6 +1129,7 @@ class ProfileScreen extends StatelessWidget {
                                     child: InkWell(
                                       onTap: () {
                                         GoogleSignIn().signOut();
+                                        FacebookLogin().logOut();
                                         context
                                             .read<AccountBloc>()
                                             .add(LogOutEvent());

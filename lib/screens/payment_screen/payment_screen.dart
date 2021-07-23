@@ -262,6 +262,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                                   FontWeight
                                                                       .w400,
                                                             ),
+                                                            maxLines: null,
                                                           ),
                                                         ],
                                                       )

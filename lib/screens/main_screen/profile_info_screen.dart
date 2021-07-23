@@ -6,6 +6,7 @@ import 'package:faiikan/utils/server_name.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class ProfileInfoScreen extends StatefulWidget {
@@ -104,15 +105,22 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
                     ),radius: 40,),
                     Positioned(
                         bottom: 0,
-                        child: Container(
-                          width: 40,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              backgroundBlendMode: BlendMode.colorBurn),
-                          child: Center(
-                            child: Text(
-                              "Sửa",
-                              style: TextStyle(color: Colors.white),
+                        child: InkWell(
+                          onTap: ()async{
+                            await ImagePicker().getImage(source: ImageSource.gallery).then((value) {
+                              avarta =File(value!.path);
+                            });
+                          },
+                          child: Container(
+                            width: 40,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                backgroundBlendMode: BlendMode.colorBurn),
+                            child: Center(
+                              child: Text(
+                                "Sửa",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
                         ))

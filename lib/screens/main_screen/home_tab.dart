@@ -21,11 +21,15 @@ import 'package:faiikan/screens/register_login_screen/register_and_login_screen.
 import 'package:faiikan/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_tab_tab/beauty_screen.dart';
 import 'home_tab_tab/female_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  final   SharedPreferences prefs;
+
+  const HomeScreen({Key? key, required this.prefs}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -133,7 +137,7 @@ class HomeScreen extends StatelessWidget {
               BlocProvider(
                 create: (BuildContext context) =>
                     CategoryBloc(LoadingCategory())
-                      ..add(InitiateEvent(catId: 16)),
+                      ..add(InitiateEvent(catId: prefs.getInt("catId") ?? 16)),
               ),
               BlocProvider.value(value: context.read<AccountBloc>())
 

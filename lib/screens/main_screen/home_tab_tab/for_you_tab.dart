@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:faiikan/models/product.dart' as product;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:faiikan/blocs/CartBloc/CartBloc.dart';
@@ -366,7 +367,84 @@ class _ForYouScreenState extends State<ForYouScreen> {
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
-
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  MultiBlocProvider(
+                                                      providers: [
+                                                        BlocProvider.value(
+                                                            value: context
+                                                                .read<
+                                                                AccountBloc>()),
+                                                        BlocProvider.value(
+                                                            value: context
+                                                                .read<
+                                                                ProductBloc>()),
+                                                        BlocProvider(
+                                                            create: (_) =>
+                                                            ProductDetailBloc(
+                                                                InitialProductDetail())
+                                                              ..add(
+                                                                  ProductDetailLoadEvent(
+                                                                    id: context
+                                                                        .read<
+                                                                        FlashSaleBloc>()
+                                                                        .data[index]
+                                                                        .productItem!
+                                                                        .id!,
+                                                                    person_id: context
+                                                                        .read<
+                                                                        AccountBloc>()
+                                                                        .userId ==
+                                                                        0
+                                                                        ? "0"
+                                                                        : context
+                                                                        .read<
+                                                                        AccountBloc>()
+                                                                        .user!
+                                                                        .id
+                                                                        .toString(),
+                                                                  ))),
+                                                        BlocProvider
+                                                            .value(
+                                                          value: context
+                                                              .read<
+                                                              CartBloc>(),
+                                                        ),
+                                                      ],
+                                                      child:
+                                                      ProductDetail(
+                                                        userId: context
+                                                            .read<
+                                                            AccountBloc>()
+                                                            .user!
+                                                            .id!,
+                                                        percentStar: 0,
+                                                        countRating: 0,
+                                                        price: new product
+                                                            .Price(
+                                                            priceMax: context
+                                                                .read<
+                                                                FlashSaleBloc>()
+                                                                .data[index]
+                                                                .productItem!
+                                                                .price!
+                                                                .priceMax!,
+                                                            priceMin: context
+                                                                .read<
+                                                                FlashSaleBloc>()
+                                                                .data[index]
+                                                                .productItem!
+                                                                .price!
+                                                                .priceMin!),
+                                                        productId:
+                                                        context
+                                                            .read<
+                                                            FlashSaleBloc>()
+                                                            .data[index]
+                                                            .productItem!.id!,
+                                                      ))));
                                     },
                                     child: Container(
                                       margin: EdgeInsets.only(

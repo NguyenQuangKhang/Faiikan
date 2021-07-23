@@ -239,7 +239,7 @@ class _ProductWithSubCat_ScreenState extends State<ProductWithSubCat_Screen> {
 //
 //                    ),
               ///Danh Mục Catelv3 With Icon
-              Center(
+            if(widget.category.subCategory.length >0)  Center(
                 child: Container(
                   color: Colors.white,
                   height: 50,
@@ -479,14 +479,11 @@ class _ProductWithSubCat_ScreenState extends State<ProductWithSubCat_Screen> {
                       ),
                     ),
                  Container(
-                          height: MediaQuery.of(context).size.height - 150,
+                          height: MediaQuery.of(context).size.height-150,
                           color: Color(0xffC4C4C4).withOpacity(0.5),
                           child: CustomScrollView(
                               shrinkWrap: true,
                               primary: false,
-                              physics: flag == true
-                                  ? NeverScrollableScrollPhysics()
-                                  : ClampingScrollPhysics(),
                               controller: _scrollController,
                               scrollDirection: Axis.vertical,
                               slivers: <Widget>[

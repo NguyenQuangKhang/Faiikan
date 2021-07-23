@@ -1,75 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="982adfac-8613-4cc4-8ca6-7a1ed870a03a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/hot_search_bloc/hot_search_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/hot_search_bloc/hot_search_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/hot_search_bloc/hot_search_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/order_bloc/order_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/order_bloc/order_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/order_bloc/order_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/product_by_category_bloc/product_by_category_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/product_by_category_bloc/product_by_category_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/product_by_category_bloc/product_by_category_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/similar_product_bloc/similar_product_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/similar_product_bloc/similar_product_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/blocs/similar_product_bloc/similar_product_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/models/input_order_item.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/models/order_detail.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/models/search_item.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/screens/my_order_screen/order_item_detail.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/screens/my_order_screen/reason_cancel_order_detail.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/screens/my_order_screen/reason_cancel_order_sheet.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/screens/post_screen/post_explorer.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/screens/review_screen/create_review_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/screens/review_screen/my_review_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/screens/similar_product_screen/similar_product_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/widgets/update_cart_sheet.dart" afterDir="false" />
+    <list default="true" id="d4d096a8-4fe5-4b3f-9280-355f69df3836" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/CartBloc/CartBloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/CartBloc/CartBloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/CartBloc/CartEvent.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/CartBloc/CartEvent.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/CartBloc/CartState.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/CartBloc/CartState.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/address_bloc/address_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/address_bloc/address_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/address_bloc/address_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/address_bloc/address_event.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/favorite_bloc/FavoriteBloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/favorite_bloc/FavoriteBloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/my_order_bloc/my_order_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/my_order_bloc/my_order_bloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/blocs/account_bloc/AccountBloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/account_bloc/AccountBloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/blocs/category_bloc/category_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/category_bloc/category_bloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/blocs/login_social_bloc/login_social_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/login_social_bloc/login_social_bloc.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lib/blocs/product_bloc/ProductBloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/product_bloc/ProductBloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/product_detail_bloc/ProductDetailBloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/product_detail_bloc/ProductDetailBloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/product_detail_bloc/ProductDetailEvent.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/product_detail_bloc/ProductDetailEvent.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/product_detail_bloc/ProductDetailState.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/product_detail_bloc/ProductDetailState.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/search_bloc/search_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/search_bloc/search_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/search_bloc/search_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/search_bloc/search_event.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/blocs/search_bloc/search_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/blocs/search_bloc/search_state.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/models/order.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/models/order.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/models/product_detail.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/models/product_detail.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/address_screen/choose_unit_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/address_screen/choose_unit_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lib/screens/address_screen/edit_address.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/address_screen/edit_address.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/address_screen/my_address.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/address_screen/my_address.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/address_screen/new_address.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/address_screen/new_address.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/address_screen/select_address.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/address_screen/select_address.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/cart_screen/cart_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/cart_screen/cart_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/main_screen/favorite_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/main_screen/favorite_tab.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lib/screens/main_screen/home_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/main_screen/home_tab.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lib/screens/main_screen/home_tab_tab/for_you_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/main_screen/home_tab_tab/for_you_tab.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lib/screens/main_screen/main_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/main_screen/main_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lib/screens/main_screen/profile_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/main_screen/profile_tab.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lib/screens/payment_screen/payment_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/payment_screen/payment_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/product_detail_screen/product_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/product_detail_screen/product_detail_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/register_login_screen/register_and_login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/register_login_screen/register_and_login_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/search_screen/search_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/search_screen/search_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/utils/server_name.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/utils/server_name.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/widgets/appbar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/appbar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/screens/product_screen/ProductWithCatLv3_Screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/product_screen/ProductWithCatLv3_Screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/screens/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/splash_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lib/widgets/attribute_sheet.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/attribute_sheet.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/widgets/card/order_item_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/card/order_item_card.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/widgets/card/product_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/card/product_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/widgets/update_cart_sheet.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/update_cart_sheet.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../pubspec.yaml" afterDir="false" />
     </list>
@@ -89,7 +42,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="1uOhMsG6KRdMO3R6sqBHGkWKnjZ" />
+  <component name="ProjectId" id="1veF4oaVjFUk2qkyO6oVnpUq7E6" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
@@ -113,11 +66,11 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="982adfac-8613-4cc4-8ca6-7a1ed870a03a" name="Default Changelist" comment="" />
-      <created>1624542497958</created>
+      <changelist id="d4d096a8-4fe5-4b3f-9280-355f69df3836" name="Default Changelist" comment="" />
+      <created>1626914458261</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1624542497958</updated>
+      <updated>1626914458261</updated>
     </task>
     <servers />
   </component>

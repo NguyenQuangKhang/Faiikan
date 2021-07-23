@@ -32,7 +32,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   @override
   Stream<CartState> mapEventToState(event) async* {
     if (event is GetCartEvent) {
-      yield InitialCart(data: [], discount: 0, totalPrice: 0);
       userId = event.person_id;
       final response = await http.get(Uri.parse(
           "http://$server:8080/api/v1/cart/${event.person_id}/get-list-item"));

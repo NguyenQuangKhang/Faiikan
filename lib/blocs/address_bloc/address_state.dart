@@ -12,6 +12,7 @@ class LoadAddress extends AddressState {}
 
 
 class InitialAddressState extends AddressState {}
+class InitiateAddressSuccessfulState extends AddressState {}
 
 
 class AddSuccessAddress extends AddressState {

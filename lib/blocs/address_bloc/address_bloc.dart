@@ -52,6 +52,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
           .cast<Map<String, dynamic>>()
           .map<Province>((json) => Province.fromJson(json))
           .toList();
+      yield InitiateAddressSuccessfulState();
       yield InitialAddressState();
     }
 

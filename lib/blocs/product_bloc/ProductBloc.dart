@@ -6,6 +6,7 @@ import 'package:faiikan/models/search_item.dart';
 import 'package:faiikan/utils/server_name.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ProductEvent.dart';
 import 'ProductState.dart';
@@ -19,6 +20,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
   int currentPageByCateGory = 1;
   List<SearchItem> hotSearchItems =[];
   List<Product> listSeenProduct = [];
+  late SharedPreferences prefs;
   ProductBloc(ProductsState initialState) : super(initialState);
 
   @override
@@ -27,6 +29,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductsState> {
       currentPage = 1;
       listdata = [];
 //      var param = {'p': 1, 'filter': "popular",};
+
       yield Loading(
           sortBy: state.sortBy,
           error: "null",

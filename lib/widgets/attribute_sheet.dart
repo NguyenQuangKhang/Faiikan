@@ -561,8 +561,7 @@ class _AttributesSheetState extends State<AttributesSheet> {
                               return false;
                           }
                           return true;
-                        }).option.where((e) => e.value.substring(0, 2) !=
-                            "ht").map((a) => a.value).toList();
+                        }).option.where((e) => !e.value.contains("http")).map((a) => a.value).toList();
                         context.read<ProductDetailBloc>().amount=count;
                       Navigator.of(context).pop("Mua ngay");
                       },

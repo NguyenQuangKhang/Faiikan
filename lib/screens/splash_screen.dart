@@ -24,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future _navigationPage() async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     if (prefs.getInt("catId") == null) {
       Navigator.push(
           context, MaterialPageRoute(builder: (_) => SexSelectScreen()));

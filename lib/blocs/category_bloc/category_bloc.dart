@@ -25,6 +25,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       CategoryEvent event,
       ) async* {
     if (event is InitiateEvent) {
+
       yield LoadingCategory();
       indexSelected=0;
       final response = await http.get(Uri.parse("http://$server:8080/api/v1/categories/${event.catId}/sub-categories"));

@@ -18,6 +18,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
    User? user;
   bool isLogined=false;
   int? userId=0;
+   late SharedPreferences prefs;
   AccountBloc(AccountState initialState) : super(initialState);
 
   @override
@@ -31,7 +32,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     if(event is InitialAccount)
       {
         yield AccountLoading();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+         prefs = await SharedPreferences.getInstance();
         print("userId: local ");
         print(prefs.get("userId"));
         if(prefs.get("userId")!=null) {
@@ -53,7 +54,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     if(event is LogOutEvent)
       {
         yield AccountLoading();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+         prefs = await SharedPreferences.getInstance();
        await prefs.clear();
        userId=0;
        user=null;
@@ -82,7 +83,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 //          FBStorage.instanace.saveUserImageToFirebaseStorage("",
 //              user!.id.toString(),user!.name,"",
 //             await urlToFile(user!.imageUrl ?? ""));
-          SharedPreferences prefs = await SharedPreferences.getInstance();
+           prefs = await SharedPreferences.getInstance();
          await  prefs.setString("userId", userId!.toString());
          await  prefs.setString("email", user!.email ?? "");
           await prefs.setString("avarta", user!.imageUrl!);
